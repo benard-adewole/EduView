@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Customview="clr-namespace:Estudiar.CustomViews"
+             x:Class="Estudiar.Views.PDFViewer"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
+             Title="Pdf Viewer"
+             xmlns:vm="clr-namespace:Estudiar.ViewModels"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="True"
+             NavigationPage.HasNavigationBar="{OnPlatform False,Android=True, iOS=True}"
+             BackgroundColor="{OnPlatform iOS={StaticResource AppColor},UWP={StaticResource AppColor}, Android=SkyBlue}">
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding OnBackPressedHandled}">
+            <BackButtonBehavior.IconOverride>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ArrowBottomLeft}" FontFamily="MF" Color="Red"/>
+            </BackButtonBehavior.IconOverride>
+        </BackButtonBehavior>
+    </Shell.BackButtonBehavior>-->
+    <ContentPage.BindingContext>
+        <vm:MainVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <!--<ToolbarItem Text="Note" Command="{Binding OpenNote}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Notebook}" FontFamily="MF" Size="25"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>-->
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
+            
+            <Customview:CustomWebView x:Name="MyPDFView"
+                                      VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

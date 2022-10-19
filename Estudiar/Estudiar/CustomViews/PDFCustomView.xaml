@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfPdfViewer="clr-namespace:Syncfusion.SfPdfViewer.XForms;assembly=Syncfusion.SfPdfViewer.XForms"
+             xmlns:sfBtn="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+            xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=netstandard"
+            xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:navigationdrawer="clr-namespace:Syncfusion.SfNavigationDrawer.XForms;assembly=Syncfusion.SfNavigationDrawer.XForms"
+             xmlns:vm="clr-namespace:Estudiar.ViewModels"
+             xmlns:cview="clr-namespace:Estudiar.CustomViews"
+            xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+             xmlns:range="clr-namespace:Syncfusion.SfRangeSlider.XForms;assembly=Syncfusion.SfRangeSlider.XForms"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms"
+             x:Class="Estudiar.CustomViews.PDFCustomView">
+    <ContentView.BindingContext>
+        <vm:sfPdfViewVM/>
+    </ContentView.BindingContext>
+    <ContentView.Resources>
+        <xct:TextCaseConverter Type="FirstUpperRestLower" x:Key="TextCaseConverter"/>
+        <ResourceDictionary>
+            <sfPdfViewer:TextSearchSettings x:Key="SearchSettings">
+                <sfPdfViewer:TextSearchSettings.CurrentInstanceColor>
+                    <Color>#90FFFF00</Color>
+                </sfPdfViewer:TextSearchSettings.CurrentInstanceColor>
+                <sfPdfViewer:TextSearchSettings.OtherInstanceColor>
+                    <Color>#50FFFF00</Color>
+                </sfPdfViewer:TextSearchSettings.OtherInstanceColor>
+            </sfPdfViewer:TextSearchSettings>
+            <sfPdfViewer:TextSelectionSettings x:Key="TextSelectionSettings">
+                <sfPdfViewer:TextSelectionSettings.TextSelectionColor>
+                    <Color>#90FFFF00</Color>
+                </sfPdfViewer:TextSelectionSettings.TextSelectionColor>
+                <sfPdfViewer:TextSelectionSettings.TextSelectionHandleColor>
+                    <Color>#50FFFF00</Color>
+                </sfPdfViewer:TextSelectionSettings.TextSelectionHandleColor>
+            </sfPdfViewer:TextSelectionSettings>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <navigationdrawer:SfNavigationDrawer x:Name="navigationDrawer" DrawerHeaderHeight="60" DrawerHeight="210" IsOpen="False" Position="Bottom" >
+            <navigationdrawer:SfNavigationDrawer.ContentView>
+                <Grid x:Name="mainContentView" RowDefinitions="Auto,*" RowSpacing="0" 
+                      BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor}, Default={StaticResource BackgroundColor}}">
+                    <Frame VerticalOptions="Start" Padding="0,0,0,0" Grid.Row="0" Margin="0,0" x:Name="header"
+                           BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor}, Default={StaticResource BackgroundColor}}">
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame" Binding="{Binding IsChecked, Source={x:Reference SearchbtnCommand}}" Value="True">
+                                <Setter Property="HeightRequest" Value="0"/>
+                            </DataTrigger>
+                        </Frame.Triggers>
+                        <Grid>
+                            <StackLayout Orientation="Horizontal" Padding="10,10" Spacing="0" Grid.Row="0"
+                                         BackgroundColor="Transparent" x:Name="SearchContainer" IsVisible="False">
+                                <sfBtn:SfButton x:Name="cancelSearchButton"
+                                                Style="{StaticResource circleButtons}"
+                                        IsChecked="{Binding IsVisible, Source={x:Reference SearchContainer}}"
+                                        VerticalOptions="Center"
+                                TextColor="{StaticResource AppColor}"
+                        Text="{x:Static MaterialFont:FontIcon.Check}"
+                         Command="{Binding CancelSearchTextCommand, Source={x:Reference Name=pdfViewerControl1}}"/>
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+
+                                    <Entry x:Name="textSearchEntry" FontSize="18" 
+                                           ClearButtonVisibility="WhileEditing"
+                                           Text=""
+                                           FontFamily="IR"
+                                           Placeholder="Enter search text"
+                                           IsSpellCheckEnabled="False"
+                                           Completed="textSearchEntry_Completed"
+                       ReturnCommand="{Binding SearchTextCommand, Source={x:Reference Name=pdfViewerControl1}}"
+                       ReturnCommandParameter="{Binding Source ={RelativeSource Self}, Path=Text}"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="End">
+                                        
+                                    </Entry>
+                                    <sfBtn:SfButton Text="{x:Static MaterialFont:FontIcon.Magnify}"
+                                                    TextColor="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                                    x:Name="SearchbtnCommand"
+                                                    IsChecked="False"
+                                                    Style="{StaticResource circleButtons}"
+                                        Margin="0,0,0,0"
+                                        VerticalOptions="Center"
+                                Command="{Binding SearchTextCommand, Source={x:Reference Name=pdfViewerControl1}}" CommandParameter="{Binding Source ={x:Reference textSearchEntry}, Path=Text}"
+                                 HorizontalTextAlignment="Center" >
+                                        <sfBtn:SfButton.Triggers>
+                                            <DataTrigger TargetType="sfBtn:SfButton" Binding="{Binding Text,Source={x:Reference textSearchEntry}}" Value="">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </sfBtn:SfButton.Triggers>
+                                    </sfBtn:SfButton>
+                                </StackLayout>
+
+
+
+
+
+
+                                
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" Grid.Row="0" Spacing="0" Padding="0,10">
+                                <StackLayout.Triggers>
+                                    <DataTrigger TargetType="StackLayout" Binding="{Binding IsVisible, Source={x:Reference SearchContainer}}" Value="True">
+                                        <Setter Property="IsVisible" Value="False"/>
+                                    </DataTrigger>
+                                </StackLayout.Triggers>
+                                <sfBtn:SfButton x:Name="ClosePage"
+                                                Style="{StaticResource circleButtons}"
+                                                Clicked="ClosePage_Clicked"
+                                        Margin="10,0,0,0"
+                                        Text="{x:Static MaterialFont:FontIcon.ChevronLeft}"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"/>
+                                <StackLayout VerticalOptions="Center" Spacing="0" Margin="10,0,0,0">
+                                    <Label Text="{Binding SelectedCourse.course}" TextTransform="Uppercase"
+                                           TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                       FontFamily="NSK" FontSize="14"/>
+                                    <Label Text="{Binding SelectedMaterial.type, Converter={StaticResource TextCaseConverter}}"
+                                       FontFamily="IM" FontSize="24" LineBreakMode="TailTruncation" MaxLines="1"  />
+                                </StackLayout>
+                                
+                                <sfBtn:SfButton Text="{x:Static MaterialFont:FontIcon.Magnify}"
+                                                Style="{StaticResource circleButtons}"
+                                                VerticalOptions="Center"
+                                          HorizontalOptions="EndAndExpand"
+                                          IsChecked="{Binding IsVisible, Source={x:Reference SearchContainer}}"/>
+                                <sfBtn:SfButton Text="{x:Static MaterialFont:FontIcon.Cog}"
+                                                Style="{StaticResource circleButtons}"
+                                                VerticalOptions="Center"
+                                        Margin="0,0,20,0"
+                                           IsChecked="{Binding IsOpen, Source={x:Reference navigationDrawer}}"/>
+
+                            </StackLayout>
+
+
+                        </Grid>
+                    </Frame>
+                    <sfPdfViewer:SfPdfViewer x:Name="pdfViewerControl1" 
+                                     ShowPageNumber="True" ShowPageFlipNavigationArrows="False"
+                                             IsTextSelectionEnabled="True"
+                                     IsPageFlipEnabled="True" InputFileStream="{Binding PdfDocumentStream}"
+                                     TextSearchSettings="{StaticResource SearchSettings}"
+                                     
+                                             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor}, Default={StaticResource BackgroundColor}}"
+                                                 Grid.Row="1"
+                                     IsToolbarVisible="False">
+                        <sfPdfViewer:SfPdfViewer.Triggers>
+                            <DataTrigger TargetType="sfPdfViewer:SfPdfViewer" Binding="{Binding SelectedIndex, Source={x:Reference pageViewComboBox1}}" Value="0">
+                                <Setter Property="PageViewMode" Value="PageByPage"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="sfPdfViewer:SfPdfViewer" Binding="{Binding SelectedIndex, Source={x:Reference pageViewComboBox1}}" Value="1">
+                                <Setter Property="PageViewMode" Value="Continuous"/>
+                            </DataTrigger>
+                        </sfPdfViewer:SfPdfViewer.Triggers>
+                    </sfPdfViewer:SfPdfViewer>
+
+                    <Frame BackgroundColor="{AppThemeBinding Dark=#99181818, Light=#99FDFDFD, Default=#99FDFDFD}" VerticalOptions="Center"
+                                 Grid.Row="1"
+                                 HorizontalOptions="Center">
+                        <StackLayout >
+                            <progressBar:SfCircularProgressBar Progress="{Binding ProgressValue}" 
+                                                       ProgressColor="{StaticResource AppColor}"
+                                                       SegmentCount="4">
+                            </progressBar:SfCircularProgressBar>
+                            <Label Text="{Binding SelectedMaterial.filesize, StringFormat='{0:F2}MB'}" 
+                                   HorizontalOptions="Center"/>
+
+                            <!--<Button Text="Cancel"/>-->
+                        </StackLayout>
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame" Binding="{Binding ProgressValue}" Value="100">
+                                <Setter Property="IsVisible" Value="false"/>
+                            </DataTrigger>
+                        </Frame.Triggers>
+                    </Frame>
+                    
+                    
+                    <!--<BoxView HeightRequest="4" BackgroundColor="Black"/>
+            <sfPdfViewer:SfPdfViewer InputFileStream="{Binding PdfDocumentStream}"
+                                     IsToolbarVisible="True"/>-->
+
+
+                    <StackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="End" IsVisible="{Binding IsChecked,Source={x:Reference SearchbtnCommand}, Mode=TwoWay}">
+                        <Frame Padding="1" CornerRadius="20" HorizontalOptions="Center"
+                               BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarkTransparent}, Light={StaticResource BackgroundColorTransparent}, Default={StaticResource BackgroundColorTransparent}}">
+                            <sfBtn:SfButton x:Name="negateSearchBtnCommand"
+                                        Style="{StaticResource circleButtons}"
+                                        
+                                        BackgroundColor="{AppThemeBinding Dark=#99181818, Light=#99FDFDFD, Default=#99FDFDFD}"
+                                        IsChecked="{Binding IsChecked,Source={x:Reference SearchbtnCommand}, Mode=TwoWay}"
+                                            PressedBackgroundColor="{AppThemeBinding Dark=#99181818, Light=#99FDFDFD, Default=#99FDFDFD}"
+                                Text="{x:Static MaterialFont:FontIcon.CloseCircle}"/>
+                        </Frame>
+                        
+                        <Frame HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#99181818, Light=#99FDFDFD, Default=#99FDFDFD}" 
+                           Padding="20,10"
+                           Margin="0,0,0,20"
+                           >
+                            <StackLayout Orientation="Horizontal" Spacing="30" >
+                                <sfBtn:SfButton x:Name="searchTextButton" 
+                                                Style="{StaticResource circleButtons}"
+                                            PressedBackgroundColor="#99FDFDFD"
+                                Text="{x:Static MaterialFont:FontIcon.ChevronUp}"
+                                VerticalOptions="Center"
+                        Command="{Binding SearchPreviousTextCommand, Source={x:Reference Name=pdfViewerControl1}}" CommandParameter="{Binding Source ={x:Reference textSearchEntry}, Path=Text}"/>
+                                <Label VerticalOptions="Center" >
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding CurrentSearchTextOccurrence, Source={x:Reference Name=pdfViewerControl1}}"/>
+                                            <Span Text="/"/>
+                                            <Span Text="{Binding TotalSearchTextOccurrences, Source={x:Reference Name=pdfViewerControl1}}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <sfBtn:SfButton Text="{x:Static MaterialFont:FontIcon.ChevronDown}"
+                                                Style="{StaticResource circleButtons}"
+                                VerticalOptions="Center"
+                                            PressedBackgroundColor="{AppThemeBinding Dark=#99181818, Light=#99FDFDFD, Default=#99FDFDFD}"
+                        HorizontalOptions="Start"
+                        Command="{Binding SearchNextTextCommand, Source={x:Reference Name=pdfViewerControl1}}" CommandParameter="{Binding Source ={x:Reference textSearchEntry}, Path=Text}"/>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                    
+                    
+
+                </Grid>
+            </navigationdrawer:SfNavigationDrawer.ContentView>
+            <navigationdrawer:SfNavigationDrawer.DrawerHeaderView>
+                <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" >
+                    <Label Text="PDF Settings" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" FontSize="20" />
+                </Grid>
+            </navigationdrawer:SfNavigationDrawer.DrawerHeaderView>
+            <navigationdrawer:SfNavigationDrawer.DrawerContentView>
+                <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                             Spacing="0" HorizontalOptions="FillAndExpand"
+                             Padding="0,0">
+                    <!--<StackLayout Orientation="Horizontal" Padding="10,0" >
+                        <Label Text="Go to:" VerticalOptions="Center" Margin="0,0,10,0"/>
+                        <Entry Keyboard="Numeric" FontSize="18" x:Name="pageNumberEntry"
+                               ClearButtonVisibility="Never"
+                               WidthRequest="50" HorizontalOptions="Start"
+                               HorizontalTextAlignment="Center"  Text="{Binding PageNumber, Source={x:Reference Name=pdfViewerControl1}}"/>
+                        <Label x:Name="pageCountLabel" FontSize="18" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
+                               Text="{Binding PageCount, Source={x:Reference Name=pdfViewerControl1},StringFormat='/ {0}'}}"/>
+                    </StackLayout>-->
+                    <inputLayout:SfTextInputLayout ContainerType="Outlined" Hint="zoom" HorizontalOptions="FillAndExpand" Margin="10,0">
+                        <combobox:SfComboBox HeightRequest="50" x:Name="comboBox" ShowClearButton="False"
+                                                 DropDownBackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor}, Default={StaticResource BackgroundColor}}"
+                                             HorizontalOptions="FillAndExpand"
+                                             TextColor="{AppThemeBinding Dark=lightgray, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                         VerticalOptions="Center"
+                                     SelectedItem="{Binding ZoomPercentage, Source={x:Reference Name=pdfViewerControl1}, Mode=OneWayToSource}"
+                                             DropDownTextColor="{AppThemeBinding Dark=lightgray, Light={StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                     MaximumDropDownHeight="200" IsEditableMode="False" >
+                            <combobox:SfComboBox.ComboBoxSource>
+                                <ListCollection:List x:TypeArguments="x:String">
+                                    <x:String>100</x:String>
+                                    <x:String>150</x:String>
+                                    <x:String>200</x:String>
+                                    <x:String>400</x:String>
+                                </ListCollection:List>
+                            </combobox:SfComboBox.ComboBoxSource>
+                        </combobox:SfComboBox>
+                    </inputLayout:SfTextInputLayout>
+                    
+                    <inputLayout:SfTextInputLayout ContainerType="Outlined" Hint="Page Scroll Mode" HorizontalOptions="FillAndExpand"
+                                                   Margin="10,0">
+                        <combobox:SfComboBox HeightRequest="50" x:Name="pageViewComboBox1"
+                                         VerticalOptions="Center"
+                                             HorizontalOptions="FillAndExpand"
+                                         DataSource="{Binding MyPageViewModels}"
+                                         DropDownBackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor}, Default={StaticResource BackgroundColor}}"
+                                         DisplayMemberPath="Name"
+                                             ShowClearButton="False"
+                                             SelectedDropDownItemColor="{StaticResource AppColor}"
+                                             HighlightedTextColor="Red"
+                                             IndicatorTextColor="Green"
+                                             NoResultsFoundTextColor="Aqua"
+                                             
+                                             WatermarkColor="Blue"
+                                             TextColor="{AppThemeBinding Dark=lightgray, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                     SelectedIndex="1"
+                                     MaximumDropDownHeight="200" IsEditableMode="False" >
+                            <combobox:SfComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <StackLayout Orientation="Horizontal" >
+                                            <Image VerticalOptions="Center" Margin="10,0,0,0">
+                                                <Image.Triggers>
+                                                    <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Page by Page">
+                                                        <Setter Property="Source">
+                                                            <Setter.Value>
+                                                                <FontImageSource FontFamily="MF"
+                                                                                 Size="20"
+                                                                                 Color="{AppThemeBinding Dark=lightgray, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                                                                 Glyph="{x:Static MaterialFont:FontIcon.GestureSwipeHorizontal}"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Continuous">
+                                                        <Setter Property="Source">
+                                                            <Setter.Value>
+                                                                <FontImageSource FontFamily="MF"
+                                                                                 Size="20"
+                                                                                 Color="{AppThemeBinding Dark=lightgray, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                                                                 Glyph="{x:Static MaterialFont:FontIcon.GestureSwipeVertical}"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Image.Triggers>
+                                            </Image>
+                                            <Label Text="{Binding Name}" Margin="10,0,0,0"
+                                                   TextColor="{AppThemeBinding Dark=White, Light=Black,Default=Black}"
+                                                   VerticalOptions="Center" />
+                                        </StackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </combobox:SfComboBox.ItemTemplate>
+                            <!--<combobox:SfComboBox.ComboBoxSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>Continuous Pages</x:String>
+                                <x:String>Page By Page</x:String>
+                            </ListCollection:List>
+                        </combobox:SfComboBox.ComboBoxSource>-->
+                        </combobox:SfComboBox>
+                    </inputLayout:SfTextInputLayout>
+
+                </StackLayout>
+            </navigationdrawer:SfNavigationDrawer.DrawerContentView>
+        </navigationdrawer:SfNavigationDrawer>
+
+    </ContentView.Content>
+</ContentView>

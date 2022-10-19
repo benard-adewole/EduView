@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.App"
+             xmlns:controls="clr-namespace:Estudiar.Controls"
+              xmlns:CustomView="clr-namespace:Estudiar.CustomViews"
+             xmlns:shimmer="clr-namespace:Syncfusion.XForms.Shimmer;assembly=Syncfusion.Core.XForms"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+                xmlns:sfBtn="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+
+    <!--
+        Define global resources and styles here, that apply to all pages in your app.
+    -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="course_loading">
+                <StackLayout Padding="20,8" VerticalOptions="Center">
+                    <Grid ColumnDefinitions="*,*" HeightRequest="200">
+                        <controls:SkeletonView Grid.ColumnSpan="2"
+                                           BackgroundColor="LightGray"
+                                           VerticalOptions="FillAndExpand"/>
+                        <controls:SkeletonView Grid.Column="0"
+                                               Margin="5"
+                                               Length="500"
+                                               Opacity="0.1"
+                                           BackgroundColor="{StaticResource AppColor}"
+                                           VerticalOptions="FillAndExpand"/>
+                        <controls:SkeletonView Grid.Column="1"
+                                               Margin="0,10,10,0"
+                                               HeightRequest="20"
+                                               Length="600"
+                                           BackgroundColor="DarkGray"
+                                           VerticalOptions="Start"/>
+                        <controls:SkeletonView Grid.Column="1"
+                                               Margin="0,0,10,10"
+                                               HeightRequest="20"
+                                           BackgroundColor="LightGray"
+                                           VerticalOptions="End"
+                                               HorizontalOptions="End"/>
+                    </Grid>
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="item_loading">
+                <StackLayout Padding="32,16" VerticalOptions="Center">
+                    <Grid>
+                        <controls:SkeletonView Grid.ColumnSpan="3"
+                                           Grid.Row="0"
+                                           BackgroundColor="Gray"
+                                           HeightRequest="16"
+                                           VerticalOptions="Center"/>
+                        <controls:SkeletonView Grid.ColumnSpan="5"
+                                           Grid.Row="1"
+                                           BackgroundColor="DarkGray"
+                                           HeightRequest="24"
+                                           VerticalOptions="Center"/>
+                        <controls:SkeletonView Grid.ColumnSpan="2"
+                                           Grid.Row="2"
+                                           BackgroundColor="LightGray"
+                                           HeightRequest="16"
+                                           VerticalOptions="Center"/>
+                    </Grid>
+
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="Home_loading">
+                <ScrollView>
+                    <StackLayout Orientation="Horizontal">
+                        <controls:SkeletonView WidthRequest="200"
+                                               HeightRequest="200"
+                                               Length="500"
+                                           BackgroundColor="DimGray"
+                                           VerticalOptions="FillAndExpand"/>
+                        <controls:SkeletonView WidthRequest="200"
+                                           BackgroundColor="Gray"
+                                           VerticalOptions="Fill"/>
+
+                    </StackLayout>
+                </ScrollView>
+            </DataTemplate>
+            <DataTemplate x:Key="SearchCourse_Shimmer">
+                <shimmer:SfShimmer>
+                    <shimmer:SfShimmer.CustomView>
+                        <Grid
+                    Padding="10,0"
+                            ColumnDefinitions="*,2*"
+                            RowDefinitions="10,10,10,10,*"
+                            HeightRequest="120"
+                            Margin="10,0"
+                    ColumnSpacing="15"
+                    RowSpacing="10">
+                            
+
+                            <BoxView BackgroundColor="Gray"
+                                     CornerRadius="10"
+                                     Grid.RowSpan="5"
+                                     Grid.Column="0"
+                             HorizontalOptions="Fill"
+                                     HeightRequest="120"
+                             WidthRequest="200" />
+
+                            <BoxView BackgroundColor="Gray"
+                             Grid.Row="0" Grid.Column="1"
+                                     HeightRequest="10"
+                             HorizontalOptions="Start"
+                                     WidthRequest="50"/>
+
+                            <BoxView BackgroundColor="Gray"
+                             Grid.Row="1"
+                                     Grid.Column="1"
+                             HeightRequest="10"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+                            <BoxView BackgroundColor="Gray"
+                             Grid.Row="3"
+                                     Grid.Column="1"
+                             HeightRequest="10"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+                            <BoxView BackgroundColor="Gray"
+                             Grid.Row="4"
+                                     Grid.Column="1"
+                             HeightRequest="10"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+
+
+
+                        </Grid>
+                    </shimmer:SfShimmer.CustomView>
+                </shimmer:SfShimmer>
+            </DataTemplate>
+            <DataTemplate x:Key="NewestCourse_Shimmer">
+                <shimmer:SfShimmer>
+                    <shimmer:SfShimmer.CustomView>
+                        <Grid
+                    Padding="10"
+                            Margin="0,0"
+                    ColumnSpacing="15"
+                    RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="120" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="10" />
+
+                            </Grid.RowDefinitions>
+
+                            <BoxView BackgroundColor="Gray"
+                                     CornerRadius="10"
+                                     Grid.Row ="0"
+                             HorizontalOptions="Center"
+                                     HeightRequest="120"
+                             WidthRequest="200" />
+
+                            <BoxView BackgroundColor="Red"
+                             Grid.Row="1"
+                             HorizontalOptions="Center"
+                             WidthRequest="50" />
+
+                            <BoxView BackgroundColor="Red"
+                             Grid.Row="2"
+                             HeightRequest="10"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+                            
+
+
+                        </Grid>
+                    </shimmer:SfShimmer.CustomView>
+                </shimmer:SfShimmer>
+            </DataTemplate>
+            <DataTemplate x:Key="RecommendedCourse_Shimmer">
+                <shimmer:SfShimmer>
+                    <shimmer:SfShimmer.CustomView>
+                        <Grid
+                    Padding="10"
+                            Margin="10,0,0,0"
+                    ColumnSpacing="15"
+                    RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="200" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="10" />
+
+                            </Grid.RowDefinitions>
+
+                            <BoxView BackgroundColor="Gray"
+                                     CornerRadius="10"
+                                     Grid.Row ="0"
+                             Grid.Column="0"
+                             HorizontalOptions="Start"
+                                     HeightRequest="200"
+                             WidthRequest="200" />
+
+                            <BoxView BackgroundColor="LightGray"
+                             Grid.Row="1"
+                             Grid.Column="0"
+                             HorizontalOptions="Start"
+                             WidthRequest="50" />
+
+                            <BoxView BackgroundColor="LightGray"
+                             Grid.Row="2"
+                             Grid.Column="0"
+                             HeightRequest="10"
+                             HorizontalOptions="Start"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+                            <BoxView BackgroundColor="Gray"
+                                     CornerRadius="10"
+                                     Grid.Row ="0"
+                             Grid.Column="1"
+                             HorizontalOptions="Start"
+                                     HeightRequest="200"
+                             WidthRequest="200" />
+
+                            <BoxView BackgroundColor="LightGray"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             HorizontalOptions="Start"
+                             WidthRequest="50" />
+
+                            <BoxView BackgroundColor="LightGray"
+                             Grid.Row="2"
+                             Grid.Column="1"
+                             HeightRequest="10"
+                             HorizontalOptions="Start"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+                            
+                            
+                            <BoxView BackgroundColor="Gray"
+                                     CornerRadius="10"
+                                     Grid.Row ="0"
+                             Grid.Column="2"
+                             HorizontalOptions="Start"
+                                     HeightRequest="200"
+                             WidthRequest="200" />
+
+                            <BoxView BackgroundColor="LightGray"
+                             Grid.Row="1"
+                             Grid.Column="2"
+                             HorizontalOptions="Start"
+                             WidthRequest="50" />
+
+                            <BoxView BackgroundColor="LightGray"
+                             Grid.Row="2"
+                             Grid.Column="2"
+                             HeightRequest="10"
+                             HorizontalOptions="Start"
+                             VerticalOptions="Start"
+                             WidthRequest="120" />
+
+                           
+                        </Grid>
+                    </shimmer:SfShimmer.CustomView>
+                </shimmer:SfShimmer>
+            </DataTemplate>
+            <Color x:Key="Primary">#A29CF4</Color>
+            <Color x:Key="BackgroundColor">#FDFDFD</Color>
+            <Color x:Key="BackgroundColorDarkTransparent">#99181818</Color>
+            <Color x:Key="BackgroundColorDark">#181818</Color>
+            <Color x:Key="BackgroundColorTransparent">#99FDFDFD</Color>
+
+            <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">
+                <On Platform="Android" Value="materialdesignicons-webfont.ttf/Material Design Icons"/>
+            </OnPlatform>
+            <DataTemplate x:Key="CourseGridTemplate">
+                <Grid>
+                    <Frame HeightRequest="100" BackgroundColor="Blue">
+                        <Label Text="{Binding }" TextColor="White"/>
+                    </Frame>
+                </Grid>
+
+            </DataTemplate>
+            <DataTemplate x:Key="CourseListTemplate">
+                <Grid>
+                    <Frame HeightRequest="100" BackgroundColor="Red">
+                        <Label Text="{Binding }" TextColor="White"/>
+                    </Frame>
+                </Grid>
+            </DataTemplate>
+            <Color x:Key="PrimarySelect">#309ECF</Color>
+            <Color x:Key="Secondary">#FFFFFF</Color>
+            <Color x:Key="MyAccent">#C566CD</Color>
+            <Color x:Key="MyGray">#E5E5E5</Color>
+            <Color x:Key="LightGray">#3D3D3D</Color>
+            <Color x:Key="DimGray">#3D3D3D</Color>
+            <Color x:Key="AppColor">#A29CF4</Color>
+            <Color x:Key="Shadow">#CABBBBBB</Color>
+            <Color x:Key="SelectedColor">#D4B1E6</Color>
+            <Color x:Key="SelectedAnchorColor">Purple</Color>
+
+
+
+            <!--<Color x:Key="SelectedColor">Purple</Color>-->
+            <Color x:Key="NavigationBarTextColor">White</Color>
+            <Color x:Key="NavigationPrimary">#FFAA66CC</Color>
+            <Style TargetType="Label" x:Key="BaseLabel">
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=LightGray, Light= #9CA0B0,Default=#9CA0B0}"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <On Platform="iOS" Value="Vollkorn" />
+                            <On Platform="Android" Value="IR" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+            </Style>
+            <Style TargetType="Frame" x:Key="EntryFrame">
+                <Setter Property="CornerRadius" Value="2"/>
+                <Setter Property="BackgroundColor" Value="{OnPlatform Android=Transparent,iOS=White, UWP=#E5E5E5}"/>
+                <Setter Property="Padding" Value="{OnPlatform Android=0,iOS=1, UWP='0'}"/>
+                <Setter Property="Margin" Value="0,0,0,0"/>
+                <Setter Property="HasShadow" Value="False"/>
+
+            </Style>
+            <Style TargetType="cards:SfCardView" >
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="ShadowColor" Value="{AppThemeBinding Dark={StaticResource DimGray},Light=LightGray}"/>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#F5F5F9,Default=#F5F5F9}"/>
+                <Setter Property="Padding" Value="{OnPlatform Android=0,iOS=1, UWP='0'}"/>
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style TargetType="sfBtn:SfButton" x:Key="circleButtons" >
+                <Setter Property="HeightRequest" Value="40"/>
+                <Setter Property="WidthRequest" Value="40"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+                <Style TargetType="sfBtn:SfButton">
+                <Setter Property="CornerRadius" Value="30"/>
+                <Setter Property="FontFamily" Value="MF"/>
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="IsCheckable" Value="True"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                        <VisualStateGroup x:Name="ButtonStates">
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Checked">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#00000000"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Unchecked">
+                                <VisualState.Setters>
+                                    
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+                    <!--<Style.Triggers>
+                    <Trigger TargetType="sfBtn:SfButton" Property="IsCheckable" Value="True">
+                        <Setter Property="VisualStateManager.VisualStateGroups">
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Checked">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="MouseOver">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Property="Opacity" Value="0.4" />
+                                            <Setter Property="TextColor" Value="LightGray" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </Setter>
+                    </Trigger>
+                    <Trigger TargetType="sfBtn:SfButton" Property="IsCheckable" Value="False">
+                        <Setter Property="VisualStateManager.VisualStateGroups">
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Checked">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="MouseOver">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Property="Opacity" Value="0.4" />
+                                            <Setter Property="TextColor" Value="LightGray" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>-->
+                
+            </Style>
+            <Style TargetType="CustomView:CustomPickerView">
+                <Style.Setters>
+                    <Setter Property="TitleColor" Value="{StaticResource AppColor}"/>
+                    <Setter Property="TextColor" Value="Black"/>
+                    <Setter Property="BackColor" Value="Transparent"/>
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                    <Setter Property="PlaceholderColor" Value="DimGray"/>
+                    <Setter Property="CornerRadius" Value="4"/>
+                    <Setter Property="BorderColor" Value="Black"/>
+                    <Setter Property="FontSize" Value="17"/>
+                    <Setter Property="Padding" Value="18,15"/>
+                    <Setter Property="Margin"  Value="0,2,2,2"/>
+                    <Setter Property="BorderWidth" Value="0"/>
+                    <Setter Property="FontFamily">
+                        <Setter.Value>
+                            <OnPlatform x:TypeArguments="x:String">
+                                <!--<On Platform="iOS" Value="Vollkorn" />-->
+                                <On Platform="Android" Value="Vollkorn-Regular.ttf#Vollkorn" />
+                                <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                            </OnPlatform>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="ChangeBackgroundStyle" Value="True"/>
+                    <Setter Property="FocusedBorderColor" Value="{StaticResource AppColor}"/>
+                    <Setter Property="UnfocusedBorderColor" Value="Gray"/>
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                </Style.Setters>
+            </Style>
+            <Style TargetType="inputLayout:SfTextInputLayout">
+                <Setter Property="UnfocusedColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource LightGray}, Default={StaticResource LightGray}}"/>
+                <Setter Property="FocusedColor" Value="{StaticResource AppColor}"/>
+                <Setter Property="ErrorColor" Value="Red"/>
+                <Setter Property="UnfocusedStrokeWidth" Value="0" />
+                <Setter Property="ContainerType" Value="Outlined" />
+                <Setter Property="Hint" Value="" />
+                <Style.Triggers>
+                    <DataTrigger TargetType="inputLayout:SfTextInputLayout"
+                                                 Binding="{Binding InputView.IsFocused, Source={RelativeSource Self}}"
+                                                 Value="True">
+                        <Setter Property="ContainerBackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White, Default=White}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="inputLayout:SfTextInputLayout"
+                                                 Binding="{Binding InputView.IsFocused, Source={RelativeSource Self}}"
+                                                 Value="False">
+                        <Setter Property="ContainerBackgroundColor" Value="{AppThemeBinding Dark={StaticResource DimGray}, Light=#F5F5F9,Default=#F5F5F9}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="inputLayout:SfTextInputLayout"
+                                                 Binding="{Binding InputView.Text.Length, Source={RelativeSource Self}}"
+                                                 Value="0">
+                        <Setter Property="EnablePasswordVisibilityToggle" Value="False"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="Label" BasedOn="{StaticResource BaseLabel}" x:Key="LabelTitle">
+                <Setter Property="FontSize" Value="25"/>
+            </Style>
+            <Style TargetType="Label" BasedOn="{StaticResource BaseLabel}" x:Key="EntryHeader">
+                <Setter Property="FontFamily" Value="ISB"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=LightGray, Light= #9CA0B0,Default=#9CA0B0}"/>
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="HorizontalOptions"  Value="FillAndExpand"/>
+                <Setter Property="VerticalTextAlignment"  Value="Center"/>
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=lightgray, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"/>
+                <Setter Property="PlaceholderColor" Value="{AppThemeBinding Dark=lightgray, Light=#9CA0B0,Default=#9CA0B0}"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <On Platform="Android" Value="IB" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsFocused" TargetType="Entry" Value="True">
+                        <Setter Property="TextColor" Value="{StaticResource AppColor}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <On Platform="Android" Value="IR" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type NavigationPage}">
+                <Setter Property="BarBackgroundColor">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="Color">
+                            <On Platform="Android" Value="{AppThemeBinding Dark={StaticResource MyGray}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"/>
+                            <!--<On Platform="UWP" Value="{StaticResource AppColor}"/>-->
+                            <On Platform="iOS" Value="{StaticResource AppColor}"/>
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property='BackgroundColor' Value="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"/>
+                <!--<Setter Property="BarBackgroundColor"
+                    Value="White" />-->
+                <!--<Setter Property="BarTextColor"
+                    Value="{StaticResource NavigationBarTextColor}" />-->
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       Title="Menu"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.BackgroundColor="{OnPlatform UWP={StaticResource AppColor}}"
+       xmlns:pages="clr-namespace:Estudiar.Views"
+       Shell.NavBarIsVisible="False"
+             x:Class="Estudiar.Views.MainShell">
+    <Shell.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="FlyoutItem">
+
+                <Setter Property="Shell.BackgroundColor"
+            Value="{AppThemeBinding Dark={StaticResource AppColor},
+                    Light={OnPlatform Android={StaticResource AppColor}, UWP={StaticResource AppColor}},
+                    Default={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}}}" />
+                <Setter Property="Shell.TabBarBackgroundColor"
+            Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark},
+                    Light={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}},
+                    Default={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}}}" />
+                <Setter Property="Shell.TabBarTitleColor"
+            Value="{StaticResource AppColor}" />
+                <Setter Property="Shell.TabBarUnselectedColor"
+            Value="{AppThemeBinding Dark={StaticResource MyGray},
+                    Light={OnPlatform Android={StaticResource LightGray}, UWP={StaticResource AppColor}},
+                    Default={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}}}"  />
+            </Style>
+            
+        </ResourceDictionary>
+    </Shell.Resources>
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" >
+        <ShellContent ContentTemplate="{DataTemplate pages:CustomTab}" />
+        
+
+    </FlyoutItem>
+</Shell>

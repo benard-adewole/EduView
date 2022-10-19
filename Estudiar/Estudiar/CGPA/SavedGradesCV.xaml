@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Estudiar.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:customviews="clr-namespace:Estudiar.CustomViews"
+             Shell.PresentationMode="Animated"
+             x:Name="this"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             x:Class="Estudiar.CGPA.SavedGradesCV">
+    <ContentView.BindingContext>
+        <vm:savedDataVm/>
+    </ContentView.BindingContext>
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light=Black,Default=Black}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Grid RowDefinitions="Auto,*" RowSpacing="0">
+            <Frame Grid.Row="0" BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Padding="10,10">
+                <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                        <ImageButton VerticalOptions="Center"
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                     xct:TouchEffect.Command="{Binding Pop}"
+                                                     HorizontalOptions="End"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronLeft}"
+                                                             Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                                                     Size="35"
+                                                             FontFamily="MF"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                        <Label Margin="10,0,0,0" Text="Saved Results"
+                               xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                               xct:TouchEffect.Command="{Binding Rename}"
+                               xct:TouchEffect.CommandParameter="{Binding Text, Source={RelativeSource Self}}"
+                               
+                               TextTransform="Uppercase"
+                               TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="IM" VerticalOptions="Center" FontSize="20">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding Text, Source={RelativeSource Self}}" Value="unsaved">
+                                    <Setter Property="TextColor" Value="Gray"/>
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="10">
+
+                        <ImageButton VerticalOptions="Center" x:Name="MoreMenu" Clicked="MoreMenu_Clicked"
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Size="30" Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                 xct:TouchEffect.NativeAnimation="True"
+                                 xct:TouchEffect.NativeAnimationColor="Gray"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.DotsVertical}"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding SemesterGroup}" Margin="0,10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Frame CornerRadius="10"
+                                   BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White,Default=White}"
+                               xct:ShadowEffect.Color="Black"
+                               xct:ShadowEffect.OffsetX="1"
+                               xct:ShadowEffect.OffsetY="1"
+                               xct:ShadowEffect.Radius="5"
+                               Padding="0"
+                              Margin="17,0,17,15">
+                                <StackLayout Orientation="Horizontal" Spacing="0"
+                                         >
+
+                                    <BoxView WidthRequest="13" BackgroundColor="{StaticResource Primary}"/>
+                                    <StackLayout Padding="10,10,0,10" HorizontalOptions="FillAndExpand"
+                                             xct:TouchEffect.NativeAnimation="True"
+                                             xct:TouchEffect.NativeAnimationColor="LightGray"
+                                             xct:TouchEffect.Command="{Binding BindingContext.EditSemesterGroup,Source={x:Reference this}}"
+                                                          xct:TouchEffect.CommandParameter="{Binding .}"
+                                             VerticalOptions="FillAndExpand" Spacing="10">
+                                        <Label Text="{Binding Name}"  FontFamily="NSB" FontSize="20" MaxLines="1"/>
+
+                                        <Label Text="{Binding Description}" Margin="0,0,0,0" FontFamily="IR" MaxLines="1" VerticalOptions="StartAndExpand"/>
+
+                                    </StackLayout>
+
+                                    <Grid HorizontalOptions="End" VerticalOptions="Center" RowSpacing="0" 
+                                      xct:TouchEffect.NativeAnimation="True"
+                                             xct:TouchEffect.NativeAnimationColor="PaleVioletRed"
+                                      xct:TouchEffect.Command="{Binding BindingContext.DeleteSemesterGroup,Source={x:Reference this}}"
+                                         xct:TouchEffect.CommandParameter="{Binding .}">
+                                        <!--<ImageButton VerticalOptions="FillAndExpand"
+                                                 Padding="10,0"
+                                                 Grid.Row="0"
+                                                         CornerRadius="0"
+                                                      xct:TouchEffect.NativeAnimation="True"
+                                             xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                  xct:TouchEffect.Command="{Binding BindingContext.EditSemesterGroup,Source={x:Reference this}}"
+                                         xct:TouchEffect.CommandParameter="{Binding .}"
+                                                 BackgroundColor="Transparent">
+                                        <ImageButton.Source>
+                                            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.OpenInNew}"
+                                                             Color="{StaticResource Primary}"
+                                                                 Size="30"
+                                                             FontFamily="MF"/>
+                                        </ImageButton.Source>
+                                    </ImageButton>-->
+                                        <Image VerticalOptions="Center"
+                                           Margin="10,0"
+                                                 BackgroundColor="Transparent">
+                                            <Image.Source>
+                                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.TrashCanOutline}"
+                                                             Color="Gray"
+                                                                 Size="30"
+                                                             FontFamily="MF"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Grid>
+
+                                </StackLayout>
+                            </Frame>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="0"/>
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+            <Frame Padding="0" VerticalOptions="End"
+                   Grid.Row="1"
+                   CornerRadius="15"
+                   Margin="0,0,17,20"
+                   HorizontalOptions="End">
+                <ImageButton Padding="5"
+                             x:Name="AddSemester"
+                             xct:TouchEffect.Command="{Binding OpenFreshCalc}"
+                         xct:TouchEffect.NativeAnimation="True"
+                         xct:TouchEffect.NativeAnimationColor="LightGray"
+                         BackgroundColor="{StaticResource Primary}"
+                         Command="{Binding AddSemester}">
+                    <ImageButton.Source>
+                        <FontImageSource Size="45" Color="{AppThemeBinding Dark=Black, Light=White,Default=White}"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.Plus}"/>
+                    </ImageButton.Source>
+
+                </ImageButton>
+            </Frame>
+
+            <Grid BackgroundColor="Transparent" 
+                  Grid.Row="1"
+                  IsVisible="true"
+                  x:Name="MenuOptionGrid">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="MenuOptionGrid_Tapped"/>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                </Grid.GestureRecognizers>
+                <Frame HorizontalOptions="End"
+                   VerticalOptions="Start"
+                       Margin="0,5,5,0"
+                       Padding="0">
+                    <xct:Expander 
+                              IsExpanded="True"
+                          x:Name="MenuExpander"
+                   
+                          BackgroundColor="Transparent">
+                        <xct:Expander.Content>
+                            <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}" Padding="0"
+                                   CornerRadius="0"
+                                   VerticalOptions="Start"
+                           HorizontalOptions="End">
+                                <StackLayout Spacing="0" >
+                                    <StackLayout Orientation="Horizontal"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="LightGray">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MoreMenu_Clicked" Command="{Binding ToggleFingerPrint}" />
+                                        </StackLayout.GestureRecognizers>
+                                        <Image Margin="10,0,5,0">
+                                            <Image.Source>
+                                                <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.Fingerprint}"/>
+                                            </Image.Source>
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding IsResultLocked}" Value="true">
+                                                    <Setter Property="Source">
+                                                        <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.FingerprintOff}"/>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                        <Label Margin="0,15,15,15" Text="Enable Lock" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsResultLocked}" Value="true">
+                                                    <Setter Property="Text" Value="Disable Lock"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="LightGray">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MoreMenu_Clicked" Command="{Binding HideRecent}" />
+                                        </StackLayout.GestureRecognizers>
+                                        <Image Margin="10,0,5,0">
+                                            <Image.Source>
+                                                <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.EyeOff}"/>
+                                            </Image.Source>
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding IsRecentHidden}" Value="true">
+                                                    <Setter Property="Source">
+                                                        <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.Eye}"/>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                        <Label Margin="0,15,15,15" Text="Hide Recent" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsRecentHidden}" Value="true">
+                                                    <Setter Property="Text" Value="Show Recent"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="PaleVioletRed">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MoreMenu_Clicked" Command="{Binding DeleteAll}" />
+                                        </StackLayout.GestureRecognizers>
+                                        <Image Margin="10,0,5,0">
+                                            <Image.Source>
+                                                <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.TrashCanOutline}"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label Margin="0,15,15,15" Text="Delete All" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </xct:Expander.Content>
+
+                    </xct:Expander>
+                </Frame>
+            </Grid>
+        </Grid>
+
+    </ContentView.Content>
+</ContentView>

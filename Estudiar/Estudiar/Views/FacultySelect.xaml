@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Shell.TabBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             xmlns:Converter="clr-namespace:Estudiar.Converters"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             
+             x:Class="Estudiar.Views.FacultySelect">
+    <ContentPage.BindingContext>
+        <VM:VM_SignUp_In/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <Converter:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <Converter:NullToBoolConverter x:Key="NullToBoolConverter"/>
+        <ResourceDictionary>
+            <Style TargetType="Grid" x:Key="CollectionGrid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" >
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+            <StackLayout HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand">
+                <StackLayout Margin="0,0,0,5"
+                         Grid.Row="0"
+                         HorizontalOptions="Fill">
+                    <CollectionView ItemsSource="{Binding Faculty_Department}" SelectionMode="Single">
+                        <CollectionView.Header>
+
+                            <Grid>
+                                <Label Text="Select your faculty from the list below"
+                                       Margin="10,60,10,30"
+                                       FontSize="40"
+                                   TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                       FontFamily="NSK"
+                                       Style="{StaticResource LabelTitle}"
+                                   VerticalOptions="Center"
+                   HorizontalOptions="Start"
+                   HorizontalTextAlignment="Start"/>
+                            </Grid>
+
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="50,0,50,20" Style="{StaticResource CollectionGrid}">
+                                    <Button Text="{Binding Faculty}"
+                                            xct:ShadowEffect.Color="Black" 
+                                            WidthRequest="400"
+                                    BorderWidth="2"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DimGray}, Light=White,Default=White}"
+                                            HorizontalOptions="Center"
+                                    Padding="20,20"
+                                        Margin="0,0"
+                                        CornerRadius="7"
+                                    Clicked="Button_Clicked" FontSize="15"
+                                    CommandParameter="{Binding Faculty}">
+                                        <Button.Triggers>
+                                            <DataTrigger TargetType="Button" Binding="{Binding Selected}" Value="True">
+                                                <Setter Property="BorderColor" Value="{StaticResource AppColor}"/>
+                                                <Setter Property="TextColor" Value="{StaticResource AppColor}"/>
+                                            </DataTrigger>
+                                        </Button.Triggers>
+                                    </Button>
+                                </Grid>
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="0"/>
+                        </CollectionView.ItemsLayout>
+                    </CollectionView>
+
+                </StackLayout>
+                <StackLayout Margin="30,0,30,20" 
+                         Grid.Row="1"
+                         Spacing="15"
+                             Orientation="Horizontal"
+                         VerticalOptions="End" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}">
+                    <Frame Padding="5,2"
+                           VerticalOptions="Center"
+                       BackgroundColor="Transparent"
+                       HasShadow="False"
+                       HorizontalOptions="End"
+                                           xct:TouchEffect.NativeAnimation="True"
+                                        xct:TouchEffect.Command="{Binding GoBack}"
+                                           xct:TouchEffect.NativeAnimationColor="LightGray">
+                        <Label Text="Go back"
+                           Margin="20,10,0,10"
+                           TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                               VerticalOptions="Center"
+                   HorizontalOptions="Center"/>
+
+                    </Frame>
+                    <Button CornerRadius="60"
+                            WidthRequest="60"
+                            HeightRequest="60"
+                            HorizontalOptions="EndAndExpand"
+                    TextColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                        FontSize="15"
+                        Padding="20,20"
+                        x:Name="Next"
+                        Clicked="Next_Clicked"
+                        IsEnabled="{Binding SelectedFac.Faculty, Converter={StaticResource NullToBoolConverter},FallbackValue=False}"
+                    BackgroundColor="{StaticResource AppColor}">
+                        <Button.ImageSource>
+                            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ArrowRight}" Color="White" FontFamily="MF"/>
+                        </Button.ImageSource>
+                    </Button>
+                    
+
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

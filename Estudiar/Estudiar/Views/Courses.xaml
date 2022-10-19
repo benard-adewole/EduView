@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.Views.Courses"
+             Shell.NavBarIsVisible="False"
+             xmlns:CustomView="clr-namespace:Estudiar.CustomViews"
+             xmlns:Converters="clr-namespace:Estudiar.Converters"
+             xmlns:controlTemplate="clr-namespace:Estudiar.DataTemplates"
+             x:Name="ThisPage"
+             xmlns:controls="clr-namespace:Estudiar.Controls"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             xmlns:views="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+             Shell.NavBarHasShadow="False"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="Courses">
+    
+    <ContentPage.BindingContext>
+        <VM:MainVM/>
+    </ContentPage.BindingContext>
+    <!--<Shell.SearchHandler>
+        <controls:courseSearchHandler Placeholder="Enter search term"
+                                      GetCourses="{Binding MyCourses.courses}"
+                                      ShowsResults="true"
+                                      SearchBoxVisibility="Collapsible"
+                                      DisplayMemberName="Name" />
+    </Shell.SearchHandler>-->
+    <!--"<Shell.TitleView >
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+            <Label Text="{Binding Title, Source={x:Reference ThisPage}}"
+                   x:Name="PageTitle"
+                   IsVisible="{OnPlatform True,UWP=False}"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   
+                   FontSize="22"
+                   TextColor="White"/>
+            <CustomView:RoundedEntry x:Name="TitleEntry"
+                                     VerticalOptions="Center"
+                                     ScaleX="0"
+                                     BackColor="#33F5F5F5"
+                                     Visual="Default"
+                                     Placeholder="Search"
+                                     Padding="10,15,20,15"
+                                     CornerRadius="4"
+                                     Unfocused="TitleEntry_Unfocused"
+                                     FontAttributes="{OnPlatform Bold, Android=Bold, UWP=None}"
+                                     TextChanged="TitleEntry_TextChanged"
+                                     TextColor="{OnPlatform White, Android=White, UWP=Black}"
+                                     ClearButtonVisibility="WhileEditing"
+                                     PlaceholderColor="{OnPlatform White, Android=White, UWP=Black}"
+                                     />
+        </Grid>
+    </Shell.TitleView>-->
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Text="Search"
+                     Order="Primary"
+                     x:Name="SearchCourseBtn"
+                     Clicked="SearchCourseBtn_Clicked"
+                     >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.Magnify}" Color="White" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Text="Change View"
+                     Order="Primary"
+                     x:Name="ChangeViewBtn"
+                     Clicked="ChangeViewBtn_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.ViewList}" Color="White" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>-->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Converters:TextToColorConverter x:Key="DeptToColor"/>
+            <Converters:TextToInitialCapsConverter x:Key="TextToInitialCaps"/>
+
+            <Style TargetType="Grid" x:Key="CollectionGrid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" >
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <Converters:ItemTemplateToItemLayoutConv x:Key="TemplateToLayout"/>
+            <DataTemplate x:Key="CourseGridTemplate">
+                <Grid Style="{StaticResource CollectionGrid}">
+                    <Frame Margin="10,5,10,15"
+                        
+                                HorizontalOptions="FillAndExpand"
+                                BackgroundColor="#E5E5E5"
+                                CornerRadius="{OnPlatform Android=10, UWP=0}">
+
+
+                        <Grid RowDefinitions="*,5" Padding="10,5">
+                            <BoxView Grid.Row="1" VerticalOptions="Fill" BackgroundColor='Purple' Opacity="0.5"/>
+                            <StackLayout Orientation="Vertical" Grid.Row="0" Spacing="0">
+                                <Path
+                                HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  Aspect="Uniform"
+                                WidthRequest="40"
+                                    Opacity="0.5"
+                                  Margin="10,10"
+                                  Data="M37.3635 24.3325C36.2393 23.1291 33.9372 22.4372 30.6755 22.4372C28.9338 22.4372 26.9151 22.6114 24.7222 23.0231C23.484 21.8039 22.249 20.3789 21.0694 18.7164C20.2302 17.5447 19.4972 16.3097 18.8211 15.0906C20.1083 11.0689 20.7306 7.79139 20.7306 5.43223C20.7306 2.78489 19.7758 0.0235596 17.0256 0.0235596C16.1817 0.0235596 15.3377 0.538143 14.8881 1.29023C13.6483 3.51956 14.2072 8.40414 16.34 13.2286C15.5436 15.6352 14.7012 17.9358 13.6483 20.5198C12.7332 22.6985 11.6787 24.9436 10.6036 27.0051C4.42225 29.5131 0.422751 32.4423 0.0475006 34.7381C-0.117166 35.6042 0.164667 36.4006 0.771084 37.034C0.981667 37.2081 1.77808 37.8969 3.11442 37.8969C7.21525 37.8969 11.5377 31.1202 13.7338 27.0352C15.4201 26.4652 17.1063 25.9475 18.7894 25.4281C20.6387 24.9167 22.4944 24.5051 24.1807 24.2169C28.5111 28.1816 32.3285 28.8086 34.2475 28.8086C36.6098 28.8086 37.4522 27.8316 37.7356 27.0321C38.1789 26.0029 37.8464 24.8629 37.3366 24.2771L37.3682 24.3404L37.3635 24.3325ZM35.1706 26.0013C35.0059 26.8626 34.1604 27.4358 32.9761 27.4358C32.6436 27.4358 32.3586 27.3772 32.0213 27.3218C29.868 26.8072 27.8524 25.7131 25.8416 23.9873C27.8207 23.6485 29.4991 23.5915 30.5599 23.5915C31.7316 23.5915 32.7449 23.6421 33.4257 23.8195C34.2016 23.9873 35.4366 24.5082 35.1595 26.0045H35.1912L35.1706 26.0013ZM23.2592 23.2986C21.8025 23.5994 20.2287 23.9541 18.5978 24.3958C17.3058 24.7489 15.96 25.1463 14.6078 25.615C15.3409 24.1868 15.96 22.8061 16.5205 21.4936C17.1982 19.8786 17.7555 18.2161 18.3176 16.6707C18.8717 17.6366 19.4893 18.6182 20.1068 19.4891C21.1201 20.8666 22.1809 22.1807 23.2417 23.3207V23.2891L23.2592 23.2986ZM15.8967 1.94731C16.1262 1.48814 16.5775 1.25698 16.9702 1.25698C18.1497 1.25698 18.3746 2.63131 18.3746 3.72698C18.3746 5.57631 17.8141 8.38514 16.8546 11.5914C15.1731 7.12639 15.0575 3.38973 15.8998 1.94889L15.8967 1.94731ZM9.7185 28.7009C6.85267 33.519 4.10083 36.5115 2.41458 36.5115C2.08208 36.5115 1.80183 36.3927 1.57542 36.2217C1.23658 35.8797 1.06875 35.4744 1.18275 35.0184C1.52 33.2926 4.72308 30.8811 9.72008 28.7009H9.7185Z"
+                                  Fill="Transparent"
+                                  HeightRequest="40"
+                                  Stroke="Purple"
+                                  StrokeLineCap="Flat"
+                                  StrokeThickness="1"
+                                            />
+                                <Label Text="{Binding code}"
+                                   MaxLines="1"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="Black"/>
+                                <Label Text="{Binding materials.Count,StringFormat='{0} file(s)'}"
+                                   MaxLines="1"
+                                       HorizontalOptions="Center"
+                                           FontSize="11"
+                                   VerticalOptions="Center"
+                                   TextColor="Black"/>
+
+                            </StackLayout>
+                        </Grid>
+                    </Frame>
+                    
+                </Grid>
+                
+            </DataTemplate>
+            <DataTemplate x:Key="CourseListTemplate">
+                <Grid Style="{StaticResource CollectionGrid}">
+                    <Frame Margin="10,5,10,5" Padding="0"
+                           BackgroundColor="Transparent"
+                           HasShadow="False"
+                                HorizontalOptions="FillAndExpand">
+
+                        <Grid ColumnDefinitions="*,*">
+                            <Frame Grid.Column="0" HorizontalOptions="Fill" BackgroundColor="{Binding dept, Converter={StaticResource DeptToColor}}" CornerRadius="5" Opacity="1">
+                                
+                                <Grid>
+                                    <Path Data="M47.5666 -14.1113C51.6557 -13.3199 56.2693 -10.689 59.2878 -7.74996C73.7697 6.35092 53.1516 16.2599 43.425 22.9469C34.1308 29.3367 33.8743 41.3317 26.0734 48.5548C16.3807 57.5294 8.15069 55.6165 -4.35559 54.653C-4.61373 54.0663 -4.9462 53.5055 -5.30025 52.8859C-7.34109 49.3144 -7.03111 44.6078 -8.22377 40.7317C-9.12058 37.817 -11.1279 35.5166 -12.1218 32.692C-13.7927 27.943 -16.4497 23.6062 -17.2379 18.5617C-18.0249 13.5252 -18.253 6.57677 -16.9943 1.61612C-15.6194 -3.80274 -15.2655 -10.7773 -10.8766 -14.8151C-6.01409 -19.2886 3.41365 -17.495 9.4256 -17.495C22.2476 -17.495 34.9961 -16.5443 47.5666 -14.1113Z"
+                                                                      HorizontalOptions="Start"
+                                                                      VerticalOptions="Start"
+                                                                      Aspect="Uniform"
+                                                                      HeightRequest="120"
+                                          TranslationX="-50"
+                                          Opacity="0.1"
+                                                                      TranslationY="-50"
+                                                                      WidthRequest="120">
+                                        <Path.Fill>
+                                            <LinearGradientBrush >
+                                                <GradientStop Color="Black" Offset="0.2" />
+                                                <GradientStop Color="{Binding dept, Converter={StaticResource DeptToColor}}" Offset="1.0" />
+
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+                                    <Path Data="M50.7197 3.90163C57.1023 0.801472 63.9419 0.518608 70.8732 0.493304C71.5449 1.97155 73.968 0.955188 75.1905 1.84434C76.0921 2.49999 78.247 1.27959 78.9803 2.19625C79.5449 2.90197 81.1255 3.29407 81.9038 4.11819C84.9421 7.33522 86.0322 12.688 87.8591 16.5702C89.0837 19.1725 89.5816 22.4951 90.4036 25.3137C91.4847 29.0203 90.6743 33.7905 90.6743 37.6303C90.6743 42.4617 90.6569 47.0716 89.1584 51.7336C88.2927 54.4269 87.5837 58.1374 85.8018 60.4229C82.9103 64.1316 76.7862 65.8775 72.5377 67.2444C60.9722 70.9655 49.3957 70.6552 37.4285 70.6552C31.4784 70.6552 25.6036 70.7118 19.6979 69.8972C17.4416 69.586 15.1433 69.8039 12.9305 69.1934C8.74579 68.039 4.22451 68.53 1.88614 64.3209C0.285725 61.4402 0.0454102 59.9703 0.0454102 56.6332C0.0454102 34.0616 14.4422 37.9373 28.4143 28.2642C38.4668 21.3048 39.1774 9.50785 50.7197 3.90163Z"
+                                                                      HorizontalOptions="End"
+                                                                      VerticalOptions="End"
+                                                                      Aspect="Uniform"
+                                                                      HeightRequest="120"
+                                                                      WidthRequest="120"
+                                                                      Opacity="0.1"
+                                                                      TranslationX="50"
+                                                                      TranslationY="50">
+                                        <Path.Fill>
+                                            <LinearGradientBrush  >
+                                                <GradientStop Color="{Binding dept, Converter={StaticResource DeptToColor}}" Offset="0.2" />
+                                                <GradientStop Color="Black" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+                                </Grid>
+                            </Frame>
+
+                            <Frame HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="100" Padding="2" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White,Default=White}">
+                                <xct:AvatarView Text="{Binding title,Converter={StaticResource TextToInitialCaps}}" BackgroundColor="Transparent" TextColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White,Default=White}" FontSize="30"
+                                                                         Color="{Binding dept, Converter={StaticResource DeptToColor}}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Frame>
+                            <Frame Grid.Column="0" HorizontalOptions="Start"
+                                   VerticalOptions="Start"
+                                   HasShadow="False"
+                                   Padding="10,5"
+                                   CornerRadius="7"
+                                   BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White,Default=White}"
+                                   Margin="10">
+                                <Label Text="{Binding code}"
+                                   MaxLines="1"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   TextColor="{Binding dept, Converter={StaticResource DeptToColor}}"/>
+                            </Frame>
+                            <StackLayout Orientation="Horizontal" Grid.Column="1">
+                                
+                                <StackLayout Spacing="5"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalOptions="FillAndExpand" Margin="0,7,0,0">
+                                    
+                                    <Label Text="{Binding title}"
+                                   MaxLines="2"
+                                           FontSize="15"
+                                           TextTransform="Uppercase"
+                                           LineBreakMode="TailTruncation"
+                                           HorizontalOptions="Start"
+                                           HorizontalTextAlignment="Start"
+                                           FontAttributes="Bold"
+                                   VerticalOptions="Start"
+                                   TextColor="{AppThemeBinding Dark=White, Light=Black,Default=Black}"/>
+                                    <Label Text="{Binding materials.Count,StringFormat='{0} File(s) Available'}"
+                                   MaxLines="1"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Start"
+                                           HorizontalTextAlignment="Start"
+                                   VerticalOptions="Center"
+                                   TextColor="DarkGray"/>
+                                    <Button Text="View"
+                                            x:Name="ViewBtn"
+                                            Clicked="ViewBtn_Clicked"
+                                            HorizontalOptions="End"
+                                            Padding="15,0"
+                                            Margin="0,60,5,7"
+                                            BorderColor="LightGray"
+                                            TextColor="{AppThemeBinding Dark=White, Light=Black,Default=Black}"
+                                            CornerRadius="7"
+                                            BorderWidth="1"
+                                            FontSize="18"
+                                            CommandParameter="{Binding title}"
+                                            BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White,Default=White}"/>
+                                    
+                                </StackLayout>
+                                
+                            </StackLayout>
+                        </Grid>
+                        
+                        
+                    </Frame>
+                    
+                </Grid>
+            </DataTemplate>
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid x:Name="CourseView" 
+              views:StateLayout.CurrentState="{Binding State}"
+              views:StateLayout.AnimateStateChanges="True"
+                             Padding="0,0,0,0">
+            <views:StateLayout.StateViews>
+                <views:StateView StateKey="Loading"
+                                 RepeatCount="3"
+                                 Template="{StaticResource course_loading}"/>
+                <views:StateView StateKey="Error">
+                    <StackLayout Grid.Row="1" VerticalOptions="Fill" HorizontalOptions="Fill">
+                        <Button Text="Refresh This Page" HorizontalOptions="Center"
+                                Margin="0,60"
+                                Command="{Binding RefreshCourses}"
+                                BackgroundColor="{StaticResource AppColor}"
+                                TextColor="White"
+                                FontSize="20"
+                                VerticalOptions="Center"/>
+                    </StackLayout>
+
+                </views:StateView>
+            </views:StateLayout.StateViews>
+            <RefreshView Refreshing="RefreshView_Refreshing"
+                      VerticalOptions="Fill">
+                <CollectionView x:Name="RegCourses"
+                            SelectionMode="Single"
+                            ItemsSource="{Binding MyCourses.courses}"
+                            Margin="0,10,0,0"
+                            SelectedItem="{Binding SelectedCourse}"
+                            VerticalOptions="FillAndExpand"
+                            EmptyView="No resource yet. Contribute to Estudiar community today"
+                            HorizontalOptions="FillAndExpand"
+                            ItemTemplate="{StaticResource CourseListTemplate}"
+                            />
+            </RefreshView>
+
+
+        </Grid>
+        
+        
+       
+        
+
+
+
+    </ContentPage.Content>
+</ContentPage>

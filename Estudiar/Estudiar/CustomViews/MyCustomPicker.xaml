@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="thisView"
+             
+             x:Class="Estudiar.CustomViews.MyCustomPicker">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            
+        </ResourceDictionary>
+    </ContentView.Resources>
+  <ContentView.Content>
+        <Frame Padding="0"
+               BackgroundColor="White"
+               CornerRadius="3" HasShadow="False">
+            <Grid HeightRequest="{Binding  HeightRequest, Source={x:Reference thisView}}"
+                  
+                  HorizontalOptions="Center" VerticalOptions="Center"
+              RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CollectionView ItemsSource="{Binding MyItemSource}"
+                                HorizontalScrollBarVisibility="{OnPlatform Never, UWP=Always}"
+
+                                ItemTemplate="{Binding MyDataTemplate}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                Grid.Row="0"
+                                Margin="12,20"
+                                Grid.RowSpan="2"
+                                x:Name="MyCollectionView"
+                                Scrolled="MyCollectionView_Scrolled">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Horizontal" Span="1" HorizontalItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+                <ImageButton x:Name="btn"
+                             Source="arrow.png"
+                             HeightRequest="65"
+                             BackgroundColor="Transparent"
+                             HorizontalOptions="Start"
+                        Grid.RowSpan="2"
+                        Clicked="Button_Clicked" VerticalOptions="Center"/>
+                <ImageButton HorizontalOptions="End"
+                             Source="arrow.png"
+                             HeightRequest="65"
+                             BackgroundColor="Transparent"
+                             Rotation="180"
+                        Grid.RowSpan="2"
+                        Clicked="Button_Clicked_1" VerticalOptions="Center"/>
+                <Frame x:Name="Frame1"
+                   Padding="10"
+                   Grid.Row="0"
+                       CornerRadius="0"
+                   BackgroundColor="{Binding BlinderColor}" >
+                </Frame>
+                <Frame x:Name="Frame2"
+                       CornerRadius="0"
+                   Padding="10"
+                   Grid.Row="1"
+                   BackgroundColor="{Binding BlinderColor}" >
+                </Frame>
+            </Grid>
+        </Frame>
+        
+    </ContentView.Content>
+</ContentView>

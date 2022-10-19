@@ -1,0 +1,596 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+             xmlns:cview="clr-namespace:Estudiar.CustomViews"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Name="this"
+             xmlns:converters="clr-namespace:Estudiar.Converters"
+             BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             xmlns:xamanimtrig="clr-namespace:Xamanimation.Triggers;assembly=Xamanimation"
+             xmlns:sflistview="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             xmlns:expander="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+            xmlns:sfBtn="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+            xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             x:Class="Estudiar.CustomViews.CourseContentView">
+    <!--<ContentView.BindingContext>
+        <VM:CourseVM x:Name="viewModel"/>
+    </ContentView.BindingContext>-->
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <xct:TextCaseConverter x:Key="TextCaseConverter" Type="Upper"/>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+            <converters:TextToSentenceConverter x:Key="TextToSentenceConverter"/>
+            <Style TargetType="Label" x:Key="FontIcon">
+                <Setter Property="FontFamily" Value="MF" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}" />
+                <Style.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="excerpt">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.KeyStar}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="textbook">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.BookOpenPageVariantOutline}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="note">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.NotebookEditOutline}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="past question">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.FileQuestionOutline}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        
+        <sflistview:SfListView x:Name="listView" FocusBorderThickness="0" IsScrollBarVisible="False" ScrollStateChanged="listView_ScrollStateChanged"
+                                   ItemSpacing="0" SelectionMode="None" AutoFitMode="DynamicHeight" ItemsSource="{Binding DbCourseStructure.types}">
+            <sflistview:SfListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="0" >
+                        <ff:CachedImage Source="{Binding DbCourseStructure.dp}"
+                                    IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                                    Grid.Row="0"
+                            LoadingPlaceholder = "Logo"
+                        Aspect="AspectFill"
+                                   HeightRequest="200"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Fill"
+                            ErrorPlaceholder = "Error"
+                            CacheDuration = "30"
+                            RetryCount = "5"
+                            RetryDelay = "450">
+
+                        </ff:CachedImage>
+                        <StackLayout Spacing="0" Grid.Row="1" IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}">
+
+
+                            <Label Text="{Binding DbCourseStructure.course}"
+                   TextTransform="Uppercase"
+                   TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                            <Label Text="{Binding DbCourseStructure.title}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontSize="30" FontFamily="NSK"
+                   Margin="15,0"/>
+                            <Label Text="About this Course" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="NSB" FontSize="18"
+                   Margin="15,10,15,0"/>
+                            <Label Text="{Binding DbCourseStructure.description}" 
+                   Margin="15,0">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsChecked, Source={x:Reference TextExpandBtn}}" Value="False">
+                                        <Setter Property="LineBreakMode" Value="TailTruncation"/>
+                                        <Setter Property="MaxLines" Value="3"/>
+                                    </DataTrigger>
+
+                                </Label.Triggers>
+                            </Label>
+                            <sfBtn:SfButton x:Name="TextExpandBtn" Text="See More" IsCheckable="True" 
+                                        BackgroundColor="Transparent"
+                                        Opacity="0.8"
+                                        ShowIcon="True"
+                                        FontFamily="IR"
+                                        FontSize="15"
+                                        Margin="0,10,0,0"
+                                        HorizontalOptions="CenterAndExpand" CornerRadius="5" ImageAlignment="Right"
+                                        IsChecked="False" TextColor="{StaticResource AppColor}">
+                                <sfBtn:SfButton.ImageSource>
+                                    <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronDown}" Color="{StaticResource AppColor}" FontFamily="MF" Size="10"/>
+                                </sfBtn:SfButton.ImageSource>
+                                <sfBtn:SfButton.Triggers>
+                                    <Trigger TargetType="sfBtn:SfButton" Property="IsChecked" Value="True">
+                                        <Setter Property="Text" Value="See Less"/>
+                                        <Setter Property="ImageSource">
+                                            <Setter.Value>
+                                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronUp}" Color="{StaticResource AppColor}" FontFamily="MF" Size="10"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </sfBtn:SfButton.Triggers>
+                            </sfBtn:SfButton>
+                            <!--<Label Text="Resource categories" TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                            <StackLayout BindableLayout.ItemsSource="{Binding DbCourseStructure.types}"  Margin="15,0" >
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,Auto" MinimumHeightRequest="30" ColumnSpacing="10">
+                                            <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" FontSize="25" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="5,0"/>
+                                            <Label Text="{Binding type}" FontFamily="NSK"  Grid.Column="1" Margin="10,0" VerticalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding resources.Count}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                        <Span Text=" "/>
+                                                        <Span Text="{Binding type}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                        <Span Text="(s)" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>-->
+                            <Label Text="Available resources" TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                        </StackLayout>
+                        <ImageButton Margin="10,7,0,0" Padding="5" Grid.Row="0" CornerRadius="20" BorderColor="White"
+                                 IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                                 Clicked="closePage_Clicked" Opacity="0.8"
+                                 BorderWidth="0.1" VerticalOptions="Start" HorizontalOptions="Start"
+                                 BackgroundColor="Black">
+                            <ImageButton.Source>
+                                <FontImageSource Size="30" FontFamily="MF" Color="{AppThemeBinding Dark=White, Light= White,Default=White}"  Glyph="{x:Static MaterialFont:FontIcon.ChevronLeft}"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                        <!--<StackLayout Orientation="Horizontal" Margin="15,0,15,10" IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}}">-->
+                        <StackLayout Orientation="Horizontal" Margin="15,0,15,10" IsVisible="false">
+                            <inputLayout:SfTextInputLayout  HorizontalOptions="FillAndExpand" LeadingViewPosition="Inside" >
+                                <inputLayout:SfTextInputLayout.LeadingView>
+                                    <Image>
+                                        <Image.Source>
+                                            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Magnify}" Size="40" FontFamily="MF" Color="{AppThemeBinding Dark=lightgray, Light=#9CA0B0,Default=#9CA0B0}"/>
+                                        </Image.Source>
+                                    </Image>
+                                </inputLayout:SfTextInputLayout.LeadingView>
+                                <inputLayout:SfTextInputLayout.TrailingView>
+                                    <sfBtn:SfButton BackgroundColor="Transparent"
+                                                Margin="0,0,0,5"
+                                    BorderColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                                        IsCheckable="True"
+                                                IsChecked="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                                            FontSize="30"
+                                            HeightRequest="50"
+                                        WidthRequest="50"
+                                TextColor="{StaticResource AppColor}"
+                        Text="{x:Static MaterialFont:FontIcon.Check}"
+                        CornerRadius="30"
+                        FontFamily="MF"
+                                    VerticalOptions="End"
+                        HorizontalOptions="End" >
+                                    </sfBtn:SfButton>
+                                </inputLayout:SfTextInputLayout.TrailingView>
+
+                                <Entry Text="{Binding SearchKey, Mode=TwoWay, TargetNullValue='', FallbackValue=''}"
+                                    Placeholder="Find resource(s) by name">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry" Binding="{Binding IsChecked, Source={x:Reference EnableSearchBtn}}" Value="False">
+                                            <Setter Property="Text" Value=""/>
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                            </inputLayout:SfTextInputLayout>
+
+                        </StackLayout>
+
+                        <!--IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"-->
+                        <Frame Grid.Row="0" Margin="0,0,5,-25"
+                           Padding="0"
+                           IsVisible="false"
+                           BackgroundColor="{StaticResource AppColor}"
+                           CornerRadius="30"
+                           VerticalOptions="End" HorizontalOptions="End">
+                            <sfBtn:SfButton x:Name="EnableSearchBtn"
+                                    BackgroundColor="{StaticResource AppColor}"
+                                    BorderColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                                        IsCheckable="True"
+                                            FontSize="30"
+                                            HeightRequest="50"
+                                        WidthRequest="50"
+                                TextColor="{AppThemeBinding Dark=Black, Light= White,Default=White}"
+                        Text="{x:Static MaterialFont:FontIcon.Magnify}"
+                        CornerRadius="30"
+                        FontFamily="MF"
+                                    VerticalOptions="End"
+                        HorizontalOptions="End" >
+                            </sfBtn:SfButton>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </sflistview:SfListView.HeaderTemplate>
+            <sflistview:SfListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Frame x:Name="frame" CornerRadius="2" BackgroundColor="Transparent" Margin="15,2"
+                                   Padding="{OnPlatform Android=1, iOS=1,  UWP=0}" 
+                                   HasShadow="{OnPlatform Android=false, iOS=false, UWP=true}">
+                                    <xct:Expander AnimationEasing="{Binding Animation}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                                    <xct:Expander.Header>
+                                            <Frame Padding="10,10" xct:TouchEffect.LongPressCommand="{Binding BindingContext.SemesterSelected,Source={x:Reference this}}"
+                                                       BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#F5F5F9,Default=#F5F5F9}"
+                                           xct:TouchEffect.LongPressDuration="500"
+                                               HasShadow="False"
+                                           xct:TouchEffect.CommandParameter="{Binding .}">
+                                                <!--<Frame.Triggers>
+                                            <DataTrigger TargetType="Frame"
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                                
+                                            </DataTrigger>
+                                        </Frame.Triggers>-->
+                                                <StackLayout Orientation="Horizontal">
+                                                    <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal" Spacing="10">
+                                                    <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" VerticalOptions="Center"
+                                                               HorizontalOptions="Center" FontFamily="MF"
+                                                               FontSize="30" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="5,0"/>
+                                                    <!--<Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+                                                            <Setter Property="TextColor" Value="White"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>-->
+                                                    <Label LineBreakMode="TailTruncation" VerticalTextAlignment="Center" 
+                                                               FontFamily="NSK"
+                                                           TextColor="{AppThemeBinding Dark=White, Light=Black, Default=Black}"
+                                                               VerticalOptions="Center" HorizontalTextAlignment="Start" 
+                                                               Text="{Binding type,Converter={StaticResource TextToSentenceConverter},StringFormat='{0}(s/es)'}" 
+                                                               FontSize="{OnPlatform Android={OnIdiom Phone=18, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, UWP={OnIdiom Phone=18, Tablet=20, Default=20}}"/>
+                                                            <!--<Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+                                                            <Setter Property="TextColor" Value="White"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>-->
+                                                    </StackLayout>
+                                                    <ImageButton HorizontalOptions="End"
+                                                         
+                                                         xct:TouchEffect.LongPressCommand="{Binding SemesterSelected}"
+                                                         xct:TouchEffect.PressedScale="1.2"
+                                           xct:TouchEffect.LongPressDuration="100"
+                                           xct:TouchEffect.CommandParameter="{Binding .}"
+                                                         BackgroundColor="Transparent"
+                                                   VerticalOptions="Center">
+                                                        <ImageButton.Source>
+                                                            <FontImageSource Size="30" Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                                         FontFamily="MF"
+                                                         Glyph="{x:Static MaterialFont:FontIcon.ChevronDownCircle}"/>
+                                                        </ImageButton.Source>
+                                                        <ImageButton.Triggers>
+                                                            <DataTrigger TargetType="ImageButton"
+                                                                
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+
+                                                                <Setter Property="Source">
+                                                                    <Setter.Value>
+                                                                        <FontImageSource Size="30" Color="{StaticResource Primary}"
+                                                         FontFamily="MF"
+                                                         Glyph="{x:Static MaterialFont:FontIcon.ChevronDownCircle}"/>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <DataTrigger.EnterActions>
+                                                                    <xamanimtrig:AnimateInt TargetProperty="ImageButton.Rotation" To="180" Duration="200"/>
+                                                                </DataTrigger.EnterActions>
+                                                                <DataTrigger.ExitActions>
+                                                                    <xamanimtrig:AnimateInt TargetProperty="ImageButton.Rotation" To="0" Duration="200" />
+                                                                </DataTrigger.ExitActions>
+                                                            </DataTrigger>
+                                                        </ImageButton.Triggers>
+                                                    </ImageButton>
+                                                </StackLayout>
+                                            </Frame>
+                                        <!--<Grid x:Name="grid" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#F5F5F9,Default=#F5F5F9}"
+                                              xct:CornerRadiusEffect.CornerRadius="5"
+                                              VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                
+                                                <Grid RowSpacing="0" Padding="0,10">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="60" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="60" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Grid.Row="0" Grid.Column="0">
+                                                        <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" VerticalOptions="Center"
+                                                               HorizontalOptions="Center"
+                                                               FontSize="30" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="5,0"/>
+                                                    </Grid>
+                                                    <Grid Grid.Row="0" Grid.Column="1" VerticalOptions="Center">
+                                                        <Label Grid.Row="0" LineBreakMode="TailTruncation" VerticalTextAlignment="Center" 
+                                                               FontFamily="NSK"
+                                                               VerticalOptions="Center" HorizontalTextAlignment="Start" TextColor="#474747"
+                                                               Text="{Binding type,Converter={StaticResource TextToSentenceConverter},StringFormat='{0}(s/es)'}" 
+                                                               FontSize="{OnPlatform Android={OnIdiom Phone=18, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, UWP={OnIdiom Phone=18, Tablet=20, Default=20}}"/>
+                                                    </Grid>
+                                                <ImageButton HorizontalOptions="Center"
+                                                         Grid.Row="0" Grid.Column="2"
+                                                         BackgroundColor="Transparent"
+                                                   VerticalOptions="Center">
+                                                    <ImageButton.Source>
+                                                        <FontImageSource Size="30" Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                                         FontFamily="MF"
+                                                         Glyph="{x:Static MaterialFont:FontIcon.ChevronDownCircle}"/>
+                                                    </ImageButton.Source>
+                                                    <ImageButton.Triggers>
+                                                        <DataTrigger TargetType="ImageButton"
+                                                                
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+
+                                                            <Setter Property="Source">
+                                                                <Setter.Value>
+                                                                    <FontImageSource Size="30" Color="{StaticResource Primary}"
+                                                         FontFamily="MF"
+                                                         Glyph="{x:Static MaterialFont:FontIcon.ChevronDownCircle}"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <DataTrigger.EnterActions>
+                                                                <xamanimtrig:AnimateInt TargetProperty="ImageButton.Rotation" To="180" Duration="200"/>
+                                                            </DataTrigger.EnterActions>
+                                                            <DataTrigger.ExitActions>
+                                                                <xamanimtrig:AnimateInt TargetProperty="ImageButton.Rotation" To="0" Duration="200" />
+                                                            </DataTrigger.ExitActions>
+                                                        </DataTrigger>
+                                                    </ImageButton.Triggers>
+                                                </ImageButton>
+                                                --><!--<Grid  HorizontalOptions="Center" VerticalOptions="Center">
+                                                        <Image HeightRequest="20" WidthRequest="20" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
+                                                            <Image.Source>
+                                                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronDown}" Color="{StaticResource AppColor}" FontFamily="MF" Size="10"/>
+                                                            </Image.Source>
+                                                        </Image>
+                                                    </Grid>--><!--
+                                                </Grid>
+                                            </Grid>-->
+                                        </xct:Expander.Header>
+                                    <xct:Expander.Content>
+                                        <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#F5F5F9,Default=#F5F5F9}"
+                                                     xct:CornerRadiusEffect.CornerRadius="5"
+                                             BindableLayout.ItemsSource="{Binding resources}" Orientation="Vertical" Margin="0,5,0,0" Spacing="0" >
+
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                            <!--<cards:SfCardView.GestureRecognizers>
+                                                                    <TapGestureRecognizer
+                                                                                          CommandParameter="{Binding .}"
+                                                                                          Command="{Binding BindingContext.SelectedMaterial,Source={x:Reference this}}"/>
+                                                                </cards:SfCardView.GestureRecognizers>-->
+
+
+                                                    <StackLayout Padding="0,5" Spacing="0">
+                                                        <StackLayout Padding="0,5" Orientation="Horizontal" xct:TouchEffect.NativeAnimation="True" Spacing="0"
+                                                                      xct:TouchEffect.Command="{Binding BindingContext.SelectedResourceCommand,Source={x:Reference this}}" 
+                                                                              xct:TouchEffect.CommandParameter="{Binding .}"
+                                                                              xct:TouchEffect.NativeAnimationColor="LightGray">
+                                                            <Label Text="{Binding foldername,Converter={StaticResource TextToSentenceConverter}}" VerticalOptions="Center" FontSize="20" LineBreakMode="TailTruncation" MaxLines="1"
+                                                                       Margin="10,0"
+                                                                       FontFamily="IM" />
+                                                            <Frame Padding="10,5" CornerRadius="5" BackgroundColor="{StaticResource AppColor}" HasShadow="False"
+                                                                   Margin="0,0,10,0" HorizontalOptions="EndAndExpand" MinimumWidthRequest="200">
+                                                                <Label Text="{Binding files.Count, StringFormat='{0} file(s)'}" FontSize="15" TextColor="{AppThemeBinding Dark=Black, Light=White,Default=White}">
+                                                                    <Label.Triggers>
+                                                                        <DataTrigger TargetType="Label" Binding="{Binding files.Count}" Value="1">
+                                                                            <Setter Property="Text" Value="{Binding files[0].filesize, StringFormat='{0:F1} MB'}"/>
+                                                                        </DataTrigger>
+                                                                    </Label.Triggers>
+                                                                </Label>
+                                                            </Frame>
+                                                        </StackLayout>
+                                                                    
+                                                        <BoxView BackgroundColor="Gainsboro" HeightRequest="0.1" Margin="10,0,10,0" HorizontalOptions="Fill" 
+                                                                 VerticalOptions="End"/>
+                                                        <!--<Grid.GestureRecognizers>
+                                                                        <TapGestureRecognizer x:Name="MaterialCard"
+                                                                                              
+                                                                                          CommandParameter="{Binding .}"
+                                                                                          Command="{Binding BindingContext.SelectedMaterial,Source={x:Reference this}}"/>
+                                                                    </Grid.GestureRecognizers>-->
+                                                                </StackLayout>
+                                                                
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </StackLayout>
+                                        </xct:Expander.Content>
+                                    </xct:Expander>
+                            </Frame>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </sflistview:SfListView.ItemTemplate>
+        </sflistview:SfListView>
+        <!--<CollectionView ItemsSource="{Binding TempCourseMaterials}">
+            <CollectionView.Header>
+                <Grid RowDefinitions="Auto,Auto" RowSpacing="0" >
+                    <ff:CachedImage Source="{Binding DbCourseStructure.dp}"
+                                    IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                                    Grid.Row="0"
+                            LoadingPlaceholder = "Logo"
+                        Aspect="AspectFill"
+                                   HeightRequest="200"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Fill"
+                            ErrorPlaceholder = "Error"
+                            CacheDuration = "30"
+                            RetryCount = "5"
+                            RetryDelay = "450">
+
+                    </ff:CachedImage>
+                    <StackLayout Spacing="0" Grid.Row="1" IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}">
+                        
+
+                        <Label Text="{Binding DbCourseStructure.course}"
+                   TextTransform="Uppercase"
+                   TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                        <Label Text="{Binding DbCourseStructure.title}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontSize="30" FontFamily="NSK"
+                   Margin="15,0"/>
+                        <Label Text="About this Course" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="NSB" FontSize="25"
+                   Margin="15,10,15,0"/>
+                        <Label Text="{Binding DbCourseStructure.description}" 
+                   Margin="15,0">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding IsChecked, Source={x:Reference TextExpandBtn}}" Value="False">
+                                    <Setter Property="LineBreakMode" Value="TailTruncation"/>
+                                    <Setter Property="MaxLines" Value="3"/>
+                                </DataTrigger>
+                                
+                            </Label.Triggers>
+                        </Label>
+                        <sfBtn:SfButton x:Name="TextExpandBtn" Text="See More" IsCheckable="True" 
+                                        BackgroundColor="Transparent"
+                                        Opacity="0.8"
+                                        ShowIcon="True"
+                                        FontFamily="IR"
+                                        FontSize="15"
+                                        Margin="0,10,0,0"
+                                        HorizontalOptions="CenterAndExpand" CornerRadius="5" ImageAlignment="Right"
+                                        IsChecked="False" TextColor="{StaticResource AppColor}">
+                            <sfBtn:SfButton.ImageSource>
+                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronDown}" Color="{StaticResource AppColor}" FontFamily="MF" Size="10"/>
+                            </sfBtn:SfButton.ImageSource>
+                            <sfBtn:SfButton.Triggers>
+                                <Trigger TargetType="sfBtn:SfButton" Property="IsChecked" Value="True">
+                                    <Setter Property="Text" Value="See Less"/>
+                                    <Setter Property="ImageSource">
+                                        <Setter.Value>
+                                            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronUp}" Color="{StaticResource AppColor}" FontFamily="MF" Size="10"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </sfBtn:SfButton.Triggers>
+                        </sfBtn:SfButton>
+                        <Label Text="Resource categories" TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                        <StackLayout BindableLayout.ItemsSource="{Binding DbCourseStructure.types}"  Margin="15,0" >
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto,Auto" MinimumHeightRequest="30" ColumnSpacing="10">
+                                        <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" FontSize="25" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="5,0"/>
+                                        <Label Text="{Binding type}" FontFamily="NSK"  Grid.Column="1" Margin="10,0" VerticalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding resources.Count}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                    <Span Text=" "/>
+                                                    <Span Text="{Binding type}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                    <Span Text="(s)" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                        <Label Text="Available resources" TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                    </StackLayout>
+                    <ImageButton Margin="10,7,0,0" Padding="5" Grid.Row="0" CornerRadius="20" BorderColor="White"
+                                 IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                                 Clicked="closePage_Clicked" Opacity="0.8"
+                                 BorderWidth="0.1" VerticalOptions="Start" HorizontalOptions="Start"
+                                 BackgroundColor="Black">
+                        <ImageButton.Source>
+                            <FontImageSource Size="30" FontFamily="MF" Color="{AppThemeBinding Dark=White, Light= White,Default=White}"  Glyph="{x:Static MaterialFont:FontIcon.ChevronLeft}"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+                    <StackLayout Orientation="Horizontal" Margin="15,0,15,10" IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}}">
+                        <inputLayout:SfTextInputLayout  HorizontalOptions="FillAndExpand" LeadingViewPosition="Inside" >
+                            <inputLayout:SfTextInputLayout.LeadingView>
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Magnify}" Size="40" FontFamily="MF" Color="{AppThemeBinding Dark=lightgray, Light=#9CA0B0,Default=#9CA0B0}"/>
+                                    </Image.Source>
+                                </Image>
+                            </inputLayout:SfTextInputLayout.LeadingView>
+                            <inputLayout:SfTextInputLayout.TrailingView>
+                                <sfBtn:SfButton BackgroundColor="Transparent"
+                                                Margin="0,0,0,5"
+                                    BorderColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                                        IsCheckable="True"
+                                                IsChecked="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                                            FontSize="30"
+                                            HeightRequest="50"
+                                        WidthRequest="50"
+                                TextColor="{StaticResource AppColor}"
+                        Text="{x:Static MaterialFont:FontIcon.Check}"
+                        CornerRadius="30"
+                        FontFamily="MF"
+                                    VerticalOptions="End"
+                        HorizontalOptions="End" >
+                                </sfBtn:SfButton>
+                            </inputLayout:SfTextInputLayout.TrailingView>
+
+                            <Entry Text="{Binding SearchKey, Mode=TwoWay, TargetNullValue='', FallbackValue=''}"
+                                    Placeholder="Find resource(s) by name">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry" Binding="{Binding IsChecked, Source={x:Reference EnableSearchBtn}}" Value="False">
+                                        <Setter Property="Text" Value=""/>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                        </inputLayout:SfTextInputLayout>
+
+                    </StackLayout>
+
+
+                    <Frame Grid.Row="0" Margin="0,0,5,-25"
+                           Padding="0"
+                           IsVisible="{Binding IsChecked, Source={x:Reference EnableSearchBtn}, Converter={StaticResource InvertedBoolConverter}}"
+                           BackgroundColor="{StaticResource AppColor}"
+                           CornerRadius="30"
+                           VerticalOptions="End" HorizontalOptions="End">
+                        <sfBtn:SfButton x:Name="EnableSearchBtn"
+                                    BackgroundColor="{StaticResource AppColor}"
+                                    BorderColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                                        IsCheckable="True"
+                                            FontSize="30"
+                                            HeightRequest="50"
+                                        WidthRequest="50"
+                                TextColor="{AppThemeBinding Dark=Black, Light= White,Default=White}"
+                        Text="{x:Static MaterialFont:FontIcon.Magnify}"
+                        CornerRadius="30"
+                        FontFamily="MF"
+                                    VerticalOptions="End"
+                        HorizontalOptions="End" >
+                        </sfBtn:SfButton>
+                    </Frame>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="15,3" >
+                        <cards:SfCardView Padding="0,10" xct:TouchEffect.NativeAnimation="True"
+                                           
+                                                          xct:TouchEffect.Command="{Binding BindingContext.SelectedMaterial,Source={x:Reference this}}"
+                                                          xct:TouchEffect.CommandParameter="{Binding .}"
+                                                          xct:TouchEffect.NativeAnimationColor="LightGray">
+                            <Grid ColumnDefinitions="50,*" ColumnSpacing="0">
+                                <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="10,0,0,0"  FontSize="30"/>
+                                <Label Text="{Binding foldername}" VerticalOptions="Center" FontSize="20" Grid.Column="1" LineBreakMode="MiddleTruncation" MaxLines="1"
+                                       Margin="0,0,5,0"
+                                       FontFamily="NSK" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+
+                            </Grid>
+                        </cards:SfCardView>
+                    </Grid>
+                </DataTemplate>
+
+            </CollectionView.ItemTemplate>
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="0" Orientation="Vertical"/>
+            </CollectionView.ItemsLayout>
+        </CollectionView>-->
+    </ContentView.Content>
+</ContentView>

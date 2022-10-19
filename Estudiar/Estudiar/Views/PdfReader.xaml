@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Customview="clr-namespace:Estudiar.CustomViews"
+             x:Class="Estudiar.Views.PdfReader"
+             >
+  <ContentView.Content>
+        <Customview:CustomWebView x:Name="MyPDFView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+    </ContentView.Content>
+</ContentView>

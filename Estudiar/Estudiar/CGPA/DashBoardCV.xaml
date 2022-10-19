@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="this"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:vm="clr-namespace:Estudiar.ViewModels"
+             xmlns:views="clr-namespace:Estudiar.Views"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:converters="clr-namespace:Estudiar.Converters"
+             xmlns:customviews="clr-namespace:Estudiar.CustomViews"
+             xmlns:controls="clr-namespace:Estudiar.Controls"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xanimation="clr-namespace:Xamanimation;assembly=Xamanimation"
+             xmlns:xamanimtrig="clr-namespace:Xamanimation.Triggers;assembly=Xamanimation"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:microChartsforms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:inputText ="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:comboBox ="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=System.Collections"
+             xmlns:microCharts="clr-namespace:Microcharts;assembly=Microcharts"
+             BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             x:Class="Estudiar.CGPA.DashBoardCV">
+    <ContentView.BindingContext>
+        <vm:calcVm/>
+    </ContentView.BindingContext>
+    <ContentView.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+        </Style>
+        <ControlTemplate x:Key="CardViewInfoControlTemplate">
+            <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Padding="15,10"
+                   xct:TouchEffect.PressedOpacity="0.5"
+                   xct:TouchEffect.PressedBackgroundColor="Gainsboro"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="Center"
+                   HasShadow="True"
+                   CornerRadius="5"
+                   BindingContext="{Binding Source={RelativeSource TemplatedParent}}"
+                   xct:TouchEffect.LongPressCommand="{Binding BindingContext.InfoCardsPressed,Source={x:Reference this}}"
+                   xct:TouchEffect.LongPressDuration="600"
+                   xct:TouchEffect.CommandParameter="{Binding .}">
+                <StackLayout Spacing="0" VerticalOptions="Center">
+                    <Label Text="{Binding Value}" HorizontalOptions="Center"
+                                                   FontFamily="NSK" FontSize="30"/>
+                    <Label Text="{Binding Description}" TextColor="{StaticResource Primary}"
+                           FontSize="12"
+                           MaxLines="1"
+                           LineBreakMode="TailTruncation"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
+        </ControlTemplate>
+    </ContentView.Resources>
+  <ContentView.Content>
+        <Grid RowDefinitions="Auto,*" RowSpacing="0">
+            <Frame Grid.Row="0" BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Padding="10,10">
+                <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="CGPA Calculator" TextTransform="Uppercase" FontFamily="IM" VerticalOptions="Center" FontSize="20"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="10">
+
+                        <ImageButton VerticalOptions="Center" x:Name="MoreMenu" Clicked="MoreMenu_Clicked"
+                                     
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Size="{OnPlatform Android=30, UWP=10}" Color="{AppThemeBinding Dark=White, Light=Black,Default=Black}"
+                                 xct:TouchEffect.NativeAnimation="True"
+                                 xct:TouchEffect.NativeAnimationColor="Gray"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.DotsVertical}"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <StackLayout Grid.Row="1" Spacing="0">
+                <ScrollView VerticalOptions="FillAndExpand">
+                    <StackLayout >
+                        <Frame Padding="10,20" BackgroundColor="Transparent" VerticalOptions="CenterAndExpand" >
+                            <StackLayout Spacing="0">
+                                <StackLayout Orientation="Vertical" >
+                                    <Grid HorizontalOptions="Center" ColumnDefinitions="*,Auto,*" ColumnSpacing="0">
+                                        <skia:SKCanvasView PaintSurface="SKCanvasView_PaintSurface" 
+                                                           Grid.Column="1"
+                                                   HeightRequest="200"
+                                                   WidthRequest="{Binding HeightRequest, Source={RelativeSource Self }}"
+                                                   HorizontalOptions="Center"
+                                                   x:Name="cgpaCanvas">
+                                        </skia:SKCanvasView>
+                                        <ImageButton HorizontalOptions="Start" Grid.Column="2"
+                                                     xct:TouchEffect.PressedScale="1.2"
+                                                     x:Name="InfoBtn"
+                                                         Clicked="InfoBtn_Clicked"
+                                                     VerticalOptions="Start" BackgroundColor="Transparent" >
+                                            <ImageButton.Source>
+                                                <FontImageSource Size="30" FontFamily="MF" Color="Gray" Glyph="{x:Static MaterialFont:FontIcon.InformationOutline}"/>
+                                            </ImageButton.Source>
+                                        </ImageButton>
+                                    </Grid>
+
+                                    <StackLayout Padding="20,0" Orientation="Horizontal"
+                                            HorizontalOptions="Center" >
+                                        <Grid ColumnDefinitions="*,*,*">
+                                            <controls:CardViewInfo Grid.Column="0" HorizontalOptions="FillAndExpand" Value="{Binding TotalUnits, FallbackValue=0, TargetNullValue=0}" Description="Unit(s)" ControlTemplate="{StaticResource CardViewInfoControlTemplate}"/>
+                                            <controls:CardViewInfo Grid.Column="1" HorizontalOptions="FillAndExpand" Value="{Binding NumberofCoursesDone, FallbackValue=0, TargetNullValue=0}" Description="Course(s)" ControlTemplate="{StaticResource CardViewInfoControlTemplate}"/>
+                                            <controls:CardViewInfo Grid.Column="2" HorizontalOptions="FillAndExpand" Value="{Binding Universitygrades.Count, FallbackValue=0, TargetNullValue=0}" Description="Semester(s)" ControlTemplate="{StaticResource CardViewInfoControlTemplate}"/>
+                                        </Grid>
+
+                                    </StackLayout>
+                                </StackLayout>
+
+
+                            </StackLayout>
+                        </Frame>
+                        <Frame BorderColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= lightgray,Default=lightgray}" BackgroundColor="{AppThemeBinding Dark=Black, Light= White,Default=White}"
+                           xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                           HorizontalOptions="End" CornerRadius="10" Padding="10,10,15,10" Margin="20,20">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.OpenFreshCalc,Source={x:Reference this}}" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout Orientation="Horizontal">
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource Size="20" Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                 xct:TouchEffect.NativeAnimation="True"
+                                 xct:TouchEffect.NativeAnimationColor="Gray"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.Plus}"/>
+                                    </Image.Source>
+                                </Image>
+                                <Label Text="Calculate new result" VerticalOptions="Center"/>
+
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </ScrollView>
+
+                <BoxView BackgroundColor="LightGray" Opacity="0.5" HeightRequest="0.4" HorizontalOptions="Fill"
+                         xct:ShadowEffect.Color="Black"
+                         xct:ShadowEffect.Opacity="1"
+                         xct:ShadowEffect.Radius="1"
+                         xct:ShadowEffect.OffsetY="-1"/>
+            </StackLayout>
+            <Grid x:Name="GraphView" Grid.Row="1" IsVisible="false" VerticalOptions="FillAndExpand">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="GraphsView_Tapped"/>
+                    <PanGestureRecognizer PanUpdated="GraphsView_PanUpdated"/>
+                </Grid.GestureRecognizers>
+                <BoxView Opacity="0.5">
+                    <BoxView.Background>
+                        <RadialGradientBrush>
+                            <GradientStop Color="{StaticResource PrimarySelect}" Offset="0.1"/>
+                            <GradientStop Color="{StaticResource BackgroundColor}" Offset="1.0" />
+                        </RadialGradientBrush>
+                    </BoxView.Background>
+                </BoxView>
+                <ScrollView VerticalOptions="Center">
+                    <StackLayout Spacing="0">
+                        <ImageButton HorizontalOptions="Center" Clicked="GraphsView_Tapped" BackgroundColor="Transparent" xct:TouchEffect.PressedScale="0.8" xct:TouchEffect.PressedOpacity="0.8">
+                            <ImageButton.Source>
+                                <FontImageSource Size="40" Glyph="{x:Static MaterialFont:FontIcon.CloseCircleOutline}" Color="Gray" FontFamily="MF"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="10,10" xct:CornerRadiusEffect.CornerRadius="10,10,10,10" Margin="30,10" BackgroundColor="{StaticResource BackgroundColor}">
+                            <Frame Margin="10,10,10,10" HorizontalOptions="FillAndExpand">
+                                <StackLayout Spacing="15">
+                                    <microChartsforms:ChartView Chart="{Binding BindingContext.GPAcompare,Source={x:Reference this}}"  HeightRequest="200"/>
+                                    <Label Text="CGPA for each semester" FontFamily="IM" TextColor="Black" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </Frame>
+                            <Frame Margin="10,10,10,10" HorizontalOptions="FillAndExpand">
+                                <StackLayout Spacing="15">
+                                    <microChartsforms:ChartView Chart="{Binding BindingContext.GradeFreq,Source={x:Reference this}}"  HeightRequest="200" />
+                                    <Label Text="Frequency of each grade" FontFamily="IM" TextColor="Black" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </Frame>
+
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </ScrollView>
+
+            </Grid>
+            <Grid BackgroundColor="Transparent" 
+                  Grid.Row="1"
+                  IsVisible="true"
+                  x:Name="MenuOptionGrid">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="MenuOptionGrid_Tapped"/>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                </Grid.GestureRecognizers>
+                <Frame HorizontalOptions="End"
+                   VerticalOptions="Start"
+                       Margin="0,5,5,0"
+                       Padding="0">
+                    <xct:Expander 
+                              IsExpanded="True"
+                          x:Name="MenuExpander"
+                   
+                          BackgroundColor="Transparent">
+                        <xct:Expander.Content>
+                            <Frame BackgroundColor="{AppThemeBinding Dark=Black, Light= White,Default=White}"
+                                   Padding="0,0,0,0" CornerRadius="0" VerticalOptions="Start"
+                           HorizontalOptions="End">
+                                <StackLayout Spacing="0" >
+                                    <StackLayout Orientation="Horizontal"
+                                                 x:Name="OpenSavedData" IsVisible="false"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="LightGray">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MoreMenu_Clicked" Command="{Binding OpenSavedData}" />
+                                        </StackLayout.GestureRecognizers>
+                                        <Image Margin="10,0,5,0">
+                                            <Image.Source>
+                                                <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.ExpandAll}"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label Margin="0,15,15,15" Text="Saved Items" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                    </StackLayout>
+
+                                    <!--<StackLayout Orientation="Horizontal"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="LightGray">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MoreMenu_Clicked" />
+                                        </StackLayout.GestureRecognizers>
+                                        <Image Margin="10,0,5,0">
+                                            <Image.Source>
+                                                <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.School}"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label Margin="0,15,15,15" Text="Tutorials" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                    </StackLayout>-->
+                                </StackLayout>
+                            </Frame>
+                        </xct:Expander.Content>
+
+                    </xct:Expander>
+                </Frame>
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+             xmlns:cview="clr-namespace:Estudiar.CustomViews"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Name="this"
+            xmlns:sfBtn="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+            xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             x:Class="Estudiar.CustomViews.test">
+    <ContentView.BindingContext>
+        <VM:CourseVM/>
+    </ContentView.BindingContext>
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <xct:TextCaseConverter x:Key="TextCaseConverter" Type="Upper"/>
+            <Style TargetType="Label" x:Key="FontIcon">
+                <Setter Property="FontFamily" Value="MF" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}" />
+                <Style.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="excerpt">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.FileQuestionOutline}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="textbook">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.BookOpenPageVariantOutline}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="note">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.NotebookEditOutline}"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding type}" Value="past question">
+
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <CollectionView ItemsSource="{Binding CourseMaterials}">
+            <CollectionView.Header>
+                <Grid>
+                    <StackLayout Spacing="0">
+                        <ff:CachedImage Source="{Binding DbCourseStructure.dp}"
+                            LoadingPlaceholder = "Logo"
+                        Aspect="AspectFill"
+                            ErrorPlaceholder = "Error"
+                            HorizontalOptions="Fill"
+                            HeightRequest = "200"
+                            CacheDuration = "30"
+                            RetryCount = "5"
+                            RetryDelay = "450"
+                            Grid.Row="0"
+                            DownsampleToViewSize = "true">
+
+                        </ff:CachedImage>
+
+                        <Label Text="{Binding DbCourseStructure.course}"
+                   TextTransform="Uppercase"
+                   TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,10,15,0"/>
+                        <Label Text="{Binding DbCourseStructure.title}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontSize="30" FontFamily="NSK"
+                   Margin="15,0"/>
+                        <Label Text="About this Course" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="NSK" FontSize="25"
+                   Margin="15,20,15,0"/>
+                        <Label Text="{Binding DbCourseStructure.description}" 
+                   Margin="15,0"/>
+                        <Label Text="Resource categories" TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="15,0"/>
+                        <StackLayout BindableLayout.ItemsSource="{Binding DbCourseStructure.types}"  Margin="15,0" >
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="50,Auto" MinimumHeightRequest="30" ColumnSpacing="0">
+                                        <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="5,0"/>
+                                        <Label Text="{Binding type}" FontFamily="NSK"  Grid.Column="1" Margin="10,0">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding resources.Count}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                    <Span Text=" "/>
+                                                    <Span Text="{Binding type}" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                                    <Span Text="{Binding resources.Count}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                        <Label Text="Available resources" TextColor="{StaticResource AppColor}" FontFamily="NSK"
+                   Margin="20,0"/>
+                    </StackLayout>
+                    <ImageButton Margin="10,7,0,0" Padding="5" CornerRadius="20" BorderColor="White"
+                                 Clicked="closePage_Clicked"
+                                 BorderWidth="0.1" VerticalOptions="Start" HorizontalOptions="Start"
+                                 BackgroundColor="Black">
+                        <ImageButton.Source>
+                            <FontImageSource Size="30" FontFamily="MF" Color="{AppThemeBinding Dark=White, Light= White,Default=White}"  Glyph="{x:Static MaterialFont:FontIcon.ChevronLeft}"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="20,3" >
+                        <cards:SfCardView CornerRadius="15" Padding="0,10" xct:TouchEffect.NativeAnimation="True"
+                                              BackgroundColor="{AppThemeBinding Dark={StaticResource DimGray}, Light=#F5F5F9,Default=#F5F5F9}"
+                                                          xct:TouchEffect.Command="{Binding BindingContext.SelectedMaterial,Source={x:Reference this}}"
+                                                          xct:TouchEffect.CommandParameter="{Binding .}"
+                                                          xct:TouchEffect.NativeAnimationColor="LightGray">
+                            <Grid ColumnDefinitions="50,*">
+                                <Label Text="{x:Static MaterialFont:FontIcon.MinusCircleOutline}" Style="{StaticResource FontIcon}" Grid.Column="0" Margin="10,0,0,0"  FontSize="30"/>
+                                <Label Text="{Binding foldername}" VerticalOptions="Center" FontSize="20" Grid.Column="1" FontFamily="NSK" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+
+                            </Grid>
+                        </cards:SfCardView>
+                    </Grid>
+                </DataTemplate>
+
+            </CollectionView.ItemTemplate>
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="0" Orientation="Vertical"/>
+            </CollectionView.ItemsLayout>
+        </CollectionView>
+    </ContentView.Content>
+</ContentView>

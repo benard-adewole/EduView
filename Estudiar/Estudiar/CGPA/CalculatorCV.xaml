@@ -1,0 +1,659 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Estudiar.ViewModels"
+             x:Name="this"
+             xmlns:views="clr-namespace:Estudiar.Views"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:converters="clr-namespace:Estudiar.Converters"
+             xmlns:controls="clr-namespace:Estudiar.Controls"
+             xmlns:toolkit="clr-namespace:Estudiar.Toolkit"
+             xmlns:customviews="clr-namespace:Estudiar.CustomViews"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xanimation="clr-namespace:Xamanimation;assembly=Xamanimation"
+             xmlns:xamanimtrig="clr-namespace:Xamanimation.Triggers;assembly=Xamanimation"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:microChartsforms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:microCharts="clr-namespace:Microcharts;assembly=Microcharts"
+             Shell.TabBarIsVisible="False"
+             Shell.PresentationMode="Animated"
+             BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             Shell.NavBarIsVisible="False"
+             x:Class="Estudiar.CGPA.CalculatorCV">
+    <ContentView.BindingContext>
+        <vm:calcVm/>
+    </ContentView.BindingContext>
+    <ContentView.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light=Black,Default=Black}"/>
+        </Style>
+        <xanimation:RotateToAnimation x:Key="ExpandToRotate" Duration="500" Rotation="90"/>
+        <xanimation:RotateToAnimation x:Key="CollapseToRotate"  Duration="500" Rotation="0"/>
+        <DataTemplate x:Key="Even">
+            <Grid ColumnDefinitions="*,*,*,60" BackgroundColor="LightGray" >
+
+                <customviews:RoundedEntry Text="{Binding code}"
+                                         BackColor="Transparent"
+                                         BorderWidth="1"
+                                         UnfocusedBorderColor="Transparent"
+                                         FocusedBorderColor="Transparent"
+                                         Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <customviews:Dropdown ItemsSource="{Binding possibleunit }"
+                                      SelectedIndex="{Binding unit}"
+                                      Grid.Column="1"
+                                      WidthRequest="10"
+                                      HeightRequest="30"/>
+                <customviews:Dropdown ItemsSource="{Binding possiblegrades }"
+                                      SelectedIndex="1"
+                                      Grid.Column="2"
+                                      WidthRequest="10"
+                                      HeightRequest="30"/>
+                <!--<ImageButton Padding="8"
+                             BorderColor="{StaticResource Primary}"
+                             BorderWidth="0.1"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="Black"
+                             xct:TouchEffect.NativeAnimationBorderless="False"
+                             BackgroundColor="LightGray"
+                             CornerRadius="50"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Clicked="OnDeleteUpdateExpannderHeight_Clicked"
+                             Command="{Binding BindingContext.DeleteCourse,Source={x:Reference this}}"
+                             Grid.Column="3" CommandParameter="{Binding .}">
+                    <ImageButton.Source>
+                        <FontImageSource Size="20" Color="{StaticResource Primary}"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.Close}"/>
+                    </ImageButton.Source>
+                </ImageButton>-->
+
+
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="Odd">
+            <Grid ColumnDefinitions="*,*,*,60" Padding="0,5">
+                <Entry Text="{Binding code}"
+                                                       Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <customviews:Dropdown ItemsSource="{Binding possibleunit }"
+                                                  SelectedIndex="{Binding unit}"
+                                                  Grid.Column="1"
+                                                  WidthRequest="20"
+                                                  HeightRequest="30"/>
+                <customviews:Dropdown ItemsSource="{Binding possiblegrades }"
+                                                  SelectedIndex="1"
+                                                  Grid.Column="2"
+                                                  HorizontalOptions="Fill"
+                                                  HeightRequest="30"/>
+                <ImageButton Padding="8"
+                                                             BorderColor="{StaticResource Primary}"
+                                                             BorderWidth="0.1"
+                                                             xct:TouchEffect.NativeAnimation="True"
+                                                             xct:TouchEffect.NativeAnimationColor="Black"
+                                                             xct:TouchEffect.NativeAnimationBorderless="False"
+                                                    BackgroundColor="{StaticResource Secondary}"
+                                                    CornerRadius="50"
+                                                             HorizontalOptions="Center"
+                                                             VerticalOptions="Center"
+                                                    Clicked="OnDeleteUpdateExpannderHeight_Clicked"
+                                                    Command="{Binding BindingContext.DeleteCourse,Source={x:Reference this}}"
+                                                    Grid.Column="3" CommandParameter="{Binding .}">
+                    <ImageButton.Source>
+                        <FontImageSource Size="20" Color="{StaticResource Primary}"
+                                                                         FontFamily="MF"
+                                                                         Glyph="{x:Static MaterialFont:FontIcon.Close}"/>
+                    </ImageButton.Source>
+                </ImageButton>
+
+
+            </Grid>
+        </DataTemplate>
+        
+        <ControlTemplate x:Key="CardViewInfoControlTemplate">
+            <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=White, Default=White}" Padding="15,10"
+                   xct:TouchEffect.PressedOpacity="0.5"
+                   xct:TouchEffect.PressedBackgroundColor="Gainsboro"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="Center"
+                   HasShadow="True"
+                   CornerRadius="5"
+                   BindingContext="{Binding Source={RelativeSource TemplatedParent}}"
+                   xct:TouchEffect.LongPressCommand="{Binding BindingContext.InfoCardsPressed,Source={x:Reference this}}"
+                   xct:TouchEffect.LongPressDuration="600"
+                   xct:TouchEffect.CommandParameter="{Binding .}">
+                <StackLayout Spacing="0" VerticalOptions="Center">
+                    <Label Text="{Binding Value}" HorizontalOptions="Center"
+                                                   FontFamily="NSK" FontSize="30"/>
+                    <Label Text="{Binding Description}" TextColor="{StaticResource Primary}"
+                           FontSize="12"
+                           MaxLines="1"
+                           LineBreakMode="TailTruncation"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
+        </ControlTemplate>
+        <ResourceDictionary>
+
+
+            <Style TargetType="Button" x:Key="OptionButtons">
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="TextColor" Value="Black"/>
+            </Style>
+            <Style TargetType="Frame" x:Key="CollectionFrameHeader">
+                <Style.Triggers>
+                    <DataTrigger TargetType="Frame"
+                                 Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                 Value="True">
+                        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=Black, Light=White, Default=White}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="Padding" Value="0,6"/>
+                <Setter Property="BorderColor" Value="Transparent"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+            </Style>
+            <Style TargetType="Label" x:Key="CollectionLabelHeader">
+                <Style.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                 Value="True">
+                        <Setter Property="TextColor" Value="DimGray"/>
+                    </DataTrigger>
+                </Style.Triggers>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="TextColor" Value="{StaticResource BackgroundColorDark}"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="LineBreakMode" Value="TailTruncation"/>
+                <Setter Property="FontFamily" Value="NSB"/>
+            </Style>
+            <xct:MathExpressionConverter x:Key="MathExpressionConverter" />
+            <xct:MultiMathExpressionConverter x:Key="MultiMathExpressionConverter" />
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Grid RowDefinitions="Auto,*" RowSpacing="0">
+            <Frame Grid.Row="0" BackgroundColor="{AppThemeBinding Dark=Black, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Padding="10,10">
+                <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                        <ImageButton VerticalOptions="Center"
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                     xct:TouchEffect.Command="{Binding Pop}"
+                                                     HorizontalOptions="End"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.ChevronLeft}"
+                                                             Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                                                     Size="35"
+                                                             FontFamily="MF"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                        <Label Margin="10,0,0,0" Text="{Binding FileName}" x:Name="FileName"
+                               xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                               xct:TouchEffect.Command="{Binding Rename}"
+                               xct:TouchEffect.CommandParameter="{Binding Text, Source={RelativeSource Self}}"
+                               
+                               TextTransform="Uppercase"
+                                FontFamily="IM" VerticalOptions="Center" FontSize="20">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding Text, Source={RelativeSource Self}}" Value="unsaved">
+                                    <Setter Property="TextColor" Value="Gray"/>
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <ImageButton VerticalOptions="Center"
+                                     xct:TouchEffect.Command="{Binding Rename}"
+                               xct:TouchEffect.CommandParameter="{Binding Text, Source={x:Reference FileName}}"
+                                                     HorizontalOptions="End"
+                                                         CornerRadius="5"
+                                                     Margin="0,0,0,0"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Pencil}"
+                                                             Color="Gray"
+                                                                     Size="25"
+                                                             FontFamily="MF"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="10">
+                        <ImageButton VerticalOptions="Center"  x:Name="SaveEditToolbar"
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.Command="{Binding SaveEdit}"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Size="30" Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                                
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.ContentSaveEdit}"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                        <ImageButton VerticalOptions="Center"
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.Command="{Binding Save}"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Size="30" Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.ContentSave}"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                        <ImageButton VerticalOptions="Center" x:Name="MoreMenu" Clicked="MoreMenu_Clicked"
+                                     xct:TouchEffect.NativeAnimation="True"
+                                     xct:TouchEffect.NativeAnimationBorderless="True"
+                                     xct:TouchEffect.NativeAnimationRadius="20"
+                                     xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                 BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource Size="30" Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.DotsVertical}"/>
+                            </ImageButton.Source>
+
+                        </ImageButton>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Grid Grid.Row="1" >
+
+                <StackLayout>
+                    <CollectionView ItemsSource="{Binding Universitygrades}"
+                                x:Name="MainCollectionView"
+                                Scrolled="CollectionView_Scrolled"
+                                EmptyView="Add new semester by clicking the Add button below">
+
+                        <CollectionView.Header>
+                            <Frame Padding="10,20" BackgroundColor="Transparent" >
+                                <StackLayout Spacing="0">
+                                    <StackLayout Orientation="Vertical" >
+
+
+
+                                        <Grid HorizontalOptions="Center" ColumnDefinitions="*,Auto,*" ColumnSpacing="0">
+                                            <skia:SKCanvasView PaintSurface="SKCanvasView_PaintSurface" 
+                                                           Grid.Column="1"
+                                                   HeightRequest="200"
+                                                   WidthRequest="{Binding HeightRequest, Source={RelativeSource Self }}"
+                                                   HorizontalOptions="Center"
+                                                   x:Name="cgpaCanvas">
+                                            </skia:SKCanvasView>
+                                            <ImageButton HorizontalOptions="Start" Grid.Column="2"
+                                                     xct:TouchEffect.PressedScale="1.2"
+                                                         x:Name="InfoBtn"
+                                                         Clicked="InfoBtn_Clicked"
+                                                     VerticalOptions="Start" BackgroundColor="Transparent" >
+                                                <ImageButton.Source>
+                                                    <FontImageSource Size="30" FontFamily="MF" Color="Gray" Glyph="{x:Static MaterialFont:FontIcon.InformationOutline}"/>
+                                                </ImageButton.Source>
+                                            </ImageButton>
+                                        </Grid>
+
+                                        <!--<ImageButton HorizontalOptions="End" VerticalOptions="Start" Margin="10"
+                                                 xct:TouchEffect.NativeAnimation="True"
+                                                 BackgroundColor="Transparent"
+                                                 xct:TouchEffect.NativeAnimationColor="LightGray"
+                                                 xct:TouchEffect.NativeAnimationBorderless="True"
+                                                 xct:TouchEffect.NativeAnimationRadius="20">
+                                        <ImageButton.Source>
+                                            <FontImageSource Color="Gray" FontFamily="MF"
+                                                             Size="30"
+                                                             Glyph="{x:Static MaterialFont:FontIcon.InformationOutline}"/>
+                                        </ImageButton.Source>
+                                    </ImageButton>-->
+                                        <StackLayout Padding="20,0" Orientation="Horizontal"
+                                            HorizontalOptions="Center" >
+                                            <Grid ColumnDefinitions="*,*,*">
+                                                <controls:CardViewInfo Grid.Column="0" HorizontalOptions="FillAndExpand" Value="{Binding TotalUnits, FallbackValue=0, TargetNullValue=0}" Description="Unit(s)" ControlTemplate="{StaticResource CardViewInfoControlTemplate}"/>
+                                                <controls:CardViewInfo Grid.Column="1" HorizontalOptions="FillAndExpand" Value="{Binding NumberofCoursesDone, FallbackValue=0, TargetNullValue=0}" Description="Course(s)" ControlTemplate="{StaticResource CardViewInfoControlTemplate}"/>
+                                                <controls:CardViewInfo Grid.Column="2" HorizontalOptions="FillAndExpand" Value="{Binding Universitygrades.Count, FallbackValue=0, TargetNullValue=0}" Description="Semester(s)" ControlTemplate="{StaticResource CardViewInfoControlTemplate}"/>
+                                            </Grid>
+
+                                        </StackLayout>
+                                    </StackLayout>
+
+
+                                </StackLayout>
+                            </Frame>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid >
+                                    <Grid.Behaviors>
+                                        <xanimation:EntranceTransition Duration="100"/>
+                                    </Grid.Behaviors>
+                                    <SwipeView Margin="10,5,10,5">
+                                        <SwipeView.LeftItems>
+                                            <SwipeItems Mode="Execute">
+                                                <SwipeItem Text="Delete" BackgroundColor="DarkRed" Command="{Binding BindingContext.DeleteSemester,Source={x:Reference this}}" CommandParameter="{Binding .}"/>
+                                            </SwipeItems>
+                                        </SwipeView.LeftItems>
+                                        <SwipeView.RightItems>
+                                            <SwipeItems Mode="Execute">
+                                                <SwipeItem Text="Info" BackgroundColor="SkyBlue" Command="{Binding BindingContext.ShowInfo,Source={x:Reference this}}" CommandParameter="{Binding .}"/>
+                                            </SwipeItems>
+                                        </SwipeView.RightItems>
+                                        <xct:Expander >
+                                            <xct:Expander.Header>
+                                                <Frame Padding="10,10" xct:TouchEffect.LongPressCommand="{Binding BindingContext.SemesterSelected,Source={x:Reference this}}"
+                                                       BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#F5F5F9,Default=#F5F5F9}"
+                                           xct:TouchEffect.LongPressDuration="500"
+                                               HasShadow="False"
+                                           xct:TouchEffect.CommandParameter="{Binding .}">
+                                                    <!--<Frame.Triggers>
+                                            <DataTrigger TargetType="Frame"
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                                                
+                                            </DataTrigger>
+                                        </Frame.Triggers>-->
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <StackLayout HorizontalOptions="StartAndExpand" Spacing="0">
+                                                            <Label Text="{Binding semester,StringFormat='Semester - {0}'}" FontFamily="IM">
+                                                                <!--<Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+                                                            <Setter Property="TextColor" Value="White"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>-->
+                                                            </Label>
+                                                            <Label Text="{Binding gpa,StringFormat='GPA: {0:F2}',Mode=OneWay}" >
+                                                                <!--<Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+                                                            <Setter Property="TextColor" Value="White"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>-->
+                                                            </Label>
+                                                        </StackLayout>
+                                                        <ImageButton HorizontalOptions="End"
+                                                         
+                                                         xct:TouchEffect.LongPressCommand="{Binding SemesterSelected}"
+                                                         xct:TouchEffect.PressedScale="1.2"
+                                           xct:TouchEffect.LongPressDuration="100"
+                                           xct:TouchEffect.CommandParameter="{Binding .}"
+                                                         BackgroundColor="Transparent"
+                                                   VerticalOptions="Center">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource Size="30" Color="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light={StaticResource BackgroundColorDark}, Default={StaticResource BackgroundColorDark}}"
+                                                         FontFamily="MF"
+                                                         Glyph="{x:Static MaterialFont:FontIcon.ChevronDownCircle}"/>
+                                                            </ImageButton.Source>
+                                                            <ImageButton.Triggers>
+                                                                <DataTrigger TargetType="ImageButton"
+                                                                
+                                                         Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                                         Value="True">
+
+                                                                    <Setter Property="Source">
+                                                                        <Setter.Value>
+                                                                            <FontImageSource Size="30" Color="{StaticResource Primary}"
+                                                         FontFamily="MF"
+                                                         Glyph="{x:Static MaterialFont:FontIcon.ChevronDownCircle}"/>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <DataTrigger.EnterActions>
+                                                                        <xamanimtrig:AnimateInt TargetProperty="ImageButton.Rotation" To="180" Duration="200"/>
+                                                                    </DataTrigger.EnterActions>
+                                                                    <DataTrigger.ExitActions>
+                                                                        <xamanimtrig:AnimateInt TargetProperty="ImageButton.Rotation" To="0" Duration="200" />
+                                                                    </DataTrigger.ExitActions>
+                                                                </DataTrigger>
+                                                            </ImageButton.Triggers>
+                                                        </ImageButton>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </xct:Expander.Header>
+                                            <CollectionView HeightRequest="{Binding GetCourseDetails.Count, Converter={StaticResource MathExpressionConverter}, ConverterParameter='150+x*35'}"
+                                ItemsSource="{Binding GetCourseDetails}"
+                                                BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#F5F5F9,Default=#F5F5F9}" Margin="-1,0,0,0"
+                                                HorizontalOptions="FillAndExpand">
+                                                <CollectionView.Header>
+                                                    <Grid ColumnDefinitions="*,*,*,40" ColumnSpacing="0.3" >
+                                                        <!--<BoxView HeightRequest="4" Grid.ColumnSpan="4" BackgroundColor="{StaticResource Primary}"
+                                                     HorizontalOptions="Fill" VerticalOptions="Start" Margin="40,0"/>
+                                            <BoxView HeightRequest="4" Grid.ColumnSpan="4" BackgroundColor="{StaticResource Primary}"
+                                                     HorizontalOptions="Fill" VerticalOptions="End" Margin="40,0"/>-->
+                                                        <Frame Style="{StaticResource CollectionFrameHeader}" Grid.Column="0" >
+                                                            <Label Style="{StaticResource CollectionLabelHeader}" Text="Code"/>
+                                                        </Frame>
+                                                        <Frame Style="{StaticResource CollectionFrameHeader}" Grid.Column="1">
+                                                            <Label Style="{StaticResource CollectionLabelHeader}" Text="Unit"/>
+                                                        </Frame>
+                                                        <Frame Style="{StaticResource CollectionFrameHeader}" Grid.Column="2">
+                                                            <Label Style="{StaticResource CollectionLabelHeader}" Text="Grade"/>
+                                                        </Frame>
+                                                        <Frame Style="{StaticResource CollectionFrameHeader}" Grid.Column="3" >
+                                                        </Frame>
+                                                    </Grid>
+                                                </CollectionView.Header>
+                                                <CollectionView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="*,*,*,40" BackgroundColor="{AppThemeBinding Dark=Black, Light=White, Default=White}" ColumnSpacing="1" >
+
+                                                            <customviews:RoundedEntry Text="{Binding code}"
+                                                                                  Placeholder="ABC123"
+                                         BackColor="Transparent"
+                                         BorderWidth="1"
+                                         UnfocusedBorderColor="Transparent"
+                                         FocusedBorderColor="Transparent"
+                                                                                  TextTransform="Uppercase"
+                                         Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center">
+
+                                                            </customviews:RoundedEntry>
+                                                            <customviews:Dropdown ItemsSource="{Binding BindingContext.possibleunit,Source={x:Reference this}}"
+                                      SelectedIndex="{Binding unit}"
+                                                                              Grid.Column="1"
+                                                                      ItemSelected="Dropdown_ItemSelected"
+                                                                              HorizontalOptions="Center"/>
+                                                            <customviews:Dropdown ItemsSource="{Binding BindingContext.possiblegrades,Source={x:Reference this}}"
+                                      SelectedIndex="{Binding gradeIndex}"
+                                                                      ItemSelected="Dropdown_ItemSelected"
+                                      Grid.Column="2"
+                                      HorizontalOptions="Center"/>
+                                                            <ImageButton Padding="8"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="{StaticResource Primary}"
+                             xct:TouchEffect.NativeAnimationBorderless="False"
+                             BackgroundColor="Transparent"
+                             CornerRadius="50"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Clicked="OnDeleteUpdateExpannderHeight_Clicked"
+                             Command="{Binding BindingContext.DeleteCourse,Source={x:Reference this}}"
+                             Grid.Column="3" CommandParameter="{Binding .}">
+                                                                <ImageButton.Source>
+                                                                    <FontImageSource Size="20" Color="DimGray"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.Close}"/>
+                                                                </ImageButton.Source>
+                                                            </ImageButton>
+
+
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </CollectionView.ItemTemplate>
+                                                <CollectionView.ItemsLayout>
+                                                    <GridItemsLayout Span="1" VerticalItemSpacing="5" Orientation="Vertical"/>
+                                                </CollectionView.ItemsLayout>
+                                                <CollectionView.Footer>
+                                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+
+                                                        <Button Text="Add Course" Margin="0,10,0,0"
+                                                        CornerRadius="4"
+                                                    TextColor="Gray"
+                                                    FontSize="20"
+                                                    TextTransform="None"
+                                                    BackgroundColor="{AppThemeBinding Dark=Black, Light={StaticResource BackgroundColor}, Default={StaticResource BackgroundColor}}"
+                                                    HorizontalOptions="FillAndExpand"
+                                                    ContentLayout="Left"
+                                                        x:Name="AddCoursebtn"
+                                                        Clicked="OnAddUpdateExpannderHeight_Clicked"
+                                                        Command="{Binding BindingContext.AddCourse,Source={x:Reference this}}"
+                                                        CommandParameter="{Binding GetCourseDetails}"
+                                                        Padding="30,0">
+                                                            <Button.ImageSource>
+                                                                <FontImageSource Size="30" Color="gray"
+                                                                     FontFamily="MF"
+                                                                     Glyph="{x:Static MaterialFont:FontIcon.Plus}"/>
+                                                            </Button.ImageSource>
+                                                        </Button>
+
+                                                    </StackLayout>
+
+                                                </CollectionView.Footer>
+                                            </CollectionView>
+                                        </xct:Expander>
+                                    </SwipeView>
+
+                                </Grid>
+
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+
+                    </CollectionView>
+
+                </StackLayout>
+                <Frame Padding="0" VerticalOptions="End"
+                   CornerRadius="15"
+                   Margin="0,0,10,20"
+                   HorizontalOptions="End">
+                    <ImageButton Padding="5"
+                             x:Name="AddSemester"
+                             Clicked="AddSemester_Clicked"
+                         xct:TouchEffect.NativeAnimation="True"
+                         xct:TouchEffect.NativeAnimationColor="LightGray"
+                         BackgroundColor="{StaticResource Primary}"
+                         Command="{Binding AddSemester}">
+                        <ImageButton.Source>
+                            <FontImageSource Size="45" Color="{AppThemeBinding Dark=Black, Light=White,Default=White}"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.Plus}"/>
+                        </ImageButton.Source>
+
+                    </ImageButton>
+                </Frame>
+                <Grid x:Name="GraphView">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="GraphsView_Tapped"/>
+                        <PanGestureRecognizer PanUpdated="GraphsView_PanUpdated"/>
+                    </Grid.GestureRecognizers>
+                    <BoxView Opacity="0.5">
+                        <BoxView.Background>
+                            <RadialGradientBrush>
+                                <GradientStop Color="Black" Offset="0.1"/>
+                                <GradientStop Color="{StaticResource BackgroundColor}" Offset="1.0" />
+                            </RadialGradientBrush>
+                        </BoxView.Background>
+                    </BoxView>
+                    <ScrollView VerticalOptions="Center">
+                        <StackLayout Spacing="0">
+                            <ImageButton HorizontalOptions="Center" Clicked="GraphsView_Tapped" BackgroundColor="Transparent" xct:TouchEffect.PressedScale="0.8" xct:TouchEffect.PressedOpacity="0.8">
+                                <ImageButton.Source>
+                                    <FontImageSource Size="50" Glyph="{x:Static MaterialFont:FontIcon.CloseCircleOutline}" Color="White" FontFamily="MF"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="10,10" xct:CornerRadiusEffect.CornerRadius="10,10,10,10" Margin="30,10" BackgroundColor="{StaticResource BackgroundColor}">
+                                <Frame Margin="10,10,10,10" HorizontalOptions="FillAndExpand" >
+                                    <StackLayout Spacing="15">
+                                        <microChartsforms:ChartView Chart="{Binding BindingContext.GPAcompare,Source={x:Reference this}}"  HeightRequest="200"/>
+                                        <Label Text="CGPA for each semester" FontFamily="IM" TextColor="Black" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Margin="10,10,10,10" HorizontalOptions="FillAndExpand">
+                                    <StackLayout Spacing="15">
+                                        <microChartsforms:ChartView Chart="{Binding BindingContext.GradeFreq,Source={x:Reference this}}"  HeightRequest="200" />
+                                        <Label Text="Frequency of each grade" FontFamily="IM" TextColor="Black" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </StackLayout>
+                    </ScrollView>
+
+                </Grid>
+
+                <Grid BackgroundColor="Transparent" 
+                  IsVisible="True"
+                  x:Name="MenuOptionGrid">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuOptionGrid_Tapped"/>
+                        <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                    </Grid.GestureRecognizers>
+                    <Frame HorizontalOptions="End"
+                   VerticalOptions="Start"
+                       Margin="0,5,5,0"
+                       Padding="0">
+                        <xct:Expander 
+                              IsExpanded="True"
+                          x:Name="MenuExpander"
+                   
+                          BackgroundColor="Transparent">
+                            <xct:Expander.Content>
+                                <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}" Padding="0" 
+                                       CornerRadius="0"
+                                       VerticalOptions="Start"
+                           HorizontalOptions="End">
+                                    <StackLayout Spacing="0">
+
+                                        <StackLayout Orientation="Horizontal"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="LightGray">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="MoreMenu_Clicked" Command="{Binding ClearInputs}" />
+                                            </StackLayout.GestureRecognizers>
+                                            <Image Margin="10,0,5,0">
+                                                <Image.Source>
+                                                    <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.TrashCanOutline}"/>
+                                                </Image.Source>
+                                            </Image>
+                                            <Label Margin="0,15,15,15" Text="Clear Inputs" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                        </StackLayout>
+                                        <!--<StackLayout Orientation="Horizontal"
+                             xct:TouchEffect.NativeAnimation="True"
+                             xct:TouchEffect.NativeAnimationColor="LightGray">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="MoreMenu_Clicked" />
+                                            </StackLayout.GestureRecognizers>
+                                            <Image Margin="10,0,5,0">
+                                                <Image.Source>
+                                                    <FontImageSource Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.School}"/>
+                                                </Image.Source>
+                                            </Image>
+                                            <Label Margin="0,15,15,15" Text="Tutorials" TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                        </StackLayout>-->
+                                    </StackLayout>
+                                </Frame>
+                            </xct:Expander.Content>
+
+                        </xct:Expander>
+                    </Frame>
+                </Grid>
+            </Grid>
+        </Grid>
+
+
+
+    </ContentView.Content>
+</ContentView>

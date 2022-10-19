@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:Estudiar.Views"
+       Title="Menu"
+       x:Name="MyShellPage"
+       xmlns:controls="clr-namespace:Estudiar.Controls"
+       xmlns:MaterialFont="clr-namespace:MaterialDesign"
+       xmlns:converters="clr-namespace:Estudiar.Converters"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.BackgroundColor="{OnPlatform UWP={StaticResource AppColor}}"
+       Shell.NavBarIsVisible="False"
+       xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             x:Class="Estudiar.Views.AppShell">
+    <!--<Shell.BindingContext>
+        <VM:MainVM/>
+    </Shell.BindingContext>-->
+    <Shell.Resources>
+
+        <ResourceDictionary>
+            
+            <Style TargetType="FlyoutItem">
+
+                <Setter Property="Shell.BackgroundColor"
+            Value="{AppThemeBinding Dark={StaticResource AppColor},
+                    Light={OnPlatform Android={StaticResource AppColor}, UWP={StaticResource AppColor}},
+                    Default={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}}}" />
+                <Setter Property="Shell.TabBarBackgroundColor"
+            Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark},
+                    Light={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}},
+                    Default={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}}}" />
+                <Setter Property="Shell.TabBarTitleColor"
+            Value="{StaticResource AppColor}" />
+                <Setter Property="Shell.TabBarUnselectedColor"
+            Value="{AppThemeBinding Dark={StaticResource MyGray},
+                    Light={OnPlatform Android={StaticResource LightGray}, UWP={StaticResource AppColor}},
+                    Default={OnPlatform Android={StaticResource BackgroundColor}, UWP={StaticResource AppColor}}}"  />
+            </Style>
+            <converters:ColorToColorConverter x:Key="ColorToColor"/>
+            <converters:ImageSourceToGlyphConverter x:Key="sourceToGlyph"/>
+            <converters:ColorToGlyphConverter x:Key="ColorToGlyphConverter"/>
+            <converters:ColorToBrushConverter x:Key="ColorToBrush"/>
+            <converters:ColorToSelectorColorConverter x:Key="ColorToSelectorColorConverter"/>
+        </ResourceDictionary>
+    </Shell.Resources>
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <Grid 
+                HeightRequest="{x:OnPlatform Android=50}"
+                ColumnSpacing="{x:OnPlatform UWP=0}"
+                RowSpacing="{x:OnPlatform UWP=0}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3" />
+                    <ColumnDefinition Width="{x:OnPlatform Android=54, iOS=50, UWP=Auto}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <BoxView BackgroundColor="White"
+                                                     HorizontalOptions="Fill" VerticalOptions="Fill"
+                                                     Grid.Column="0"/>
+                <Image x:Name="MenuItemIcon"
+                       Grid.Column="1"
+                       
+                     Source="{Binding Icon}"
+                       VerticalOptions="Center"
+                       />
+                <Label x:Name="FlyoutItemLabel"
+                    Grid.Column="2"
+                    Text="{Binding Text}"
+                       TextColor="Black"
+                    FontSize="{x:OnPlatform Android=20, iOS=Large}"
+                    HorizontalOptions="{x:OnPlatform UWP=Start}"
+                    HorizontalTextAlignment="{x:OnPlatform UWP=Start}"
+                    FontAttributes="{x:OnPlatform iOS=Bold}"
+                    VerticalTextAlignment="Center">
+                    <!--<Label.FontFamily>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <On Platform="iOS" Value="Vollkorn" />
+                            <On Platform="Android" Value="Vollkorn-Black.ttf#Vollkorn Black" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Black.ttf#Vollkorn Black" />
+                        </OnPlatform>
+                    </Label.FontFamily>-->
+
+                    <Label.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <OnPlatform.Platforms>
+                                <On Platform="Android"
+                                    Value="17, 0, 0, 0" />
+                            </OnPlatform.Platforms>
+                        </OnPlatform>
+                    </Label.Margin>
+                </Label>
+            </Grid>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+    
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid x:Name="TabItemLayout"
+                HeightRequest="{x:OnPlatform Android=50}"
+                ColumnSpacing="{x:OnPlatform UWP=0}"
+                RowSpacing="{x:OnPlatform UWP=0}">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                Value="{StaticResource Key=SelectedColor}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+
+
+                <Path x:Name="TabItemIcon"
+                    HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Aspect="Uniform"
+                    WidthRequest="50"
+                        Margin="20,10"
+                        Data="M37.3635 24.3325C36.2393 23.1291 33.9372 22.4372 30.6755 22.4372C28.9338 22.4372 26.9151 22.6114 24.7222 23.0231C23.484 21.8039 22.249 20.3789 21.0694 18.7164C20.2302 17.5447 19.4972 16.3097 18.8211 15.0906C20.1083 11.0689 20.7306 7.79139 20.7306 5.43223C20.7306 2.78489 19.7758 0.0235596 17.0256 0.0235596C16.1817 0.0235596 15.3377 0.538143 14.8881 1.29023C13.6483 3.51956 14.2072 8.40414 16.34 13.2286C15.5436 15.6352 14.7012 17.9358 13.6483 20.5198C12.7332 22.6985 11.6787 24.9436 10.6036 27.0051C4.42225 29.5131 0.422751 32.4423 0.0475006 34.7381C-0.117166 35.6042 0.164667 36.4006 0.771084 37.034C0.981667 37.2081 1.77808 37.8969 3.11442 37.8969C7.21525 37.8969 11.5377 31.1202 13.7338 27.0352C15.4201 26.4652 17.1063 25.9475 18.7894 25.4281C20.6387 24.9167 22.4944 24.5051 24.1807 24.2169C28.5111 28.1816 32.3285 28.8086 34.2475 28.8086C36.6098 28.8086 37.4522 27.8316 37.7356 27.0321C38.1789 26.0029 37.8464 24.8629 37.3366 24.2771L37.3682 24.3404L37.3635 24.3325ZM35.1706 26.0013C35.0059 26.8626 34.1604 27.4358 32.9761 27.4358C32.6436 27.4358 32.3586 27.3772 32.0213 27.3218C29.868 26.8072 27.8524 25.7131 25.8416 23.9873C27.8207 23.6485 29.4991 23.5915 30.5599 23.5915C31.7316 23.5915 32.7449 23.6421 33.4257 23.8195C34.2016 23.9873 35.4366 24.5082 35.1595 26.0045H35.1912L35.1706 26.0013ZM23.2592 23.2986C21.8025 23.5994 20.2287 23.9541 18.5978 24.3958C17.3058 24.7489 15.96 25.1463 14.6078 25.615C15.3409 24.1868 15.96 22.8061 16.5205 21.4936C17.1982 19.8786 17.7555 18.2161 18.3176 16.6707C18.8717 17.6366 19.4893 18.6182 20.1068 19.4891C21.1201 20.8666 22.1809 22.1807 23.2417 23.3207V23.2891L23.2592 23.2986ZM15.8967 1.94731C16.1262 1.48814 16.5775 1.25698 16.9702 1.25698C18.1497 1.25698 18.3746 2.63131 18.3746 3.72698C18.3746 5.57631 17.8141 8.38514 16.8546 11.5914C15.1731 7.12639 15.0575 3.38973 15.8998 1.94889L15.8967 1.94731ZM9.7185 28.7009C6.85267 33.519 4.10083 36.5115 2.41458 36.5115C2.08208 36.5115 1.80183 36.3927 1.57542 36.2217C1.23658 35.8797 1.06875 35.4744 1.18275 35.0184C1.52 33.2926 4.72308 30.8811 9.72008 28.7009H9.7185Z"
+                        Fill="Transparent"
+                        HeightRequest="50"
+                        Stroke="White"
+                        StrokeLineCap="Flat"
+                        StrokeThickness="1"/>
+
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!--<Shell.FlyoutHeader>
+        <Grid Margin="0,0,0,5" HeightRequest="180">
+
+            <NewCarousel:CarouselViewControl x:Name="MasterCarousel"
+                                             Position="{Binding Position, TargetNullValue=0}"
+                                            ItemsSource="{Binding MasterCarouselImages}">
+                <NewCarousel:CarouselViewControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding }" Aspect="AspectFill" HorizontalOptions="Center"/>
+                    </DataTemplate>
+                </NewCarousel:CarouselViewControl.ItemTemplate>
+            </NewCarousel:CarouselViewControl>
+
+            <BoxView BackgroundColor="LightSkyBlue"
+                                             Opacity="{OnPlatform 0.2, Android=0.2, UWP=0.08}"
+                                             HorizontalOptions="FillAndExpand"/>
+
+        </Grid>
+    </Shell.FlyoutHeader>-->
+
+
+    <!--<controls:MenuItemIconFont Text="Log Out" IconGlyph="{x:Static MaterialFont:FontIcon.Logout}"
+                Command="{Binding LogOutCommand}">
+        <MenuItem.IconImageSource>
+            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Logout}" FontFamily="MF" Color="Black"/>
+        </MenuItem.IconImageSource>
+        
+    </controls:MenuItemIconFont>-->
+    <!--<MenuItem Text="Exit"
+                Command="{Binding ExitCommand}">
+        <MenuItem.IconImageSource>
+            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Power}" FontFamily="MF" Color="Black"/>
+        </MenuItem.IconImageSource>
+    </MenuItem>-->
+    <ShellItem Title="NewLogin" Route="NewLogin" FlyoutItemIsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate pages:NewLogin}" />
+    </ShellItem>
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" >
+        <Tab Title="CustomTab" Route="CustomTab">
+            <Tab.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Home}" FontFamily="MF"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate pages:CustomTab}" />
+        </Tab>
+        <!--<Tab Title="Courses" Route="Courses">
+            <Tab.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Bookshelf}" FontFamily="MF"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate pages:Courses}" />
+        </Tab>
+        <Tab Title="Profile" Route="Profile">
+            <Tab.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.AccountCircle}" FontFamily="MF"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate pages:Profile}" />
+        </Tab>-->
+
+    </FlyoutItem>
+    <!--<ShellContent ContentTemplate="{DataTemplate pages:Home}" Route="Home" Title="Home">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Home}" FontFamily="MF"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent ContentTemplate="{DataTemplate pages:Courses}" Route="Courses" Title="Courses">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Bookshelf}" FontFamily="MF"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent ContentTemplate="{DataTemplate pages:Profile}" Route="Profile" Title="Profile" >
+            <ShellContent.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.AccountCircle}" FontFamily="MF"/>
+            </ShellContent.Icon>
+        </ShellContent>-->
+
+    <!--<TabBar>
+        <controls:TabIconFont Title="Home" Route="Home">
+            <Tab.Icon>
+                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Home}" FontFamily="MF"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate pages:Home}"/>
+    </controls:TabIconFont>
+    <Tab Title="Courses" Route="Courses">
+        <Tab.Icon>
+            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Bookshelf}" FontFamily="MF"/>
+        </Tab.Icon>
+        <ShellContent ContentTemplate="{DataTemplate pages:Courses}" />
+    </Tab>
+    <Tab Title="Profile" Route="Profile">
+        <Tab.Icon>
+            <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.AccountCircle}" FontFamily="MF"/>
+        </Tab.Icon>
+        <ShellContent ContentTemplate="{DataTemplate pages:Profile}" />
+    </Tab>
+    </TabBar>-->
+
+</Shell>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+           xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+           xmlns:MaterialFont="clr-namespace:MaterialDesign"
+           Color="Transparent"
+           VerticalOptions="Center"
+           Visual="Material"
+           HorizontalOptions="Fill"
+             x:Class="Estudiar.Views.savepopup">
+    <Grid RowDefinitions="*,Auto,*" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent">
+        <Frame Grid.Row="0" BackgroundColor="Transparent">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </Frame.GestureRecognizers>
+        </Frame>
+        <Frame Grid.Row="1"
+               BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+               CornerRadius="15"
+               Padding="0,10,0,0"
+               VerticalOptions="Center">
+            <StackLayout Spacing="0">
+                <Label Text="Save File" FontFamily="NSB" HorizontalOptions="Center" Margin="0,0,0,10" TextColor="{AppThemeBinding Dark=White, Light=Black,Default=Black}"/>
+                <Label x:Name="FileExists" Text="*File with same name already exists" Margin="10,0,10,10" TextColor="Red" />
+                <Entry Placeholder="File name" Visual="Material" Margin="20,0" x:Name="filename" TextChanged="filename_TextChanged"
+                       Completed="SaveBtn_Clicked"/>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="2" BackgroundColor="{StaticResource Primary}">
+                    <Button Grid.Column="0" CornerRadius="0" Text="Cancel" TextColor="DarkGray"
+                            FontFamily="NSK"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Clicked="TapGestureRecognizer_Tapped"/>
+                    <Button Grid.Column="1" CornerRadius="0" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" TextColor="{StaticResource Primary}" Text="Save" 
+                            x:Name="SaveBtn"
+                            FontFamily="NSK"
+                            Clicked="SaveBtn_Clicked"/>
+                </Grid>
+            </StackLayout>
+        </Frame>
+        <Frame Grid.Row="2" BackgroundColor="Transparent">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </Frame.GestureRecognizers>
+        </Frame>
+    </Grid>
+</xct:Popup>

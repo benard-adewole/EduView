@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:CustomView="clr-namespace:Estudiar.CustomViews"
+             xmlns:converters="clr-namespace:Estudiar.Converters"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             NavigationPage.HasNavigationBar="False"
+             Shell.TabBarIsVisible="False"
+             xmlns:toolkit="clr-namespace:Estudiar.Toolkit"
+             Shell.NavBarIsVisible="False"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}"
+             
+             x:Class="Estudiar.Views.NewLogin">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False"/>
+    </Shell.BackButtonBehavior>
+    <ContentPage.Resources>
+        <converters:EntryColorThemeConverter x:Key="EntryColorThemeConverter"/>
+        <ResourceDictionary>
+            
+            
+            
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView x:Name="SignInStactContainer"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand">
+            <ScrollView.VerticalScrollBarVisibility>
+                <OnPlatform x:TypeArguments="ScrollBarVisibility">
+                    <On Platform="Android" Value="Never"/>
+                </OnPlatform>
+            </ScrollView.VerticalScrollBarVisibility>
+            <StackLayout HorizontalOptions="FillAndExpand">
+                <StackLayout WidthRequest="400" 
+                             Spacing="0"
+                         Margin="20,0"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center">
+
+                    <Label Text="Sign In"
+                           FontSize="40"
+                           TextColor="{AppThemeBinding Dark=White, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                           FontFamily="NSK"
+                           Margin="0,40,0,40"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"/>
+                    <Label Text="Email" Style="{StaticResource EntryHeader}"/>
+                    <inputLayout:SfTextInputLayout ErrorText="Invalid Email">
+
+                        <Entry Text="{Binding LoginModel.email, Mode=TwoWay}" 
+                                       x:Name="email" Placeholder="Enter your email address"
+                                                     Keyboard="Email" IsSpellCheckEnabled="False">
+
+                        </Entry>
+                    </inputLayout:SfTextInputLayout>
+
+                    <Label Text="Password" Style="{StaticResource EntryHeader}"/>
+                    <inputLayout:SfTextInputLayout EnablePasswordVisibilityToggle="True">
+                        <Entry Placeholder="Enter password"
+                                       IsPassword="True"
+                                       ClearButtonVisibility="Never"
+                                   HorizontalOptions="FillAndExpand"
+                                                     Text="{Binding LoginModel.password, Mode=TwoWay}" />
+                    </inputLayout:SfTextInputLayout>
+                    <Frame HorizontalOptions="End"
+                                       Padding="10,2,0,2" 
+                                           Margin="0,10,0,0"
+                                       BackgroundColor="Transparent"
+                                       HasShadow="False">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ForgotPassword_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Forgot Password?"
+                               HorizontalOptions="End"
+                                TextColor="{AppThemeBinding Dark=LightGray, Light= #4F4F4F,Default=#4F4F4F}" FontSize="15"
+                                           HorizontalTextAlignment="End"/>
+
+                    </Frame>
+
+                    <Frame 
+                        HorizontalOptions="FillAndExpand"
+                        Padding="0"
+                        BackgroundColor="{StaticResource AppColor}"
+                        Margin="0,25,0,0"
+                        WidthRequest="400"
+                        xct:TouchEffect.Command="{Binding LogInNow}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray"
+                        CornerRadius="5">
+                        <Grid>
+                            <Label Text="Sign In" 
+                               Margin="30,20"
+                               FontAttributes="Bold"
+                                   FontFamily="IM"
+                               TextColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}"
+                               HorizontalOptions="Center"
+                               />
+                            <StackLayout Padding="60,5" VerticalOptions="Center">
+                                <ActivityIndicator Color="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}" IsRunning="{Binding IsLoginIn}"
+                                               x:Name="MyActivity"/>
+                            </StackLayout>
+                        </Grid>
+                    </Frame>
+                    
+
+                    
+                </StackLayout>
+                <StackLayout  xct:TouchEffect.NativeAnimation="True"
+                              xct:TouchEffect.NativeAnimationColor="LightGray" 
+                              xct:CornerRadiusEffect.CornerRadius="10"
+                              Margin="20,0"
+                              HorizontalOptions="Center" Padding="20,10">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="GotoSignUp_Tapped"/>
+                    </StackLayout.GestureRecognizers>
+                    <Label Text="Don't have an account?"
+                           Margin="0,0,0,0"
+                           VerticalOptions="EndAndExpand"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                    <Frame HorizontalOptions="Center"
+                                       Padding="10,3" 
+                                        Margin="0,0,0,0"
+                                       BackgroundColor="Transparent"
+                                       HasShadow="False">
+                        
+                        <Label FontSize="15"
+                               HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Sign Up" TextColor="{StaticResource AppColor}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

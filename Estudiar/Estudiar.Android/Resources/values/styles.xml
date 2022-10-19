@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+<style name="Theme.Splash" parent="android:Theme">
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:buttonStyle">@style/noPaddingButtonStyle</item>
+    
+    <!--We will be using the toolbar so no need to show ActionBar-->
+    <item name="android:windowBackground">@drawable/splash</item>
+    <item name="android:windowFullscreen">False</item>
+    <item name="android:windowActionBar">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    
+  </style>
+  <style name="LightTheme" parent="Base.Theme.AppCompat.Light">
+    <item name="colorAccent">#A29ACB</item>
+  <item name="colorPrimary">#A29CF4</item>
+    <item name="colorPrimaryDark">#FDFDFD</item>
+    <item name="android:textAllCaps">false</item>
+    <item name="android:colorPressedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorLongPressedHighlight">@color/ListViewHighlighted</item>
+    <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
+    <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
+    <item name="android:fontFamily">@drawable/Inter_Regular</item>
+    <item name="android:windowLightStatusBar">true</item>
+  </style>
+  <style name="DarkTheme" parent="Base.Theme.AppCompat">
+    <item name="colorAccent">#A29ACB</item>
+  <item name="colorPrimary">#A29CF4</item>
+    <item name="colorPrimaryDark">#181818</item>
+    <item name="android:textAllCaps">false</item>
+    <item name="android:colorPressedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorLongPressedHighlight">@color/ListViewHighlighted</item>
+    <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
+    <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
+    <item name="android:fontFamily">@drawable/Inter_Regular</item>
+    <item name="android:windowLightStatusBar">true</item>
+  </style>
+  <style name="MainTheme" parent="MainTheme.Base">
+    <!-- As of Xamarin.Forms 4.6 the theme has moved into the Forms binary -->
+    <!-- If you want to override anything you can do that here. -->
+    <!-- Underneath are a couple of entries to get you started. -->
+
+    <!-- Set theme colors from https://aka.ms/material-colors -->
+    <!--colorPrimary is used for the default action bar background -->
+    <!--item name="android:windowFullscreen">true</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowActionBar">false</item>-->
+    <item name="colorPrimary">#A29CF4</item>
+    <item name="android:textAllCaps">false</item>
+    <item name="android:colorPressedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorLongPressedHighlight">@color/ListViewHighlighted</item>
+    <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
+    <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
+    <item name="android:fontFamily">@drawable/Inter_Regular</item>
+    <!--colorPrimaryDark is used for the status bar -->
+
+    <item name="android:statusBarColor">@android:color/white</item>
+    <item name="android:windowLightStatusBar">true</item>
+    <item name="colorPrimaryDark">@android:color/white</item>
+    <!-- colorAccent is used as the default value for colorControlActivated
+         which is used to tint widgets -->
+    <item name="colorAccent">#A29ACB</item>
+  </style>
+<style name="noPaddingButtonStyle" parent="android:Widget.Material.Button">
+    <item name="android:paddingLeft">0dp</item>
+    <item name="android:paddingRight">0dp</item>
+  </style>
+  <style name="MyAwesomeAppTheme.ToolBar" parent="MainTheme">
+    
+    
+    <item name="android:drawableTint">#FFFFFFFF</item>
+    
+    <!--color or Nav Title .....For the more option Icon,when control normal doesnt exist. Is also default toolbar text color-->
+    <item name="android:textColorPrimary">@color/NeutralColorBalance</item>
+    <item name="actionMenuTextColor">@color/ListViewHighlighted</item>
+    <!--<item name="colorAccent">@color/ListViewHighlighted</item>-->
+    
+    
+    <!--<item name="colorControlActivated">@color/ListViewHighlighted</item>-->
+    
+    <!--color of the more option Icon -->
+    <item name="colorControlNormal">@color/NeutralColor</item>
+    <!--<item name="colorControlHighlight">@color/ListViewHighlighted</item>-->
+  </style>
+<color name="ListViewSelected">#A29ACB</color>
+<color name="ListViewHighlighted">#A29ACB</color>
+<color name="NeutralColor">#FFFFFF</color>
+<color name="NeutralColorBalance">#000000</color>
+</resources>

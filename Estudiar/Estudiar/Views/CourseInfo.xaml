@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<backdrop:SfBackdropPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+             xmlns:cview="clr-namespace:Estudiar.CustomViews"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Name="this"
+            xmlns:sfBtn="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+            xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:backdrop="clr-namespace:Syncfusion.XForms.Backdrop;assembly=Syncfusion.SfBackdrop.XForms"
+             BackLayerRevealOption="Auto"
+            IsBackLayerRevealed="True"
+            
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             x:Class="Estudiar.Views.CourseInfo">
+    <backdrop:SfBackdropPage.BindingContext>
+        <VM:CourseVM/>
+    </backdrop:SfBackdropPage.BindingContext>
+    <backdrop:SfBackdropPage.Resources>
+        <ResourceDictionary>
+            <xct:TextCaseConverter x:Key="TextCaseConverter" Type="Upper"/>
+            <Style TargetType="Label" x:Key="FontIcon">
+                <Setter Property="FontFamily" Value="MF" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}" />
+                    <Style.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding type}" Value="excerpt">
+                            <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.FileQuestionOutline}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding type}" Value="textbook">
+                            <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.BookOpenPageVariantOutline}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding type}" Value="note">
+                        <Setter Property="Text" Value="{x:Static MaterialFont:FontIcon.NotebookEditOutline}"/>
+                    </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding type}" Value="past question">
+
+                        </DataTrigger>
+                    </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </backdrop:SfBackdropPage.Resources>
+    <backdrop:SfBackdropPage.BackLayer>
+        <backdrop:BackdropBackLayer BackgroundColor="Green">
+            <xct:LazyView x:TypeArguments="cview:CourseContentView" x:Name="testLazyview" BindingContext="{Binding BindingContext,Source={x:Reference this}}"/>
+        </backdrop:BackdropBackLayer>
+    </backdrop:SfBackdropPage.BackLayer>
+    <backdrop:SfBackdropPage.FrontLayer>
+        <backdrop:BackdropFrontLayer RevealedHeight="0" IsVisible="false" LeftCornerRadius="30" RightCornerRadius="30" BackgroundColor="{AppThemeBinding Dark=Black, Light=#fbfbfb,Default=#fbfbfb}">
+            <StackLayout Padding="10,10">
+                <BoxView HorizontalOptions="Center" WidthRequest="100" CornerRadius="10" Color="Gainsboro" Margin="0,0,0,10" HeightRequest="7" />
+                <StackLayout Orientation="Horizontal">
+                    <Label FontSize="20"
+                           MaxLines="1" LineBreakMode="HeadTruncation"
+                            HorizontalOptions="Start" VerticalOptions="Center" >
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding DbCourseStructure.course}" FontFamily="IR" FontSize="20"/>
+                                <Span Text=" > " FontFamily="IR" FontSize="20"/>
+                                <Span Text="{Binding SelectedResource.foldername, Converter={StaticResource TextCaseConverter}}"  FontSize="20" FontFamily="NSK"
+                                       />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <ImageButton BackgroundColor="Transparent" HorizontalOptions="EndAndExpand" x:Name="closePopOverBtn" Clicked="closePopOverBtn_Clicked" >
+                        <ImageButton.Source>
+                            <FontImageSource Size="30" Color="gray"
+                                                                     FontFamily="MF"
+                                                                     Glyph="{x:Static MaterialFont:FontIcon.Close}"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+                </StackLayout>
+                <inputLayout:SfTextInputLayout  HorizontalOptions="FillAndExpand" LeadingViewPosition="Inside" >
+                    <inputLayout:SfTextInputLayout.LeadingView>
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource Glyph="{x:Static MaterialFont:FontIcon.Magnify}" Size="40" FontFamily="MF" Color="{AppThemeBinding Dark=lightgray, Light=#9CA0B0,Default=#9CA0B0}"/>
+                            </Image.Source>
+                        </Image>
+                    </inputLayout:SfTextInputLayout.LeadingView>
+
+                    <Entry x:Name="searchPageSearchEntry" 
+                                       Text="{Binding SearchKey, Mode=OneWayToSource, TargetNullValue='', FallbackValue=''}"
+                                    Placeholder="Find material by title">
+
+                    </Entry>
+                </inputLayout:SfTextInputLayout>
+                <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Never">
+                    <StackLayout BindableLayout.ItemsSource="{Binding TempSelectedFolder}" Orientation="Vertical"  Spacing="0" >
+
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" Padding="5,15,5,0" xct:TouchEffect.NativeAnimation="True" 
+                                                                              xct:CornerRadiusEffect.CornerRadius="5"
+                                                                        xct:TouchEffect.Command="{Binding BindingContext.SelectedMaterial,Source={x:Reference this}}" 
+                                                                        xct:TouchEffect.CommandParameter="{Binding .}"
+                                                                        xct:TouchEffect.NativeAnimationColor="LightGray">
+                                    <Label Text="{Binding type}" Margin="0,0,0,2" 
+                                       VerticalOptions="Center" FontFamily="IM" MaxLines="1" LineBreakMode="TailTruncation"
+                                       Grid.Column="0"  FontSize="18"/>
+                                       <Frame Padding="10,5" Grid.Column="1" CornerRadius="5" BackgroundColor="{StaticResource AppColor}" VerticalOptions="Center" HasShadow="False" 
+                                              Margin="0,0,0,5"
+                                              HorizontalOptions="EndAndExpand" MinimumWidthRequest="50">
+                                        <Label Text="{Binding filesize, StringFormat='{0:F1} MB'}" MinimumWidthRequest="100" FontSize="15" VerticalOptions="Center" TextColor="White"/>
+                                        </Frame>
+                                    <BoxView HeightRequest="0.5" BackgroundColor="Gainsboro" VerticalOptions="End" Grid.ColumnSpan="2"/>
+                                </Grid>
+
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+        </backdrop:BackdropFrontLayer>
+    </backdrop:SfBackdropPage.FrontLayer>
+</backdrop:SfBackdropPage>

@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.Views.UploadPage"
+             Title="Upload"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xct:StatusBarEffect.Color="{StaticResource AppColor}"
+             xct:StatusBarEffect.Style="LightContent"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             xmlns:CustomView="clr-namespace:Estudiar.CustomViews"
+             xmlns:Converters="clr-namespace:Estudiar.Converters"
+             NavigationPage.HasNavigationBar="True"
+             Shell.NavBarHasShadow="True"
+             Shell.NavBarIsVisible="True"
+             Shell.TabBarIsVisible="False"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core">
+    <ContentPage.BindingContext>
+        <VM:MainVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Converters:BoolInverterConverter x:Key="NegateBool"/>
+            <Converters:StreamToStringConverter x:Key="StreamToString"/>
+            <Style TargetType="Label" x:Key="ThemeLabel">
+                <Setter Property="TextColor" Value="{StaticResource AppColor}"/>
+            </Style>
+            <Style TargetType="Label" x:Key="SmallText" BasedOn="{StaticResource ThemeLabel}">
+                <Setter  Property="FontSize" Value="30"/>
+            </Style>
+            <Style TargetType="Path" x:Key="DownArrow">
+                <Setter Property="Opacity" Value="0.5"/>
+                <Setter Property="Fill" Value="Black"/>
+                <Setter Property="Stroke" Value="White"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Aspect" Value="Uniform"/>
+                <Setter Property="Margin" Value="10,10"/>
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="WidthRequest" Value="30"/>
+                <Setter Property="HeightRequest" Value="30"/>
+            </Style>
+            <Style TargetType="Label" x:Key="EntryLabel">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="Margin" Value="10,0,10,0"/>
+                <Setter Property="MaxLines" Value="1"/>
+                <Setter Property="LineBreakMode" Value="TailTruncation"/>
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                <Setter Property="BackgroundColor"  Value="{AppThemeBinding Dark={StaticResource DimGray}, Light= #E5E5E5,Default=#E5E5E5}"/>
+                <Setter Property="Visual"  Value="Material"/>
+                <Setter Property="HorizontalOptions"  Value="FillAndExpand"/>
+                <Setter Property="Margin">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="Thickness">
+
+                            <On Platform="Android" Value="0,0,0,-3" />
+                            <On Platform="UWP" Value="-3,-3,-3,-3" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="PlaceholderColor"  Value="DimGray"/>
+                <Setter Property="FontSize"  Value="17"/>
+                
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <!--<On Platform="iOS" Value="Vollkorn" />-->
+                            <On Platform="Android" Value="IR" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+            <Style TargetType="Frame" x:Key="EntryFrame">
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource DimGray}, Light= #E5E5E5,Default=#E5E5E5}"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="BorderColor" Value="Transparent"/>
+                <Setter Property="HasShadow" Value="False"/>
+            </Style>
+            <Style TargetType="CustomView:CustomPickerView">
+                <Style.Setters>
+                    <Setter Property="TitleColor" Value="{StaticResource AppColor}"/>
+                    <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                    <Setter Property="BackColor" Value="Transparent"/>
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                    <Setter Property="CornerRadius" Value="4"/>
+                    <Setter Property="BorderColor" Value="Black"/>
+                    <Setter Property="PlaceholderColor" Value="DimGray"/>
+                    <Setter Property="FontSize" Value="17"/>
+                    <Setter Property="Padding" Value="20,15"/>
+                    <Setter Property="Margin"  Value="0,2,2,2"/>
+                    <Setter Property="BorderWidth" Value="0"/>
+                    <Setter Property="FontFamily">
+                        <Setter.Value>
+                            <OnPlatform x:TypeArguments="x:String">
+                                <!--<On Platform="iOS" Value="Vollkorn" />-->
+                                <On Platform="Android" Value="IR" />
+                                <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                            </OnPlatform>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="ChangeBackgroundStyle" Value="True"/>
+                    <Setter Property="FocusedBorderColor" Value="{StaticResource AppColor}"/>
+                    <Setter Property="UnfocusedBorderColor" Value="Gray"/>
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                </Style.Setters>
+            </Style>
+            <Style TargetType="CustomView:RoundedEntry">
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="BackColor" Value="White"/>
+                <Setter Property="Padding" Value="20,15"/>
+                <Setter Property="Margin"  Value="0,2,2,2"/>
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="BorderWidth" Value="2"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <!--<On Platform="iOS" Value="Vollkorn" />-->
+                            <On Platform="Android" Value="IR" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="FocusedBorderColor" Value="{StaticResource AppColor}"/>
+                <Setter Property="UnfocusedBorderColor" Value="Gray"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView x:Name="SignUpStactContainer"
+                                HorizontalOptions="FillAndExpand">
+            <ScrollView.VerticalScrollBarVisibility>
+                <OnPlatform x:TypeArguments="ScrollBarVisibility">
+                    <On Platform="Android" Value="Never"/>
+                    <On Platform="iOS" Value="Never"/>
+                </OnPlatform>
+            </ScrollView.VerticalScrollBarVisibility>
+            <Grid >
+                <Grid IsVisible="{Binding LoginResponse.user.privileges, Converter={x:StaticResource NegateBool}}">
+                    <ScrollView Orientation="Vertical">
+                        <StackLayout VerticalOptions="Center" Padding="10,0">
+                            <Label Text="Only Creators are authorized to upload resources" HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" TextColor="Black"/>
+                            <Label Text="Do you have questions and need solutions?"
+                               HorizontalOptions="Center" TextColor="Black"
+                               HorizontalTextAlignment="Center"/>
+                            <Label Text="Or have resources that would be of value to the community.   Send us a mail"
+                               HorizontalOptions="Center" TextColor="Black"
+                               HorizontalTextAlignment="Center"/>
+                            <Frame 
+                        BackgroundColor="{OnPlatform Android=White,iOS=White, UWP=White}"
+                            HorizontalOptions="Center"
+                        xct:TouchEffect.Command="{Binding SendUsMail}"
+                                Margin="10,20"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray"
+                        CornerRadius="22">
+                                <StackLayout Orientation="Horizontal" Padding="10,0">
+                                    <Path WidthRequest="30"
+                                      HeightRequest="30"
+                                      Fill="Purple"
+                                      Aspect="Uniform"
+                                      Data="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"/>
+                                    <Label Text="Mail" 
+                               Margin="10,10"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource AppColor}"
+                                   VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               FontSize="18"
+                               />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+                <Grid IsVisible="{Binding LoginResponse.user.privileges}">
+                    <StackLayout Margin="20,10"
+                WidthRequest="400"
+                             VerticalOptions="Center"
+                HorizontalOptions="Center">
+
+                        <Frame Style="{StaticResource EntryFrame}">
+                            <StackLayout Orientation="Horizontal">
+                                
+                                <Entry Text="{Binding UploadModel.title}" Placeholder="Course Title"/>
+                            </StackLayout>
+                        </Frame>
+                        <Frame Style="{StaticResource EntryFrame}">
+                            <StackLayout Orientation="Horizontal">
+                                
+                                <Entry Text="{Binding UploadModel.code}" Placeholder="Course Code" MaxLength="7"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Style="{StaticResource EntryFrame}" Padding="5,0">
+                            <Grid>
+                                <Path Style="{StaticResource DownArrow}"
+                                  Data="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/>
+                                <Frame Padding="0"
+                                HorizontalOptions="FillAndExpand"
+                                BackgroundColor="{OnPlatform Android=Transparent,iOS=White, UWP=#E5E5E5}"
+                                xct:TouchEffect.Command="{Binding CustomButtonClicked}"
+                                xct:TouchEffect.CommandParameter="select materials"
+                                xct:TouchEffect.NativeAnimation="True"
+                                xct:TouchEffect.NativeAnimationColor="{StaticResource AppColor}"
+                                CornerRadius="{OnPlatform Android=2,iOS=2, UWP=0}">
+
+
+                                    <Label Text="{Binding UploadModel.Material.Stream,  Converter={StaticResource StreamToString},FallbackValue='Select File'}" 
+                                       Margin="10,20"
+                                       TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start"
+                                       FontSize="17"
+                                       >
+                                        <Label.Triggers>
+                                            <Trigger TargetType="Label" Property="Text" Value="Select File">
+                                                <Setter Property="TextColor" Value="DimGray" />
+                                                <!-- multiple Setters elements are allowed -->
+                                            </Trigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Frame>
+                            </Grid>
+                        </Frame>
+                        <Frame Style="{StaticResource EntryFrame}">
+                            <StackLayout Orientation="Horizontal">
+
+                                <Entry Text="{Binding UploadModel.Material.fileName, Mode=TwoWay}" Placeholder="File Name"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Style="{StaticResource EntryFrame}" Padding="5,0">
+                            <Grid>
+                                <Path Style="{StaticResource DownArrow}"
+                                  Data="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/>
+                                
+                                <Frame Padding="0"
+                                HorizontalOptions="FillAndExpand"
+                                BackgroundColor="{OnPlatform Android=Transparent, iOS=#E5E5E5, UWP=#E5E5E5}"
+                                xct:TouchEffect.Command="{Binding CustomButtonClicked}"
+                                xct:TouchEffect.NativeAnimation="True"
+                                xct:TouchEffect.NativeAnimationColor="{StaticResource AppColor}"
+                                CornerRadius="{OnPlatform Android=2,iOS=2, UWP=0}">
+
+
+                                    <Label Text="{Binding SelectedFac.Faculty,FallbackValue='Select Faculty'}" 
+                                       Margin="10,20"
+                                       TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                       FontAttributes="None"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start"
+                                       FontSize="17"
+                                       >
+                                        <Label.Triggers>
+                                            <Trigger TargetType="Label" Property="Text" Value="Select Faculty">
+                                                <Setter Property="TextColor" Value="DimGray" />
+                                                <!-- multiple Setters elements are allowed -->
+                                            </Trigger>
+
+                                        </Label.Triggers>
+
+                                    </Label>
+                                </Frame>
+
+                            </Grid>
+                        </Frame>
+                        <Frame Style="{StaticResource EntryFrame}" Padding="5,0">
+                            <Grid>
+                                <Path Style="{StaticResource DownArrow}"
+                                  Data="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/>
+                                <CustomView:CustomPickerView x:Name="DeptPicker" 
+                                                            ItemsSource="{Binding SelectedFac.Departments}"
+                                                            HorizontalOptions="FillAndExpand"
+                                                             Placeholder="Select Department"
+                                                             Title="Select Department"
+                                                             ItemDisplayBinding="{Binding Department}"
+                                                            SelectedItem="{Binding SelectedDept}"/>
+                            </Grid>
+                        </Frame>
+                        <Frame Style="{StaticResource EntryFrame}" Padding="5,0">
+                            <Grid>
+                                <Path Style="{StaticResource DownArrow}"
+                                  Data="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/>
+                                <CustomView:CustomPickerView x:Name="MaterialYrPicker" 
+                                                             HorizontalOptions="FillAndExpand"
+                                                             Placeholder="Select Level"
+                                                             Title="Select Level"
+                                                         SelectedItem="{Binding SelectedNumber, Mode=TwoWay}"
+                                                         ItemsSource="{Binding Level}"/>
+                            </Grid>
+                        </Frame>
+
+                        <StackLayout Margin="0,20,0,0">
+                            <Button Visual="Material"
+                                    Text="Clear" 
+                                    BorderColor="{StaticResource AppColor}"
+                                    Command="{Binding ClearUploadModel}"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DimGray}, Light= #E5E5E5,Default=#E5E5E5}" BorderWidth="3" TextColor="{StaticResource AppColor}" Padding="0,4" FontSize="20"/>
+                            <Button Visual="Material"
+                                    Command="{Binding UploadNow}"
+                                    Text="Upload" BorderColor="{StaticResource AppColor}" BackgroundColor="{StaticResource AppColor}" BorderWidth="3" FontSize="20" Padding="0,4"/>
+                        </StackLayout>
+                        
+                    </StackLayout>
+                </Grid>
+            </Grid>
+            
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

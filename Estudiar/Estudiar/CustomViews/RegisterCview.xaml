@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="clr-namespace:Estudiar.Toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:CustomView="clr-namespace:Estudiar.CustomViews"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             x:Class="Estudiar.CustomViews.RegisterCview">
+    <ContentView.BindingContext>
+        <VM:VM_SignUp_In/>
+    </ContentView.BindingContext>
+    <ContentView.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="Label" x:Key="ThemeLabel">
+                <Setter Property="TextColor" Value="{StaticResource AppColor}"/>
+            </Style>
+            <Style TargetType="Label" x:Key="SmallText" BasedOn="{StaticResource ThemeLabel}">
+                <Setter  Property="FontSize" Value="30"/>
+            </Style>
+            <Style TargetType="Label" x:Key="EntryLabel">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="Margin" Value="10,0,10,0"/>
+                <Setter Property="MaxLines" Value="1"/>
+                <Setter Property="FontSize" Value="17"/>
+                <Setter Property="LineBreakMode" Value="TailTruncation"/>
+            </Style>
+            <Style TargetType="Frame" x:Key="EntryFrame">
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="BackgroundColor" Value="{OnPlatform Android=Transparent,iOS=White, UWP=#E5E5E5}"/>
+                <Setter Property="Padding" Value="{OnPlatform Android=0,iOS=1, UWP='0'}"/>
+                <Setter Property="Margin" Value="0,0,0,0"/>
+                <Setter Property="HasShadow" Value="False"/>
+
+            </Style>
+            <Style TargetType="Path" x:Key="DownArrow">
+                <Setter Property="Opacity" Value="0.3"/>
+                <Setter Property="Rotation" Value="-90"/>
+                <Setter Property="Fill" Value="Black"/>
+                <Setter Property="Stroke" Value="White"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Aspect" Value="Uniform"/>
+                <Setter Property="Margin" Value="10,10"/>
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="VerticalOptions" Value="{x:OnPlatform Android=Center, UWP=End}"/>
+
+                <Setter Property="WidthRequest" Value="30"/>
+                <Setter Property="HeightRequest" Value="30"/>
+            </Style>
+            <Style TargetType="CustomView:CustomPickerView">
+                <Style.Setters>
+                    <Setter Property="TitleColor" Value="{StaticResource AppColor}"/>
+                    <Setter Property="TextColor" Value="Black"/>
+                    <Setter Property="BackColor" Value="Transparent"/>
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                    <Setter Property="PlaceholderColor" Value="DimGray"/>
+                    <Setter Property="CornerRadius" Value="4"/>
+                    <Setter Property="BorderColor" Value="Black"/>
+                    <Setter Property="FontSize" Value="17"/>
+                    <Setter Property="Padding" Value="18,15"/>
+                    <Setter Property="Margin"  Value="0,2,2,2"/>
+                    <Setter Property="BorderWidth" Value="0"/>
+                    <Setter Property="FontFamily">
+                        <Setter.Value>
+                            <OnPlatform x:TypeArguments="x:String">
+                                <!--<On Platform="iOS" Value="Vollkorn" />-->
+                                <On Platform="Android" Value="Vollkorn-Regular.ttf#Vollkorn" />
+                                <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                            </OnPlatform>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="ChangeBackgroundStyle" Value="True"/>
+                    <Setter Property="FocusedBorderColor" Value="{StaticResource AppColor}"/>
+                    <Setter Property="UnfocusedBorderColor" Value="Gray"/>
+                    <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                </Style.Setters>
+            </Style>
+            <Style TargetType="CustomView:RoundedEntry">
+                <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="BackColor" Value="White"/>
+                <Setter Property="Padding" Value="20,12"/>
+                <Setter Property="Margin"  Value="0,2,2,2"/>
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <!--<On Platform="iOS" Value="Vollkorn" />-->
+                            <On Platform="Android" Value="Vollkorn-Regular.ttf#Vollkorn" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="BorderWidth" Value="2"/>
+                <Setter Property="FocusedBorderColor" Value="{StaticResource AppColor}"/>
+                <Setter Property="UnfocusedBorderColor" Value="Gray"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <ScrollView x:Name="SignUpStactContainer"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand">
+            <ScrollView.VerticalScrollBarVisibility>
+                <OnPlatform x:TypeArguments="ScrollBarVisibility">
+                    <On Platform="Android" Value="Never"/>
+                </OnPlatform>
+            </ScrollView.VerticalScrollBarVisibility>
+            <StackLayout>
+                <StackLayout Margin="20,60,20,10"
+                             VerticalOptions="FillAndExpand"
+                                             WidthRequest="400"
+                                             HorizontalOptions="Center">
+
+                    <Label Text="Sign Up"
+                           FontSize="40"
+                           TextColor="{AppThemeBinding Dark=White, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                           FontFamily="NSK"
+                           Margin="0,0,0,40"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"/>
+
+
+                    <Frame Style="{StaticResource EntryFrame}">
+                        <StackLayout Spacing="0">
+                            <Label Text="FirstName LastName" Style="{StaticResource EntryHeader}"/>
+                            <inputLayout:SfTextInputLayout ErrorText="Invalid Email">
+
+                                <Entry Text="{Binding signUpModel.name, Mode=TwoWay}"
+                                       Placeholder="Enter your first and last name"
+                                                     Keyboard="Text" IsSpellCheckEnabled="False"/>
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource EntryFrame}">
+                        <StackLayout Spacing="0">
+
+
+                            <Label Text="Email" Style="{StaticResource EntryHeader}"/>
+                            <inputLayout:SfTextInputLayout ErrorText="Invalid Email">
+
+                                <Entry Text="{Binding signUpModel.email, Mode=TwoWay}"
+                                       Placeholder="Enter your email address"
+                                                     Keyboard="Email" IsSpellCheckEnabled="False"/>
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource EntryFrame}">
+                        <StackLayout Spacing="0">
+
+
+                            <Label Text="Password" Style="{StaticResource EntryHeader}"/>
+                            <inputLayout:SfTextInputLayout ErrorText="Password mismatch" EnablePasswordVisibilityToggle="True">
+
+                                <inputLayout:SfTextInputLayout.Triggers>
+                                    <DataTrigger TargetType="inputLayout:SfTextInputLayout"
+                                                 Binding="{Binding InputView.TextColor, Source={RelativeSource Self}}"
+                                                 Value="Red">
+                                        <Setter Property="HasError" Value="True"/>
+                                    </DataTrigger>
+
+                                </inputLayout:SfTextInputLayout.Triggers>
+                                <Entry x:Name="PasswordEntry"
+                                       IsPassword="True"
+                                       ClearButtonVisibility="Never"
+                                       Placeholder="Enter a strong password"
+                                                     TextChanged="PasswordEntry_TextChanged"
+                                                     Text="{Binding signUpModel.password, Mode=TwoWay}"/>
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+
+
+                    </Frame>
+                    <Label Text="password mismatch" TextColor="Pink" FontSize="11" IsVisible="False"
+                           Opacity="1" HorizontalOptions="Start"
+                           x:Name="MismatchLabel"/>
+                    <Frame Style="{StaticResource EntryFrame}">
+                        <StackLayout Spacing="0">
+
+
+                            <Label Text="Confirm password" Style="{StaticResource EntryHeader}"/>
+                            <inputLayout:SfTextInputLayout ErrorText="Password mismatch" EnablePasswordVisibilityToggle="True">
+                                <inputLayout:SfTextInputLayout.Triggers>
+                                    <DataTrigger TargetType="inputLayout:SfTextInputLayout"
+                                                 Binding="{Binding InputView.TextColor, Source={RelativeSource Self}}"
+                                                 Value="Red">
+                                        <Setter Property="HasError" Value="True"/>
+                                    </DataTrigger>
+
+                                </inputLayout:SfTextInputLayout.Triggers>
+
+                                <Entry Text="{Binding Repassword}" 
+                                       IsPassword="True"
+                                       ClearButtonVisibility="Never"
+                                       x:Name="RepasswordEntry" 
+                                       Placeholder="Re-type password"
+                                                     TextChanged="RepasswordEntry_TextChanged" />
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+
+                    </Frame>
+
+                    <Frame Style="{StaticResource EntryFrame}" IsVisible="false">
+                        <StackLayout Orientation="Horizontal" Spacing="0">
+
+                            <Entry Text="{Binding signUpModel.phone, Mode=TwoWay}"
+                                                     Placeholder="Phone Number"
+                                                     Keyboard="Telephone" />
+                        </StackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource EntryFrame}">
+                        <StackLayout Spacing="0">
+                            <Label Text="Select Level" Style="{StaticResource EntryHeader}"/>
+                            <inputLayout:SfTextInputLayout ErrorText="Invalid Email">
+
+                                <CustomView:CustomPickerView x:Name="LevelPicker" 
+                                                         SelectedItem="{Binding signUpModel.year, Mode=TwoWay}"
+                                                         Title="Select Level"
+                                                             FontFamily="ISB"
+                                                             Placeholder="Tap to select level"
+                                                         FontSize="15"
+                                                         Margin="-4,0,0,0"
+                                                         VerticalOptions="End"
+                                                         PlaceholderColor="{AppThemeBinding Dark=LightGray, Light= #9CA0B0,Default=#9CA0B0}"
+                                                         TextColor="{AppThemeBinding Dark=White, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}}"
+                                                         TitleColor="{AppThemeBinding Dark=White, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                                         SelectedIndex="2"
+                                                         ItemsSource="{Binding Level}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <!--<Path Style="{StaticResource DownArrow}"
+                                  VerticalOptions="Center"
+                                  Data="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/>-->
+
+                        </StackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource EntryFrame}" >
+                        <StackLayout Spacing="0">
+                            <Label Text="Select Department"  Style="{StaticResource EntryHeader}"/>
+                            <inputLayout:SfTextInputLayout ErrorText="Invalid Email" Padding="0" InputViewPadding="0">
+                                <Grid>
+                                    <Frame Padding="0,15"
+                                HorizontalOptions="FillAndExpand"
+                                BackgroundColor="{OnPlatform Android=Transparent,iOS=White, UWP=#E5E5E5}"
+                                xct:TouchEffect.Command="{Binding CustomButtonClicked}"
+                                xct:TouchEffect.NativeAnimation="True"
+                                xct:TouchEffect.NativeAnimationColor="LightGray"
+                                CornerRadius="{OnPlatform Android=0, UWP=2}">
+
+
+
+                                        <Label Text="{Binding SelectedDept.Department, FallbackValue='Tap to select', TargetNullValue='Tap to select'}" 
+                                       TextColor="{AppThemeBinding Dark=White, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start"
+
+                                       LineBreakMode="TailTruncation"
+                                               FontFamily="ISB"
+                                               Margin="15,0,10,0"
+                                       MaxLines="1">
+                                            <Label.Triggers>
+
+                                                <Trigger TargetType="Label" Property="Text" Value="Tap to select">
+                                                    <Setter Property="TextColor" Value="{AppThemeBinding Dark=LightGray, Light= #9CA0B0,Default=#9CA0B0}"/>
+                                                </Trigger>
+
+                                            </Label.Triggers>
+                                        </Label>
+
+                                    </Frame>
+                                    <Path Style="{StaticResource DownArrow}"
+                                  IsVisible="{x:OnPlatform False, UWP=True}"
+                                    VerticalOptions="Center"
+                                  Data="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/>
+
+                                </Grid>
+                            </inputLayout:SfTextInputLayout>
+
+                        </StackLayout>
+                    </Frame>
+                    <Frame
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="EndAndExpand"
+                        BackgroundColor="{StaticResource AppColor}"
+                        Margin="0,25,0,0"
+                        WidthRequest="400"
+                        Padding="0"
+                        xct:TouchEffect.Command="{Binding SignUpNow}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray"
+                        CornerRadius="5">
+                        <Label Text="Sign Up" 
+                               Margin="30,20"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}"
+                               HorizontalOptions="Center"
+                               />
+                    </Frame>
+
+
+
+
+                </StackLayout>
+                <StackLayout>
+                    <Label Text="Have an account?"
+                           Margin="0,50,0,0"
+                           VerticalOptions="EndAndExpand"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+
+                    <Frame HorizontalOptions="Center"
+                                       Padding="10,3" 
+                                        Margin="0,0,0,20"
+                                       BackgroundColor="Transparent"
+                                       HasShadow="False">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="GotoSignIn_Tapped"/>
+                        </Frame.GestureRecognizers>
+                        <Label HorizontalTextAlignment="Center" HorizontalOptions="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Sign In" TextColor="{StaticResource AppColor}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+
+                    </Frame>
+                </StackLayout>
+
+            </StackLayout>
+
+
+        </ScrollView>
+    </ContentView.Content>
+</ContentView>

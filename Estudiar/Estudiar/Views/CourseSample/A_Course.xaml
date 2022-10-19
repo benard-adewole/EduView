@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.Views.CourseSample.A_Course"
+             xmlns:CustomView="clr-namespace:Estudiar.CustomViews"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             NavigationPage.HasNavigationBar="True"
+             NavigationPage.HasBackButton="{OnPlatform False, iOS=True}"
+             NavigationPage.BackButtonTitle="Courses"
+             Shell.NavBarHasShadow="False"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource AppColor}, Light= {StaticResource AppColor},Default={StaticResource AppColor}}"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="{Binding SelectedCourse.code}"
+
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             x:Name="ThisPage"
+             NavigationPage.IconColor="White">
+    <Shell.TitleView >
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+            <Label Text="{Binding Title, Source={x:Reference ThisPage}}"
+                   x:Name="PageTitle"
+                   IsVisible="{OnPlatform True,UWP=False}"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   FontSize="22"
+                   TextColor="White"/>
+            <CustomView:RoundedEntry x:Name="TitleEntry"
+                                     VerticalOptions="Center"
+                                     ScaleX="0"
+                                     BackColor="#33F5F5F5"
+                                     Placeholder="Search"
+                                     Padding="10,15,20,15"
+                                     CornerRadius="4"
+                                     Unfocused="TitleEntry_Unfocused"
+                                     FontAttributes="{OnPlatform Bold, Android=Bold, UWP=None}"
+                                     TextChanged="TitleEntry_TextChanged"
+                                     TextColor="{OnPlatform White, Android=White, UWP=Black}"
+                                     ClearButtonVisibility="WhileEditing"
+                                     PlaceholderColor="{OnPlatform White, Android=White, UWP=Black}"
+                                     />
+        </Grid>
+    </Shell.TitleView>
+    <!--<ContentPage.BindingContext>
+        <VM:MainVM/>
+    </ContentPage.BindingContext>-->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Grid" x:Key="CollectionGrid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" >
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="CourseGridTemplate">
+                <Grid Style="{StaticResource CollectionGrid}">
+                    <Frame Margin="10,5,10,15"
+                           Padding="0"
+                           xct:TouchEffect.NativeAnimation="True"
+                           xct:TouchEffect.NativeAnimationColor="LightGray"
+                                HorizontalOptions="FillAndExpand"
+                                BackgroundColor="#E5E5E5"
+                                CornerRadius="{OnPlatform Android=10, UWP=0}">
+
+
+                        <Grid RowDefinitions="*,5" Padding="10,5">
+                            <BoxView Grid.Row="1" VerticalOptions="Fill" BackgroundColor='Purple' Opacity="0.5"/>
+                            <StackLayout Orientation="Vertical" Grid.Row="0" Spacing="0">
+                                <Path
+                                HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  Aspect="Uniform"
+                                WidthRequest="40"
+                                    Opacity="0.5"
+                                  Margin="10,10"
+                                  Data="M37.3635 24.3325C36.2393 23.1291 33.9372 22.4372 30.6755 22.4372C28.9338 22.4372 26.9151 22.6114 24.7222 23.0231C23.484 21.8039 22.249 20.3789 21.0694 18.7164C20.2302 17.5447 19.4972 16.3097 18.8211 15.0906C20.1083 11.0689 20.7306 7.79139 20.7306 5.43223C20.7306 2.78489 19.7758 0.0235596 17.0256 0.0235596C16.1817 0.0235596 15.3377 0.538143 14.8881 1.29023C13.6483 3.51956 14.2072 8.40414 16.34 13.2286C15.5436 15.6352 14.7012 17.9358 13.6483 20.5198C12.7332 22.6985 11.6787 24.9436 10.6036 27.0051C4.42225 29.5131 0.422751 32.4423 0.0475006 34.7381C-0.117166 35.6042 0.164667 36.4006 0.771084 37.034C0.981667 37.2081 1.77808 37.8969 3.11442 37.8969C7.21525 37.8969 11.5377 31.1202 13.7338 27.0352C15.4201 26.4652 17.1063 25.9475 18.7894 25.4281C20.6387 24.9167 22.4944 24.5051 24.1807 24.2169C28.5111 28.1816 32.3285 28.8086 34.2475 28.8086C36.6098 28.8086 37.4522 27.8316 37.7356 27.0321C38.1789 26.0029 37.8464 24.8629 37.3366 24.2771L37.3682 24.3404L37.3635 24.3325ZM35.1706 26.0013C35.0059 26.8626 34.1604 27.4358 32.9761 27.4358C32.6436 27.4358 32.3586 27.3772 32.0213 27.3218C29.868 26.8072 27.8524 25.7131 25.8416 23.9873C27.8207 23.6485 29.4991 23.5915 30.5599 23.5915C31.7316 23.5915 32.7449 23.6421 33.4257 23.8195C34.2016 23.9873 35.4366 24.5082 35.1595 26.0045H35.1912L35.1706 26.0013ZM23.2592 23.2986C21.8025 23.5994 20.2287 23.9541 18.5978 24.3958C17.3058 24.7489 15.96 25.1463 14.6078 25.615C15.3409 24.1868 15.96 22.8061 16.5205 21.4936C17.1982 19.8786 17.7555 18.2161 18.3176 16.6707C18.8717 17.6366 19.4893 18.6182 20.1068 19.4891C21.1201 20.8666 22.1809 22.1807 23.2417 23.3207V23.2891L23.2592 23.2986ZM15.8967 1.94731C16.1262 1.48814 16.5775 1.25698 16.9702 1.25698C18.1497 1.25698 18.3746 2.63131 18.3746 3.72698C18.3746 5.57631 17.8141 8.38514 16.8546 11.5914C15.1731 7.12639 15.0575 3.38973 15.8998 1.94889L15.8967 1.94731ZM9.7185 28.7009C6.85267 33.519 4.10083 36.5115 2.41458 36.5115C2.08208 36.5115 1.80183 36.3927 1.57542 36.2217C1.23658 35.8797 1.06875 35.4744 1.18275 35.0184C1.52 33.2926 4.72308 30.8811 9.72008 28.7009H9.7185Z"
+                                  Fill="Transparent"
+                                  HeightRequest="40"
+                                  Stroke="Purple"
+                                  StrokeLineCap="Flat"
+                                  StrokeThickness="1"
+                                            />
+                                <Label Text="{Binding title}"
+                                   MaxLines="2"
+                                           FontSize="11"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="Black"/>
+
+
+                            </StackLayout>
+                        </Grid>
+                    </Frame>
+                    
+                </Grid>
+
+            </DataTemplate>
+            <DataTemplate x:Key="CourseListTemplate">
+                <Grid Style="{StaticResource CollectionGrid}">
+                    <Frame Margin="0,5,0,5"
+                           xct:TouchEffect.NativeAnimation="True"
+                           xct:TouchEffect.NativeAnimationColor="LightGray"
+                           BackgroundColor="Transparent"
+                           Padding="0"
+                                HorizontalOptions="FillAndExpand">
+
+
+                        <StackLayout Spacing="0" VerticalOptions="Center" Orientation="Horizontal">
+                            <Path Fill="{StaticResource AppColor}"
+                                  Data="M10.2501 2.83337H2.2775C2.1712 2.83187 2.0663 2.80884 1.96914 2.76568C1.87198 2.72252 1.78456 2.66012 1.71216 2.58225C1.63976 2.50438 1.58388 2.41265 1.54789 2.31258C1.51189 2.21252 1.49653 2.1062 1.50273 2.00004C1.50221 1.78877 1.58193 1.58519 1.72577 1.43049C1.8696 1.27578 2.06681 1.1815 2.2775 1.16671H10.2501C10.3606 1.16671 10.4665 1.12281 10.5446 1.04467C10.6227 0.966528 10.6666 0.860548 10.6666 0.750041C10.6666 0.639534 10.6227 0.533553 10.5446 0.455413C10.4665 0.377273 10.3606 0.333374 10.2501 0.333374H2.2775C1.84579 0.348498 1.43682 0.530747 1.13686 0.841683C0.836898 1.15262 0.669384 1.56794 0.669648 2.00004C0.665619 2.06804 0.665619 2.13621 0.669648 2.20421C0.665635 2.23742 0.665635 2.271 0.669648 2.30421V12C0.669384 12.4321 0.836898 12.8475 1.13686 13.1584C1.43682 13.4693 1.84579 13.6516 2.2775 13.6667H10.2501C10.3606 13.6667 10.4665 13.6228 10.5446 13.5447C10.6227 13.4665 10.6666 13.3605 10.6666 13.25V3.35421V3.31671V3.27921C10.6669 3.16585 10.6239 3.05666 10.5466 2.97384C10.4692 2.89102 10.3632 2.84079 10.2501 2.83337ZM9.83354 12.8334H2.2775C2.06681 12.8186 1.8696 12.7243 1.72577 12.5696C1.58193 12.4149 1.50221 12.2113 1.50273 12V3.47921C1.73957 3.6099 2.00712 3.67465 2.2775 3.66671H9.83354V12.8334Z"
+                                  WidthRequest="20"
+                                  HeightRequest="20"
+                                  Aspect="Uniform"
+                                  VerticalOptions="Center"/>
+                            <!--<Image VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource Size="15" FontFamily="MF" Color="{StaticResource AppColor}"  Glyph="{x:Static MaterialFont:FontIcon.NotebookOutline}"/>
+                                </Image.Source>
+                            </Image>-->
+                            <Label Text="{Binding name}"
+                                   MaxLines="1"
+                                   Margin="10,10"
+                                           FontSize="15"
+                                   VerticalOptions="Center"
+                                   TextColor="{StaticResource AppColor}"
+                                   FontAttributes="Bold"/>
+                        </StackLayout>
+
+                    </Frame>
+                    
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Search"
+                     Order="Primary"
+                     x:Name="SearchCourseBtn"
+                     Clicked="SearchCourseBtn_Clicked"
+                     >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.Magnify}" Color="White" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Text="Change View"
+                     Order="Primary"
+                     x:Name="ChangeViewBtn"
+                     Clicked="ChangeViewBtn_Clicked"
+                     >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.ViewList}" Color="White" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        
+        <!--<ToolbarItem x:Name="Q_And_A_Btn"
+                     Clicked="Q_And_A_Btn_Clicked"
+                     Text="Q and A"
+                     Order="Secondary"
+                     IconImageSource="Hamburger.png"/>
+        <ToolbarItem x:Name="QuizBtn"
+                     Clicked="QuizBtn_Clicked"
+                     Text="Quiz"
+                     Order="Secondary"
+                     IconImageSource="Hamburger.png"/>-->
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid RowDefinitions="200,*">
+            
+            <Grid>
+                <!--<Path Grid.Column="0"
+                                    Opacity="1"
+                                HorizontalOptions="Center"
+                                  VerticalOptions="Center"
+                                  Aspect="Uniform"
+                                WidthRequest="60"
+                                  Margin="20,10"
+                                  Data="M37.3635 24.3325C36.2393 23.1291 33.9372 22.4372 30.6755 22.4372C28.9338 22.4372 26.9151 22.6114 24.7222 23.0231C23.484 21.8039 22.249 20.3789 21.0694 18.7164C20.2302 17.5447 19.4972 16.3097 18.8211 15.0906C20.1083 11.0689 20.7306 7.79139 20.7306 5.43223C20.7306 2.78489 19.7758 0.0235596 17.0256 0.0235596C16.1817 0.0235596 15.3377 0.538143 14.8881 1.29023C13.6483 3.51956 14.2072 8.40414 16.34 13.2286C15.5436 15.6352 14.7012 17.9358 13.6483 20.5198C12.7332 22.6985 11.6787 24.9436 10.6036 27.0051C4.42225 29.5131 0.422751 32.4423 0.0475006 34.7381C-0.117166 35.6042 0.164667 36.4006 0.771084 37.034C0.981667 37.2081 1.77808 37.8969 3.11442 37.8969C7.21525 37.8969 11.5377 31.1202 13.7338 27.0352C15.4201 26.4652 17.1063 25.9475 18.7894 25.4281C20.6387 24.9167 22.4944 24.5051 24.1807 24.2169C28.5111 28.1816 32.3285 28.8086 34.2475 28.8086C36.6098 28.8086 37.4522 27.8316 37.7356 27.0321C38.1789 26.0029 37.8464 24.8629 37.3366 24.2771L37.3682 24.3404L37.3635 24.3325ZM35.1706 26.0013C35.0059 26.8626 34.1604 27.4358 32.9761 27.4358C32.6436 27.4358 32.3586 27.3772 32.0213 27.3218C29.868 26.8072 27.8524 25.7131 25.8416 23.9873C27.8207 23.6485 29.4991 23.5915 30.5599 23.5915C31.7316 23.5915 32.7449 23.6421 33.4257 23.8195C34.2016 23.9873 35.4366 24.5082 35.1595 26.0045H35.1912L35.1706 26.0013ZM23.2592 23.2986C21.8025 23.5994 20.2287 23.9541 18.5978 24.3958C17.3058 24.7489 15.96 25.1463 14.6078 25.615C15.3409 24.1868 15.96 22.8061 16.5205 21.4936C17.1982 19.8786 17.7555 18.2161 18.3176 16.6707C18.8717 17.6366 19.4893 18.6182 20.1068 19.4891C21.1201 20.8666 22.1809 22.1807 23.2417 23.3207V23.2891L23.2592 23.2986ZM15.8967 1.94731C16.1262 1.48814 16.5775 1.25698 16.9702 1.25698C18.1497 1.25698 18.3746 2.63131 18.3746 3.72698C18.3746 5.57631 17.8141 8.38514 16.8546 11.5914C15.1731 7.12639 15.0575 3.38973 15.8998 1.94889L15.8967 1.94731ZM9.7185 28.7009C6.85267 33.519 4.10083 36.5115 2.41458 36.5115C2.08208 36.5115 1.80183 36.3927 1.57542 36.2217C1.23658 35.8797 1.06875 35.4744 1.18275 35.0184C1.52 33.2926 4.72308 30.8811 9.72008 28.7009H9.7185Z"
+                                  Fill="Transparent"
+                                  HeightRequest="60"
+                                  Stroke="White"
+                                  StrokeLineCap="Flat"
+                                  StrokeThickness="1"/>-->
+                <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= White,Default=White}"
+                   HorizontalOptions="Start"
+                   CornerRadius="20"
+                   HasShadow="{OnPlatform False, iOS=False}"
+                   VerticalOptions="Start"
+                   Padding="0"
+                   Grid.Row="0"
+                   IsVisible="{OnPlatform True, UWP=False}"
+                   Margin="10,10,10,0"
+                   
+                   xct:TouchEffect.HoveredBackgroundColor="{StaticResource AppColor}"
+                   xct:TouchEffect.Command="{Binding CloseThisPage}"
+                   xct:TouchEffect.NativeAnimation="True"
+                   xct:TouchEffect.NativeAnimationColor="LightGray"
+                   WidthRequest="40"
+                   HeightRequest="40">
+                    <Image Margin="7">
+                        <Image.Source>
+                            <FontImageSource Size="15" FontFamily="MF" Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}"  Glyph="{x:Static MaterialFont:FontIcon.ArrowLeft}"/>
+                        </Image.Source>
+                    </Image>
+                </Frame>
+                
+            </Grid>
+            <Frame Grid.Row="1"
+                   HasShadow="False"
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Margin="0,40,0,0">
+
+            </Frame>
+            <Frame Grid.Row="1"
+                   Padding="0,0"
+                   HasShadow="False"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                        CornerRadius="50">
+
+                <StackLayout>
+                    <StackLayout Spacing="5" Padding="20,30,20,0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Fill">
+                        <CollectionView x:Name="CourseMaterial"
+                            ItemsSource="{Binding SelectedCourse.materials}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedMaterial}"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            ItemTemplate="{StaticResource CourseListTemplate}"
+                            SelectionChanged="CourseMaterial_SelectionChanged">
+                            <CollectionView.Header>
+                                <StackLayout Padding="0,10">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{Binding SelectedCourse.title}"
+                                                        FontAttributes="Bold"
+                                                       FontSize="15"
+                                                       TextTransform="Uppercase"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="StartAndExpand"
+                                               TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                                        <Frame Padding="15,10"
+                                                       CornerRadius="5"
+                                                       BackgroundColor="{StaticResource AppColor}"
+                                                       HorizontalOptions="EndAndExpand"
+                                                       VerticalOptions="Center"
+                                                       Opacity="0.7"
+                                                       Margin="0,0,10,0"
+                                                       HasShadow="False">
+                                            <Label Text="Easy" TextColor="{AppThemeBinding Dark=Black, Light= White,Default=White}"/>
+                                        </Frame>
+                                    </StackLayout>
+
+                                    <Label Text="{Binding SelectedCourse.code}" TextColor="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light= {StaticResource LightGray},Default={StaticResource LightGray}}"  FontSize="15"/>
+
+                                    <Label Text="Materials Available"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                               Margin="0,40,0,0"
+                                       FontSize="15"/>
+                                </StackLayout>
+
+                            </CollectionView.Header>
+                        </CollectionView>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

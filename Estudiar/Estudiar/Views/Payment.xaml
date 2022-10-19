@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.Views.Payment"
+             NavigationPage.HasNavigationBar="True"
+             Shell.NavBarHasShadow="True"
+             Shell.NavBarIsVisible="True"
+             xmlns:Customview="clr-namespace:Estudiar.CustomViews"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xct:StatusBarEffect.Color="{StaticResource AppColor}"
+             xct:StatusBarEffect.Style="LightContent"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+
+             
+
+             Title="Subscribe"
+             Shell.TabBarIsVisible="False">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Customview:CustomWebView Opacity="{AppThemeBinding Dark=0.8, Light= 1,Default=1}"
+                HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand"
+                     x:Name="paymentPortal"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

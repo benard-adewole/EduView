@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cview="clr-namespace:Estudiar.CGPA"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             x:Class="Estudiar.CGPA.SavedGrades">
+    <ContentPage.Content>
+        <xct:LazyView x:TypeArguments="cview:SavedGradesCV" x:Name="MyLazyView" />
+    </ContentPage.Content>
+</ContentPage>

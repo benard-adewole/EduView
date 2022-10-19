@@ -1,0 +1,766 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.Views.Profile"
+             xmlns:VM="clr-namespace:Estudiar.ViewModels"
+             Shell.NavBarIsVisible="False"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             xmlns:Converters="clr-namespace:Estudiar.Converters"
+              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+            xmlns:customViews="clr-namespace:Estudiar.CustomViews"
+             xmlns:toolkit="clr-namespace:Estudiar.Toolkit"
+             Title="Profile">
+
+    <ContentPage.BindingContext>
+        <VM:MainVM/>
+    </ContentPage.BindingContext>
+    <!--<ContentPage.ToolbarItems>
+        
+        <ToolbarItem Text="Share"
+                     Order="Primary"
+                     Command="{Binding SaveID}"
+                     >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.ShareVariant}" Color="White" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        
+
+    </ContentPage.ToolbarItems>-->
+    <ContentPage.Resources>
+        <Converters:BoolInverterConverter x:Key="BoolInvert"/>
+        <Converters:TextToSentenceConverter x:Key="TextToSentenceConverter"/>
+        <Converters:BoolInverterConverter x:Key="NegateBool"/>
+        <Converters:BoolToTextConverter x:Key="BoolToText"/>
+        <Converters:ScrollValueConverter x:Key="ScrollValueConverter"/>
+        <Converters:ComparisonConverter x:Key="ComparisonConverter"/>
+        <ResourceDictionary>
+            <ControlTemplate x:Key="RadioButtonTemplate">
+                <Frame BorderColor="{AppThemeBinding Dark={StaticResource DimGray}, Light=#E5E5E5,Default=#E5E5E5}"
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                   HasShadow="False"
+                   HeightRequest="100"
+                   WidthRequest="100"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Start"
+                   Padding="0">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CheckedStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Property="BorderColor"
+                                            Value="{StaticResource AppColor}" />
+                                        <!--<Setter TargetName="check"
+                                            Property="Opacity"
+                                            Value="1" />-->
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor"
+                                            Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" />
+                                        <Setter Property="BorderColor"
+                                            Value="{AppThemeBinding Dark={StaticResource DimGray}, Light= LightGray,Default=LightGray}" />
+                                        <!--<Setter TargetName="check"
+                                            Property="Opacity"
+                                            Value="0" />-->
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                    <Grid Margin="4"
+                      WidthRequest="100">
+                        <!--<Grid WidthRequest="18"
+                          HeightRequest="18"
+                          HorizontalOptions="End"
+                          VerticalOptions="Start">
+                            <Ellipse Stroke="Transparent"
+                                 Fill="White"
+                                 WidthRequest="16"
+                                 HeightRequest="16"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center" />
+                            <Ellipse x:Name="check"
+                                 Fill="Transparent"
+                                 WidthRequest="8"
+                                 HeightRequest="8"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center" />
+                        </Grid>-->
+                        <ContentPresenter />
+                    </Grid>
+                </Frame>
+            </ControlTemplate>
+            <Style TargetType="RadioButton">
+                <Setter Property="ControlTemplate"
+                    Value="{StaticResource RadioButtonTemplate}" />
+            </Style>
+            <Style TargetType="Grid" x:Key="ListGrid">
+                <Setter Property="RowDefinitions" Value="Auto,Auto"/>
+                <Setter Property="RowSpacing" Value="5"/>
+                <Setter Property="Margin" Value="0,0,0,10"/>
+                <Setter Property="Padding" Value="0,4"/>
+                <Setter Property="ColumnDefinitions" Value="40,*,Auto"/>
+            </Style>
+            <Style TargetType="Label" x:Key="Edit">
+                <Setter Property="Text" Value="Edit"/>
+                
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource MyGray}, Light=DimGray,Default=DimGray}"/>
+                <Setter Property="Margin" Value="0,0"/>
+                
+            </Style>
+            <Style TargetType="Frame" x:Key="FrameEdit">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+
+                <Setter Property="Padding" Value="10,5"/>
+
+            </Style>
+            <Style TargetType="Label" x:Key="Title">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light=Black,Default=Black}" />
+                <Setter Property="Grid.Row" Value="0"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="FontFamily" Value="IM"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="End"/>
+            </Style>
+            
+            <Style TargetType="Label" x:Key="Description">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource MyGray}, Light=DimGray,Default=DimGray}"/>
+                <Setter Property="Grid.Row" Value="1"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="VerticalOptions" Value="Start"/>
+                <Setter Property="Margin" Value="0,7"/>
+            </Style>
+            <Style TargetType="Frame" x:Key="FrameImage">
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Start"/>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Margin" Value="7,0,4,0"/>
+                <Setter Property="Grid.RowSpan" Value="2"/>
+                <Setter Property="Grid.Column" Value="0"/>
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="HasShadow" Value="True"/>
+                <!--<Setter Property="xct:ShadowEffect.Color" Value="Black"/>
+                <Setter Property="xct:ShadowEffect.OffsetX" Value="0"/>
+                <Setter Property="xct:ShadowEffect.OffsetY" Value="0"/>
+                <Setter Property="xct:ShadowEffect.Opacity" Value="0.50"/>
+                <Setter Property="xct:ShadowEffect.Radius" Value="8"/>-->
+            </Style>
+            <Style TargetType="Frame" x:Key="YummyEdit">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="IsVisible" Value="true"/>
+                <Setter Property="HasShadow" Value="False"/>
+                <Setter Property="Padding" Value="15,7"/>
+                <Setter Property="Margin" Value="4,0,4,0"/>
+                <Setter Property="Grid.RowSpan" Value="2"/>
+                <Setter Property="Grid.Column" Value="2"/>
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="CornerRadius" Value="6"/>
+            </Style>
+            <Style TargetType="Button" x:Key="EditButton">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Grid.RowSpan" Value="2"/>
+                <Setter Property="Grid.Column" Value="2"/>
+                <Setter Property="HorizontalOptions" Value="EndAndExpand"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Setter Property="Text" Value="Edit"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= {StaticResource BackgroundColorDark},Default={StaticResource BackgroundColorDark}}"/>
+                <Style.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding Text, Source={RelativeSource Self}}" Value="Save">
+                        <Setter Property="TextColor" Value="{StaticResource AppColor}"/>
+                        <Setter Property="FontFamily" Value="IB"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="customViews:RoundedEntry" x:Key="EntryEdit">
+                <Setter Property="Grid.Row" Value="1"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="HorizontalOptions" Value="Fill"/>
+                <Setter Property="BackColor" Value="#F2F2F2"/>
+                <Setter Property="Padding" Value="23,12"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Setter Property="TextColor" Value="#4F4F4F"/>
+                <Setter Property="FocusedBorderColor" Value="{StaticResource AppColor}"/>
+                <Setter Property="UnfocusedBorderColor" Value="#E0E0E0"/>
+                <Setter Property="BorderWidth" Value="3"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,0,50,0"/>
+                <Setter Property="IsSpellCheckEnabled" Value="False"/>
+            </Style>
+            <Style TargetType="Image" x:Key="ListImage">
+                <Setter Property="Source" >
+                    <Setter.Value>
+                        <FontImageSource Size="20" Color="Black"
+                                         FontFamily="MF"
+                                         Glyph="{x:Static MaterialFont:FontIcon.Security}"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Grid.Row" Value="0"/>
+                <Setter Property="Grid.Column" Value="0"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
+
+            <Style TargetType="Label" x:Key="value">
+                <Setter Property="TextColor" Value="Purple"/>
+                <Setter Property="FontAttributes" Value="Italic"/>
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <!--<On Platform="iOS" Value="Vollkorn" />-->
+                            <On Platform="Android" Value="Vollkorn-Regular.ttf#Vollkorn" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Label" x:Key="key">
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="Grid.Column" Value="0"/>
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <!--<On Platform="iOS" Value="Vollkorn" />-->
+                            <On Platform="Android" Value="Vollkorn-Regular.ttf#Vollkorn" />
+                            <On Platform="UWP" Value="Assets/Fonts/Vollkorn-Regular.ttf#Vollkorn" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        
+        <ScrollView Padding="20,0">
+            <StackLayout Spacing="0">
+
+                
+                <Image Source="Ellipse.png"
+                       Margin="40,20,40,15"
+                       HorizontalOptions="Center"
+                       HeightRequest="100"/>
+                <Label Text="{Binding LoginResponse.user.name, FallbackValue='John Doe', Converter={StaticResource TextToSentenceConverter}}"
+                       HorizontalOptions="Center" 
+                       TextColor="{AppThemeBinding Dark={StaticResource BackgroundColor}, Light=Black,Default=Black}"
+                       Style="{StaticResource LabelTitle}"
+                       FontFamily="IM"
+                       FontAttributes="Bold"/>
+                <Label Text="{Binding LoginResponse.user.email, FallbackValue='johndoe@gmail.com'}" 
+                       TextColor="{AppThemeBinding Dark={StaticResource MyGray}, Light=DimGray,Default=DimGray}"
+                       Margin="0,0,0,30"
+                       HorizontalOptions="Center"/>
+                <Grid Style="{StaticResource ListGrid}">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.Account}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Name" Style="{StaticResource Title}"/>
+                    <Label Text="{Binding LoginResponse.user.name, FallbackValue='JOHN DOE', Converter={StaticResource TextToSentenceConverter}}"
+                           Style="{StaticResource Description}"/>
+                    <customViews:RoundedEntry Style="{StaticResource EntryEdit}"
+                                              x:Name="NameEntry"
+                                              Text="{Binding LoginResponse.user.name, Mode=OneWay}"
+                                              Placeholder="Firstname Lastname"
+                                              ClearButtonVisibility="WhileEditing"
+                                              IsVisible="{Binding Source={x:Reference CanEditName}, Path=HidePassword}"
+                                              Keyboard="Text"/>
+                    <Button Style="{StaticResource EditButton}" x:Name="SaveName" Clicked="SaveName_Clicked">
+                        <Button.Triggers>
+                            <EventTrigger Event="Clicked">
+                                <toolkit:CanEditTriggerAction ShowIcon="Edit"
+                                                              HideIcon="Save"
+                                                              x:Name="CanEditName"/>
+                            </EventTrigger>
+
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+                <Grid Style="{StaticResource ListGrid}">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.Email}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    
+                    <Label Text="Email" Style="{StaticResource Title}"/>
+                    <Label Text="{Binding LoginResponse.user.email, FallbackValue='person@gmail.com'}" Style="{StaticResource Description}"/>
+                    <Frame Style="{StaticResource YummyEdit}" IsVisible="false">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                <Grid Style="{StaticResource ListGrid}">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20"
+                                                 Color="{StaticResource AppColor}" 
+                                                 Glyph="{x:Static MaterialFont:FontIcon.Counter}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Level" Style="{StaticResource Title}"/>
+                    
+                    <Label Text="{Binding LoginResponse.user.year, FallbackValue='X00'}" Style="{StaticResource Description}"/>
+                    <!--<customViews:RoundedEntry Placeholder="Level" Style="{StaticResource EntryEdit}"
+                                              Keyboard="Numeric"
+                                              Text="{Binding LoginResponse.user.year}"
+                    
+                    
+                    
+                                              IsVisible="{Binding Source={x:Reference CanEditLevel}, Path=HidePassword}"/>-->
+                    <customViews:CustomPickerView x:Name="LevelPicker" 
+                                                 IsVisible="{Binding Source={x:Reference CanEditLevel}, Path=HidePassword}"
+                                                 Placeholder="Select Level"
+                                                  Title="Select Level"
+                                                 FontFamily="IR"
+                                                 FontSize="12"
+                                                  Grid.Row="1"
+                                                  Grid.Column="1"
+                                                 VerticalOptions="Center"
+                                                 BorderWidth="3"
+                                                  CornerRadius="6"
+                                                  Padding="23,12"
+                                                  Margin="0,0,50,0"
+                                                  BackColor="#F2F2F2"
+                                                  UnfocusedBorderColor="#E0E0E0"
+                                                  FocusedBorderColor="{StaticResource AppColor}"
+                                                 PlaceholderColor="{StaticResource BackgroundColorDark}"
+                                                 TextColor="{StaticResource BackgroundColorDark}"
+                                                 TitleColor="{StaticResource AppColor}"
+                                                  SelectedItem="{Binding LoginResponse.user.year, Mode=TwoWay}">
+                        <customViews:CustomPickerView.ItemsSource>
+                            <x:Array Type="{x:Type x:Int32}">
+                                <x:Int32>100</x:Int32>
+                                <x:Int32>200</x:Int32>
+                                <x:Int32>300</x:Int32>
+                                <x:Int32>400</x:Int32>
+                                <x:Int32>500</x:Int32>
+                                <x:Int32>600</x:Int32>
+                            </x:Array>
+                        </customViews:CustomPickerView.ItemsSource>
+                    </customViews:CustomPickerView>
+
+                    <Button Style="{StaticResource EditButton}" x:Name="SaveLevel" Clicked="SaveLevel_Clicked" >
+                        <Button.Triggers>
+                            <EventTrigger Event="Clicked">
+                                <toolkit:CanEditTriggerAction ShowIcon="Edit"
+                                                              HideIcon="Save"
+                                                              x:Name="CanEditLevel"/>
+                            </EventTrigger>
+                            
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+                <Grid Style="{StaticResource ListGrid}">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20"
+                                                 Color="{StaticResource AppColor}" 
+                                                 Glyph="{x:Static MaterialFont:FontIcon.School}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Programme" Style="{StaticResource Title}"/>
+                    <Label Style="{StaticResource Description}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding LoginResponse.user.faculty, FallbackValue='Faculty', Converter={StaticResource TextToSentenceConverter}}"/>
+                                <Span Text=": "/>
+                                <Span Text="{Binding LoginResponse.user.dept, FallbackValue='Department', Converter={StaticResource TextToSentenceConverter}}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Frame Style="{StaticResource YummyEdit}" IsVisible="false">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                <!--User has subscribed-->
+                <!--IsVisible="{Binding LoginResponse.user.status}"-->
+                <Grid Style="{StaticResource ListGrid}"  IsVisible="false"
+                      
+                      
+                        xct:TouchEffect.NativeAnimation="True"
+                      xct:TouchEffect.Command="{Binding Unsubscribe}"
+                        xct:TouchEffect.NativeAnimationColor="LightGray">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20"
+                                                 Color="{StaticResource AppColor}" 
+                                                 Glyph="{x:Static MaterialFont:FontIcon.CreditCardMinusOutline}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Style="{StaticResource Title}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Status: "/>
+                                <Span Text="{Binding LoginResponse.user.status, FallbackValue='unknown', Converter={StaticResource BoolToText}}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label IsVisible="{Binding IsPaymentReoccuring}" Style="{StaticResource Description}" Text="Tap to discontinue reocurring payment"/>
+                    <Label IsVisible="{Binding IsPaymentReoccuring, Converter={StaticResource NegateBool}}" Style="{StaticResource Description}" Text="Reocurring payment disabled"/>
+
+                    <Frame Style="{StaticResource YummyEdit}" IsVisible="false">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                <!--User hasn't subscribed-->
+                <!--IsVisible="{Binding LoginResponse.user.status, Converter={StaticResource NegateBool}}"-->
+                <Grid Style="{StaticResource ListGrid}" IsVisible="false"
+                      
+                        xct:TouchEffect.NativeAnimation="True"
+                      xct:TouchEffect.Command="{Binding Subscribe}"
+                        xct:TouchEffect.NativeAnimationColor="LightGray">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="30"
+                                                 Color="{StaticResource AppColor}" 
+                                                 Glyph="{x:Static MaterialFont:FontIcon.CreditCardPlusOutline}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Style="{StaticResource Title}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Status: "/>
+                                <Span Text="{Binding LoginResponse.user.status, FallbackValue='unknown', Converter={StaticResource BoolToText}}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Style="{StaticResource Description}" Text="Tap to Subscribe"/>
+
+                    <Frame Style="{StaticResource YummyEdit}" IsVisible="false">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                <Grid Style="{StaticResource ListGrid}" IsVisible="false">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20"
+                                                 Color="{StaticResource AppColor}" 
+                                                 Glyph="{x:Static MaterialFont:FontIcon.Lock}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Password" Style="{StaticResource Title}"/>
+                    <Label Text="Tap to change" Style="{StaticResource Description}"/>
+
+                    <Frame Style="{StaticResource YummyEdit}">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                <Grid Style="{StaticResource ListGrid}" IsVisible="false">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.CellphoneAndroid}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Phone Number" Style="{StaticResource Title}"/>
+                    <Label Text="081 XXXX XXXX" Style="{StaticResource Description}"/>
+                    <Frame Style="{StaticResource YummyEdit}">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                <xct:Expander IsVisible="true">
+                    <xct:Expander.Header>
+                        <Grid Style="{StaticResource ListGrid}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray">
+                            <Frame Style="{StaticResource FrameImage}">
+                                <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.ThemeLightDark}" FontFamily="MF"/>
+                                    </Image.Source>
+                                </Image>
+                            </Frame>
+                            <Label Text="Theme" Style="{StaticResource Title}"/>
+                            <Label Text="Tap to Change Theme" Style="{StaticResource Description}"/>
+
+                        </Grid>
+                    </xct:Expander.Header>
+                    <Frame  BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+                        HasShadow="False"
+                        HorizontalOptions="Center"
+                        Padding="10">
+                        <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             RadioButtonGroup.GroupName="RadioAppTheme">
+                            <RadioButton Value="Default"
+                                     x:Name="RBDefault"
+                                     CheckedChanged="RadioButton_CheckedChanged">
+                                <RadioButton.Content>
+                                    <StackLayout>
+                                        <Image HorizontalOptions="Center"
+                                       VerticalOptions="CenterAndExpand">
+                                            <Image.Source>
+                                                <FontImageSource Size="30" Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.AccountCog}"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label Text="System"
+                                               TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                           x:Name="Default"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="End">
+
+                                        </Label>
+                                    </StackLayout>
+
+                                </RadioButton.Content>
+                            </RadioButton>
+                            <RadioButton Value="Light"
+                                     x:Name="RBLight"
+                                     CheckedChanged="RadioButton_CheckedChanged">
+                                <RadioButton.Content>
+                                    <StackLayout>
+                                        <Image HorizontalOptions="Center"
+                                       VerticalOptions="CenterAndExpand">
+                                            <Image.Source>
+                                                <FontImageSource Size="30" Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF" Glyph="{x:Static MaterialFont:FontIcon.Brightness7}"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label Text="Light"
+                                           x:Name="Light"
+                                               TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                           VerticalOptions="End"
+                                       HorizontalOptions="Center">
+
+                                        </Label>
+                                    </StackLayout>
+                                </RadioButton.Content>
+                            </RadioButton>
+                            <RadioButton Value="Dark"
+                                     x:Name="RBDark"
+                                     CheckedChanged="RadioButton_CheckedChanged">
+                                <RadioButton.Content>
+                                    <StackLayout>
+                                        <Image HorizontalOptions="Center"
+                                       VerticalOptions="CenterAndExpand">
+                                            <Image.Source>
+                                                <FontImageSource Size="30" Color="{AppThemeBinding Dark=White, Light= Black,Default=Black}" FontFamily="MF"  Glyph="{x:Static MaterialFont:FontIcon.MoonWaningCrescent}"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label Text="Dark"
+                                           HorizontalOptions="Center"
+                                               TextColor="{AppThemeBinding Dark=White, Light= Black,Default=Black}"
+                                           VerticalOptions="End"
+                                           x:Name="Dark">
+                                        </Label>
+                                    </StackLayout>
+                                </RadioButton.Content>
+                            </RadioButton>
+                        </StackLayout>
+                    </Frame>
+                </xct:Expander>
+                <Grid Style="{StaticResource ListGrid}"
+                        xct:TouchEffect.NativeAnimation="True"
+                      xct:TouchEffect.Command="{Binding PrivacyCommand}"
+                        xct:TouchEffect.NativeAnimationColor="LightGray">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.Security}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Privacy Policy" Style="{StaticResource Title}"/>
+                    <Label Text="Tap to See Privacy Policy" Style="{StaticResource Description}"/>
+                    <Frame Style="{StaticResource YummyEdit}">
+                        <Label Style="{StaticResource Edit}" Text="{x:Static MaterialFont:FontIcon.ChevronRight}" FontSize="30" FontFamily="MF"/>
+                    </Frame>
+                </Grid>
+                <Grid Style="{StaticResource ListGrid}" 
+                      xct:TouchEffect.Command="{Binding UploadCommand}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray"
+                      IsVisible="{Binding LoginResponse.user.privileges}">
+                    <Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.Upload}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>
+                    <Label Text="Upload" Style="{StaticResource Title}"/>
+                    <Label Text="Tap to Upload" Style="{StaticResource Description}"/>
+                    <Frame Style="{StaticResource YummyEdit}" IsVisible="false">
+                        <Label Style="{StaticResource Edit}"/>
+                    </Frame>
+                </Grid>
+                
+                <Grid HorizontalOptions="CenterAndExpand"
+                      Margin="0,0,0,10"
+                      xct:TouchEffect.Command="{Binding LogOutCommand}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray">
+                    <!--<Frame Style="{StaticResource FrameImage}">
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource Size="20" Color="{StaticResource AppColor}" Glyph="{x:Static MaterialFont:FontIcon.Logout}" FontFamily="MF"/>
+                            </Image.Source>
+                        </Image>
+                    </Frame>-->
+                    <Label Text="LOG OUT" Margin="10,20" 
+                           HorizontalOptions="Center"
+                           FontSize="30"
+                           FontFamily="IB"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource AppColor}"/>
+                    <!--<Label Text="Tap to Log Out" Style="{StaticResource Description}"/>-->
+                    
+                </Grid>
+
+                
+                
+                
+                
+                
+                
+                <!--<Grid >
+                    <Frame BackgroundColor="White"
+                           x:Name="IDcard"
+                       CornerRadius="10"
+                       Padding="0"
+                       Margin="30,5,30,20"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+                        <Grid ColumnDefinitions="2*,*"
+                          RowDefinitions="Auto,Auto,Auto,Auto">
+                            <StackLayout Grid.Row="1" Grid.Column="0"
+                             Orientation="Horizontal">
+                                <Image Source="EstudiarIconWhite.png"
+                       Margin="10,0,0,0"
+                       Aspect="AspectFit"
+                           VerticalOptions="Center"
+                       WidthRequest="30"/>
+                                <StackLayout Spacing="0" VerticalOptions="Center">
+                                    <Label Text="ESTUDIAR" FontSize="15" TextColor="Black"/>
+                                    <Label Text="The scholars' companion" FontSize="10" TextColor="Black"/>
+                                    <BoxView HeightRequest="1" Margin="0,5,0,0" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource MyAccent}" Opacity="0.7"/>
+                                </StackLayout>
+                                
+                            </StackLayout>
+
+
+                            <BoxView Grid.Row="0"
+                         Grid.ColumnSpan="2"
+                         HeightRequest="7"
+                         BackgroundColor="{StaticResource AppColor}" HorizontalOptions="FillAndExpand"/>
+                            <BoxView Grid.Row="3"
+                         Grid.ColumnSpan="2"
+                         HeightRequest="30"
+                         BackgroundColor="{StaticResource AppColor}" HorizontalOptions="FillAndExpand"/>
+
+                            <Grid Grid.Column="0" Grid.Row="2"
+                      Margin="10,0,0,0"
+                      RowSpacing="0"
+                      ColumnSpacing="0"
+                      ColumnDefinitions="Auto,Auto"
+                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                      HorizontalOptions="End"
+                                  VerticalOptions="End"
+                      BackgroundColor="Transparent"  >
+
+                                <Label Grid.Row="0" Text="Status: " Style="{StaticResource Key='key'}"/>
+                                <Label Grid.Row="0" Text="{Binding LoginResponse.user.status,Converter={StaticResource BoolToText}}" Style="{StaticResource Key='value'}"/>
+
+                                <Label Grid.Row="1" Text="Creator: " Style="{StaticResource Key='key'}"/>
+                                <Path Grid.Row="1"
+                          WidthRequest="10"
+                          HeightRequest="7"
+                          Grid.Column="1"
+                          Aspect="Uniform"
+                          HorizontalOptions="Start"
+                          Fill="Lawngreen"
+                          Data="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+                          IsVisible="{Binding LoginResponse.user.privileges}" />
+                                <Path Grid.Row="1"
+                          HeightRequest="7"
+                          WidthRequest="10"
+                          Grid.Column="1"
+                          Aspect="Uniform"
+                          HorizontalOptions="Start"
+                          Fill="Red"
+                          IsVisible="{Binding LoginResponse.user.privileges,Converter={StaticResource BoolInvert}}"
+                          Data="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                          />
+                                <Label Grid.Row="2" Text="Email: " Style="{StaticResource Key='key'}"/>
+                                <Label Grid.Row="2" Text="{Binding LoginResponse.user.email}" Style="{StaticResource Key='value'}"/>
+
+                                <Label Grid.Row="3" Text="Level:  " Style="{StaticResource Key='key'}"/>
+                                <Label Grid.Row="3" Text="{Binding LoginResponse.user.year}" Style="{StaticResource Key='value'}"/>
+
+                                <Label Grid.Row="4" Text="Faculty:  " Style="{StaticResource Key='key'}"/>
+                                <Label Grid.Row="4" Text="{Binding LoginResponse.user.faculty}" Style="{StaticResource Key='value'}"/>
+
+                                <Label Grid.Row="5" Text="Department:  " Style="{StaticResource Key='key'}"/>
+                                <Label Grid.Row="5" Text="{Binding LoginResponse.user.dept}" Style="{StaticResource Key='value'}"/>
+
+                            </Grid>
+                            <Frame  WidthRequest="30"
+                        HeightRequest="50"
+                        Grid.Column="1"
+                        HorizontalOptions="Center"
+                        Grid.Row="2"
+                        Grid.RowSpan="2"
+                        VerticalOptions="Center"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="{StaticResource AppColor}"
+                        Padding="10"
+                        CornerRadius="10">
+                                <Path Fill="Black"
+                          
+                          StrokeThickness="0.1"
+                          Data="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z"
+                          Aspect="Uniform">
+                                      <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="{StaticResource MyAccent}" Offset="0.2"/>
+                                            <GradientStop Color="{StaticResource AppColor}" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                      </Path>
+
+
+                            </Frame>
+                        </Grid>
+
+                    </Frame>
+                </Grid>-->
+                
+
+
+            </StackLayout>
+
+        </ScrollView>
+        
+        
+    </ContentPage.Content>
+</ContentPage>

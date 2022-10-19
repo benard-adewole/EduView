@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Estudiar.Views.Loading"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="Transparent"
+           xmlns:VM="clr-namespace:Estudiar.ViewModels"
+           Size="300,100"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+             x:Name="thisPage">
+    <xct:Popup.BindingContext>
+        <VM:LoadingVM/>
+    </xct:Popup.BindingContext>
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="{AppThemeBinding Dark={StaticResource DimGray}, Light={StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}">
+        <ActivityIndicator IsRunning="True" VerticalOptions="CenterAndExpand"/>
+    </StackLayout>
+</xct:Popup>

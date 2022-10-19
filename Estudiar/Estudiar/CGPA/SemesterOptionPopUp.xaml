@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+           xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+           xmlns:MaterialFont="clr-namespace:MaterialDesign"
+           Color="Transparent"
+           HorizontalOptions="Fill"
+             x:Class="Estudiar.CGPA.SemesterOptionPopUp">
+    <Grid RowDefinitions="*,Auto" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent">
+        <Frame Grid.Row="0" BackgroundColor="Transparent">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </Frame.GestureRecognizers>
+        </Frame>
+        <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" Margin="0,0,0,20" CornerRadius="20" Padding="0">
+            <StackLayout >
+                <Label Text="Select an Action" FontFamily="NSB"
+                       FontSize="20"
+                       TextColor="{AppThemeBinding Dark=White, Light=Black,Default=Black}"
+                       HorizontalOptions="Center" Margin="10,20,10,10"/>
+                <BoxView Margin="20,0" HeightRequest="1" Color="LightGray"/>
+                <StackLayout Orientation="Horizontal"
+                             toolkit:TouchEffect.NativeAnimation="True"
+                             toolkit:TouchEffect.NativeAnimationColor="LightGray">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="infoTapped" CommandParameter="info"/>
+                    </StackLayout.GestureRecognizers>
+                    <Image Margin="20,0,10,0">
+                        <Image.Source>
+                            <FontImageSource Color="{AppThemeBinding Dark=lightgray, Light=Gray,Default=Gray}" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.InformationOutline}"/>
+                        </Image.Source>
+                    </Image>
+                    <Label Margin="0,10" Text="Info" TextColor="{AppThemeBinding Dark=lightgray, Light=Gray,Default=Gray}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal"
+                             toolkit:TouchEffect.NativeAnimation="True"
+                             toolkit:TouchEffect.NativeAnimationColor="PaleVioletRed">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="deleteTapped" CommandParameter="delete"/>
+                    </StackLayout.GestureRecognizers>
+                    <Image Margin="20,0,10,0">
+                        <Image.Source>
+                            <FontImageSource Color="Red" FontFamily="MF" Size="20" Glyph="{x:Static MaterialFont:FontIcon.Delete}"/>
+                        </Image.Source>
+                    </Image>
+                    <Label Margin="0,10" Text="Delete" TextColor="Red"/>
+                </StackLayout>
+                <BoxView Margin="20,0" HeightRequest="1" Color="LightGray"/>
+                <StackLayout toolkit:TouchEffect.NativeAnimation="True"
+                             toolkit:TouchEffect.NativeAnimationColor="LightGray">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </StackLayout.GestureRecognizers>
+                    <Label Margin="20,20" Text="Cancel" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+
+    </Grid>
+</xct:Popup>

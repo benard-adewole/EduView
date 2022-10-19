@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+           xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+           xmlns:MaterialFont="clr-namespace:MaterialDesign"
+           Color="Transparent"
+           VerticalOptions="Center"
+           Visual="Material"
+           HorizontalOptions="Fill"
+             x:Class="Estudiar.CGPA.ResultInfoPopUp">
+    <Grid RowDefinitions="*,Auto,*" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent">
+        <Frame Grid.Row="0" BackgroundColor="Transparent">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </Frame.GestureRecognizers>
+        </Frame>
+        <Frame Grid.Row="1"
+               BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+               CornerRadius="10"
+               Padding="20,10,20,10"
+               VerticalOptions="Center">
+            <StackLayout Spacing="0">
+                <Label x:Name="Title" TextTransform="Uppercase" Text="Title" FontFamily="NSB" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                <Label x:Name="Description" Text="Description" Margin="0,0,0,0" TextColor="Gray" />
+                <Button Text="Ok" CornerRadius="5" Padding="0" Clicked="TapGestureRecognizer_Tapped" HorizontalOptions="End" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}" TextColor="{StaticResource Primary}"/>
+            </StackLayout>
+        </Frame>
+        <Frame Grid.Row="2" BackgroundColor="Transparent">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </Frame.GestureRecognizers>
+        </Frame>
+    </Grid>
+</toolkit:Popup>

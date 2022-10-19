@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+            x:Name="MyCarousel"
+              SizeChanged="MyCarousel_SizeChanged"
+              BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light= {StaticResource BackgroundColor},Default={StaticResource BackgroundColor}}"
+             x:Class="Estudiar.Views.OnBoarding">
+    
+    <ContentPage x:Name="Content1" >
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <Style TargetType="Label">
+                    <Setter Property="HorizontalOptions" Value="Start"/>
+                </Style>
+                <Style TargetType="Label" x:Key="Title">
+                    <Setter Property="TextColor" Value="{AppThemeBinding Dark=White, Light= Black,Default=Black}"/>
+                    <Setter  Property="FontSize" Value="20"/>
+                    <Setter  Property="FontFamily" Value="NSK"/>
+                    <Setter  Property="TextTransform" Value="Uppercase"/>
+                </Style>
+                <Style TargetType="Label" x:Key="Description">
+                    
+                </Style>
+                <Style TargetType="BoxView">
+                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource DimGray}, Light=#F5F5F9,Default=#F5F5F9}"/>
+                    <Setter Property="WidthRequest" Value="10"/>
+                    <Setter Property="CornerRadius" Value="10"/>
+                    <Setter Property="HeightRequest" Value="10"/>
+                    <Style.Triggers>
+                        <Trigger TargetType="BoxView" Property="Width" Value="30">
+                            <Setter Property="BackgroundColor" Value="{StaticResource AppColor}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+            <ScrollView>
+                <StackLayout>
+                    <Frame HasShadow="False"
+                           HorizontalOptions="End"
+                               x:Name="SkipBtn"
+                               Padding="20,10"
+                                   Margin="20,10,10,0"
+                               CornerRadius="9"
+                               xct:TouchEffect.Command="{Binding OpenShellApp}"
+                        xct:TouchEffect.NativeAnimation="True"
+                        xct:TouchEffect.NativeAnimationColor="LightGray"
+                           BackgroundColor="Transparent">
+                        <Label Text="Skip" TextColor="{StaticResource AppColor}"
+                                   FontSize="15"
+                                   x:Name="SkipText"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Frame>
+                    <Grid HorizontalOptions="FillAndExpand"
+                          VerticalOptions="CenterAndExpand"
+                          x:Name="headerSVG"
+                          IsClippedToBounds="True">
+                        <Grid 
+                      HorizontalOptions="Center">
+                            <Image Source="bro.png" x:Name="image1"/>
+                            <Image Source="bro1.png" x:Name="image2" IsVisible="false"/>
+                            <Image Source="cuate.png" x:Name="image3" IsVisible="false"/>
+                        </Grid>
+
+                        
+                    </Grid>
+                    
+                    <StackLayout Grid.Row="1" Padding="20,10" Margin="0,0,0,0" VerticalOptions="FillAndExpand">
+
+                        <Grid VerticalOptions="EndAndExpand"
+                          HorizontalOptions="Center">
+                            <StackLayout Spacing="10" x:Name="View1" >
+                                <Label Text="extensive resources"
+                                   Style="{StaticResource Title}"
+                               FontAttributes="Bold"
+                           />
+                                <!--<Label Text="We accept solutions from student at various levels, and then validate to ensure credibility"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>-->
+                                <Label Text="Get a large range of study materials such as excerpts, notes, past questions and answers."
+                                       Style="{StaticResource Description}"/>
+                            </StackLayout>
+                            <StackLayout Spacing="10" x:Name="View2"
+                                     IsVisible="false">
+                                <Label Text="CREDIBILITY"
+                                       Style="{StaticResource Title}"
+                           />
+                                <!--<Label Text="A lot of resouces at your disposal, being updated, and more being added"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>-->
+                                <Label Text="We accept solutions from academically outstanding individuals at various levels, and then validate to ensure credibility."
+                                       Style="{StaticResource Description}"/>
+                            </StackLayout>
+                            <StackLayout Spacing="10" x:Name="View3"
+                                     IsVisible="false">
+                                <Label Text="CGPA CALCULATION" Style="{StaticResource Title}"/>
+                                <!--<Label Text="With upcoming features you'll be able to earn money by providing material resources"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>-->
+                                <Label Text="With our very interactive interface, you can easily calculate your CGPA, save it and have access to SGPA summary."
+                                       Style="{StaticResource Description}"/>
+                            </StackLayout>
+                        </Grid>
+
+
+                        <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,20,0,0">
+                            <BoxView x:Name="Ind1"
+                                     WidthRequest="30"/>
+                            <BoxView x:Name="Ind2"/>
+                            <BoxView x:Name="Ind3"/>
+                        </StackLayout>
+                        
+
+
+                    </StackLayout>
+                    <Button Text="Next" BackgroundColor="{StaticResource AppColor}"
+                            VerticalOptions="EndAndExpand"
+                                Padding="20,20"
+                                    Margin="15,0,15,15"
+                                FontSize="15"
+                                CornerRadius="9"
+                                x:Name="CarouselOne"
+                                Clicked="CarouselOne_Clicked"
+                            TextColor="{AppThemeBinding Dark=Black, Light= White,Default=White}"/>
+                </StackLayout>
+                
+            </ScrollView>
+            
+        </ContentPage.Content>
+    </ContentPage>
+    
+</CarouselPage>

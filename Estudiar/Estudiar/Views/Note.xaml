@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Shell.TabBarIsVisible="False"
+             BackgroundColor="Transparent"
+             xmlns:MaterialFont="clr-namespace:MaterialDesign"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="Estudiar.Views.Note">
+    <ContentPage.Content>
+        <Grid >
+            <Grid.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+            </Grid.GestureRecognizers>
+            <StackLayout VerticalOptions="End" BackgroundColor="White">
+                <Frame>
+                    <BoxView BackgroundColor="DimGray" HeightRequest="5" CornerRadius="3" HorizontalOptions="Center"/>
+                </Frame>
+                <Editor HorizontalOptions="Fill"
+                        
+                        HeightRequest="300"/>
+                <Label Text="Welcome to Xamarin.Forms!"
+                       x:Name="cordinate"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+                
+            </StackLayout>
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>
